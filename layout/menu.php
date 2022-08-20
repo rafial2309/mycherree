@@ -887,7 +887,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="top-menu">
+                            <a href="app?p=staff" class="top-menu">
                                 <div class="top-menu__icon"> <i data-lucide="users"></i> </div>
                                 <div class="top-menu__title"> Staff</div>
                             </a>
