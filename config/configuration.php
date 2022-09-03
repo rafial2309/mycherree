@@ -1,5 +1,5 @@
 <?php
 
-$conn = mysqli_connect('localhost','root','','db_mycherree');
+$conn = mysqli_connect('jeeves-indonesia.com','jeevesin_myceri','Pantaipik2022!','jeevesin_myceri');
 
 ?>
