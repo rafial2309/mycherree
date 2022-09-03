@@ -855,29 +855,24 @@
                             </a>
                             <ul class="">
                                 <li>
-                                    <a href="top-menu-light-users-layout-1.html" class="top-menu">
+                                    <a href="app?p=master_item" class="top-menu">
                                         <div class="top-menu__icon"> <i data-lucide="list"></i> </div>
                                         <div class="top-menu__title">Item & Category</div>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="top-menu-light-users-layout-2.html" class="top-menu">
+                                    <a href="app?p=master_colour" class="top-menu">
                                         <div class="top-menu__icon"> <i data-lucide="list"></i> </div>
-                                        <div class="top-menu__title">Color</div>
+                                        <div class="top-menu__title">Colour</div>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="top-menu-light-users-layout-3.html" class="top-menu">
+                                    <a href="app?p=master_brand" class="top-menu">
                                         <div class="top-menu__icon"> <i data-lucide="list"></i> </div>
                                         <div class="top-menu__title">Brand</div>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="top-menu-light-users-layout-3.html" class="top-menu">
-                                        <div class="top-menu__icon"> <i data-lucide="list"></i> </div>
-                                        <div class="top-menu__title">Size</div>
-                                    </a>
-                                </li>
+                              
                             </ul>
                         </li>
                         <li>
