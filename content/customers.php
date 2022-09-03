@@ -1,3 +1,4 @@
+            
             <div class="wrapper-box">
                 <!-- BEGIN: Content -->
                 <div class="content">
@@ -5,7 +6,8 @@
                         <h2 class="intro-y text-lg font-medium">
                             Customers
                         </h2>
-                        <button class="ml-auto btn btn-primary shadow-md mr-2" href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-customer-modal">Add New Customer</button>
+                        <button class="ml-auto btn btn-primary shadow-md mr-2" href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-customer-modal"><i data-lucide='plus-circle' class='w-5 h-5'></i> &nbsp; Add New Customer</button>
+                        
                     </div>
                     <div class="grid grid-cols-12 gap-6 mt-5">
                         <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
@@ -13,32 +15,16 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
+                                        <th>Phone</th>
                                         <th>Address</th>
                                         <th>Membership</th>
                                         <th>Join Date</th>
-                                        <th>Action</th>
+                                        <th>Note</th>
+                                        <th width="125px">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php 
-                                    $sql = mysqli_query($conn, "SELECT c.id, c.name as nama, m.name as member, join_date, address 
-                                                                FROM customer c JOIN membership m 
-                                                                ON c.membership=m.id ORDER BY nama");
-                                    while($data = mysqli_fetch_assoc($sql)){
-                                        echo "
-                                            <tr>
-                                                <td>".$data['nama']."</td>
-                                                <td>".$data['address']."</td>
-                                                <td>".$data['member']."</td>
-                                                <td>".date('d F Y', strtotime($data['join_date']))."</td>
-                                                <td>
-                                                    <a href='#' onclick='editButton({$data['id']})' data-tw-toggle='modal' data-tw-target='#edit-customer-modal' >edit</a> | 
-                                                    <a href='#' onclick='deleteButton({$data['id']})'>delete</a>
-                                                </td>
-                                            </tr>                                        
-                                        ";
-                                    }
-                                    ?>
+                                <tbody id="hasil">
+                                    
                                 </tbody>
                             </table>
                         </div>  
@@ -123,30 +109,72 @@
                 </div>
                 <!-- END: Content -->
             </div>
-<script>
-    function deleteButton(id){
-        let text = "Are you sure?";
-        if (confirm(text) == true) {
-            location.href="function/customers?menu=delete&id="+id;
-        } else {
-            text = "You canceled!";
-        }
-    }
-    function editButton(id){
-        $.ajax({
-            type:'POST',
-            url:'function/customers?menu=ajax',
-            data:'id='+id,
-            success: function(data) { // Jika berhasil
-                var json = data,
-                obj = JSON.parse(json);
-                $('#edit-id').val(obj.id);
-                $('#edit-name').val(obj.name);
-                $('#edit-address').val(obj.address);
-                $('#edit-membership').val(obj.membership);
-             }
-        });
-    }
-</script>
+            <?php include 'appjs.php'; ?>
+            <script src="plugin/datatable/jquery-3.5.1.js"></script>
+            <script type="text/javascript" src="plugin/datatable/jquery.dataTables.min.js"></script>
+            <script type="text/javascript" src="plugin/datatable/dataTables.buttons.min.js"></script>
+            <script type="text/javascript" src="plugin/datatable/buttons.flash.min.js"></script>
+            <script type="text/javascript" src="plugin/datatable/jszip.min.js"></script>
+            <script type="text/javascript" src="plugin/datatable/buttons.html5.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#example').DataTable( {
+                        "ajax":{
+                            url :"content/ajax/customers_processing.php",
+                            type: "post",
+                            error: function(){
+                                $(".dataku-error").html("");
+                                $("#dataku").append('<tbody class="dataku-error"><tr><th colspan="3">Tidak ada data untuk ditampilkan</th></tr></tbody>');
+                                $("#dataku-error-proses").css("display","none");
+                            }
+                        },
+                        dom: 'Bfrtip',
+                        "processing": true,
+                        "serverSide": true,
+                        buttons: [
+                            'excel',
+                        ],   
+                    } );     
+                } );
+
+                function deleteButton(id){
+                    let text = "Are you sure?";
+                    if (confirm(text) == true) {
+                        location.href="function/customers?menu=delete&id="+id;
+                    } else {
+                        text = "You canceled!";
+                    }
+                }
+                function editButton(id){
+                    $.ajax({
+                        type:'POST',
+                        url:'function/customers?menu=ajax',
+                        data:'id='+id,
+                        success: function(data) { // Jika berhasil
+                            var json = data,
+                            obj = JSON.parse(json);
+                            $('#edit-id').val(obj.id);
+                            $('#edit-name').val(obj.name);
+                            $('#edit-address').val(obj.address);
+                            $('#edit-membership').val(obj.membership);
+                         }
+                    });
+                }
+
+                setTimeout(function(){ 
+
+                    var buttons = document.getElementsByClassName("buttons-excel"),
+                        len = buttons !== null ? buttons.length : 0,
+                        i = 0;
+                    for(i; i < len; i++) {
+                        buttons[i].className += " btn btn-primary mr-1 mb-2"; 
+                    }
+
+                    $('.buttons-excel span').text('Export Data - Excel');
+
+                }, 500);
+
+                
+            </script>
 
             

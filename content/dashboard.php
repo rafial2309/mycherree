@@ -229,3 +229,4 @@
                 </div>
                 <!-- END: Content -->
             </div>
+            <?php include 'appjs.php'; ?>
