@@ -1,74 +1,59 @@
+            
             <div class="wrapper-box">
                 <!-- BEGIN: Content -->
                 <div class="content">
                     <div class="intro-y flex items-center h-10 mt-5">
                         <h2 class="intro-y text-lg font-medium">
-                            Staff
+                            Staff Data
                         </h2>
-                        <button class="ml-auto btn btn-primary shadow-md mr-2" href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-staff-modal">Add New Staff</button>
+                        <button class="ml-auto btn btn-primary shadow-md mr-2" href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-customer-modal"><i data-lucide='plus-circle' class='w-5 h-5'></i> &nbsp; Add New Staff</button>
+                        
                     </div>
                     <div class="grid grid-cols-12 gap-6 mt-5">
                         <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
                             <table id="example" class="display" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Store</th>
+                                        <th width="30px">No</th>
+                                        <th>Staff ID</th>
+                                        <th>Staff Name</th>
+                                        <th>TTL</th>
+                                        <th>Telp</th>
+                                        <th>Address</th>
+                                        <th>Access</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php 
-                                    $sql = mysqli_query($conn, "SELECT u.id, u.name as nama, s.name as store, position
-                                                                FROM user u JOIN store s 
-                                                                ON u.store_id=s.id");
-                                    while($data = mysqli_fetch_assoc($sql)){
-                                        echo "
-                                            <tr>
-                                                <td>".$data['nama']."</td>
-                                                <td>".$data['position']."</td>
-                                                <td>".$data['store']."</td>
-                                                <td>
-                                                    <a href='#' onclick='editButton({$data['id']})' data-tw-toggle='modal' data-tw-target='#edit-staff-modal' >edit</a> | 
-                                                    <a href='#' onclick='deleteButton({$data['id']})'>delete</a>
-                                                </td>
-                                            </tr>                                        
-                                        ";
-                                    }
-                                    ?>
+                                <tbody id="hasil">
+                                    
                                 </tbody>
                             </table>
                         </div>  
                     </div>
                 </div>
-                <div id="new-staff-modal" class="modal" tabindex="-1" aria-hidden="true">
+                <div id="new-customer-modal" class="modal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form id="create" action="function/staff?menu=create" method="post">
+                            <form id="create" action="function/customers?menu=create" method="post">
                             <div class="modal-header">
                                 <h2 class="font-medium text-base mr-auto">
-                                    New Staff
+                                    New Item
                                 </h2>
                             </div>
                             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
                                 <div class="col-span-12">
                                     <label for="pos-form-1" class="form-label">Name</label>
-                                    <input id="pos-form-1" name="name" type="text" class="form-control flex-1" placeholder="Staff name">
+                                    <input id="pos-form-1" name="name" type="text" class="form-control flex-1" placeholder="Customer name">
                                 </div>
                                 <div class="col-span-12">
-                                    <label for="pos-form-2" class="form-label">Position</label>
-                                    <select id="pos-form-2" name="position" class="form-control flex">
-                                        <option value="Marking">Marking</option>
-                                        <option value="Store Associate">Store Associate</option>
-                                        <option value="Store Manager">Store Manager</option>
-                                    </select>
+                                    <label for="pos-form-2" class="form-label">Address</label>
+                                    <textarea id="pos-form-2" name="address" class="form-control flex-1" placeholder="Jl Mayjend Sungkono"></textarea>
                                 </div>
                                 <div class="col-span-12">
-                                    <label for="pos-form-3" class="form-label">Store</label>
-                                    <select for="pos-form-3" class="form-select mt-2 sm:mr-2" name="store_id">
+                                    <label for="pos-form-3" class="form-label">Memberhip</label>
+                                    <select for="pos-form-3" class="form-select mt-2 sm:mr-2" name="membership">
                                     <?php
-                                    $sql = mysqli_query($conn, 'SELECT *FROM store');
+                                    $sql = mysqli_query($conn, 'SELECT *FROM membership');
                                     while ($data = mysqli_fetch_assoc($sql)) {
                                         echo "<option value='{$data["id"]}'>{$data['name']}</option>";
                                     }
@@ -84,10 +69,10 @@
                         </div>
                     </div>
                 </div>
-                <div id="edit-staff-modal" class="modal" tabindex="-1" aria-hidden="true">
+                <div id="edit-customer-modal" class="modal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form id="edit" action="function/staff?menu=edit" method="post">
+                            <form id="edit" action="function/customers?menu=edit" method="post">
                             <div class="modal-header">
                                 <h2 class="font-medium text-base mr-auto">
                                     Edit Customer
@@ -100,18 +85,14 @@
                                     <input id="edit-name" name="name" type="text" class="form-control flex-1" placeholder="Customer name">
                                 </div>
                                 <div class="col-span-12">
-                                    <label for="edit-position" class="form-label">Position</label>
-                                    <select id="edit-position" name="position" class="form-control flex">
-                                        <option value="Marking">Marking</option>
-                                        <option value="Store Associate">Store Associate</option>
-                                        <option value="Store Manager">Store Manager</option>
-                                    </select>
+                                    <label for="edit-address" class="form-label">Address</label>
+                                    <textarea id="edit-address" name="address" class="form-control flex-1" placeholder="Jl Mayjend Sungkono"></textarea>
                                 </div>
                                 <div class="col-span-12">
-                                    <label for="edit-store" class="form-label">Store</label>
-                                    <select for="edit-store" class="form-select mt-2 sm:mr-2" name="store_id">
+                                    <label for="edit-membership" class="form-label">Memberhip</label>
+                                    <select id="edit-membership" class="form-select mt-2 sm:mr-2" name="membership">
                                     <?php
-                                    $sql = mysqli_query($conn, 'SELECT *FROM store');
+                                    $sql = mysqli_query($conn, 'SELECT *FROM membership');
                                     while ($data = mysqli_fetch_assoc($sql)) {
                                         echo "<option value='{$data["id"]}'>{$data['name']}</option>";
                                     }
@@ -129,28 +110,49 @@
                 </div>
                 <!-- END: Content -->
             </div>
-<script>
-    function deleteButton(id){
-        let text = "Are you sure?";
-        if (confirm(text) == true) {
-            location.href="function/staff?menu=delete&id="+id;
-        }
-    }
-    function editButton(id){
-        $.ajax({
-            type:'POST',
-            url:'function/staff?menu=ajax',
-            data:'id='+id,
-            success: function(data) { // Jika berhasil
-                var json = data,
-                obj = JSON.parse(json);
-                $('#edit-id').val(obj.id);
-                $('#edit-name').val(obj.name);
-                $('#edit-store').val(obj.store_id);
-                $('#edit-position').val(obj.position);
-            }
-        });
-    }
-</script>
+            <?php include 'appjs.php'; ?>
+            <script src="plugin/datatable/jquery-3.5.1.js"></script>
+            <script type="text/javascript" src="plugin/datatable/jquery.dataTables.min.js"></script>
+            <script type="text/javascript" src="plugin/datatable/dataTables.buttons.min.js"></script>
+            <script type="text/javascript" src="plugin/datatable/buttons.flash.min.js"></script>
+            <script type="text/javascript" src="plugin/datatable/jszip.min.js"></script>
+            <script type="text/javascript" src="plugin/datatable/buttons.html5.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#example').DataTable( {
+                        "ajax":{
+                            url :"content/ajax/master_staff_processing.php",
+                            type: "post",
+                            error: function(){
+                                $(".dataku-error").html("");
+                                $("#dataku").append('<tbody class="dataku-error"><tr><th colspan="3">Tidak ada data untuk ditampilkan</th></tr></tbody>');
+                                $("#dataku-error-proses").css("display","none");
+                            }
+                        },
+                        dom: 'Bfrtip',
+                        "processing": true,
+                        "serverSide": true,
+                        buttons: [
+                            'excel',
+                        ],   
+                    } );     
+                } );
+
+              
+
+                setTimeout(function(){ 
+                    var buttons = document.getElementsByClassName("buttons-excel"),
+                        len = buttons !== null ? buttons.length : 0,
+                        i = 0;
+                    for(i; i < len; i++) {
+                        buttons[i].className += " btn btn-primary mr-1 mb-2"; 
+                    }
+
+                    $('.buttons-excel span').text('Export Data - Excel');
+
+                }, 500);
+
+                
+            </script>
 
             
