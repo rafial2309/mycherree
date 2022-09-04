@@ -54,7 +54,6 @@ if ($_GET['menu'] == 'create' ) {
     while( $row=mysqli_fetch_array($query) ) {
 
         $nestedData=array(); 
-        $nestedData[] = $row["Discount_No"];
         $nestedData[] = $row["Discount_Nama"];
         $nestedData[] = $row["Discount_Type"];
         $nestedData[] = $row["Persentase"].'%';

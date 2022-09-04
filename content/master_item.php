@@ -14,7 +14,6 @@
                             <table id="example" class="display" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th width="30px">No</th>
                                         <th>Item Name</th>
                                         <th>Category</th>
                                         <th>Price</th>

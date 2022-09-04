@@ -48,8 +48,7 @@ if ($_GET['menu'] == 'create' ) {
     while( $row=mysqli_fetch_array($query) ) {
 
         $nestedData=array(); 
-        $nestedData[] = "".$row["Colour_ID"]."";
-        $nestedData[] = "".$row["Colour_Name"]."";
+        $nestedData[] = $row["Colour_Name"];
         $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-colour-modal' onclick='btnEdit(".$row['Colour_ID'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Colour_ID'].")'>DISABLE</button>";
         
         $data[] = $nestedData;

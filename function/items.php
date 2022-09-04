@@ -58,7 +58,6 @@ if ($_GET['menu'] == 'create' ) {
     while( $row=mysqli_fetch_array($query) ) {
 
         $nestedData=array(); 
-        $nestedData[] = $row["Item_ID"];
         $nestedData[] = $row["Item_Name"];
         $nestedData[] = $row["Item_Category"];
         $nestedData[] = number_format($row["Item_Price"],0,',','.');

@@ -69,7 +69,6 @@ if ($_GET['menu'] == 'create' ) {
     while( $row=mysqli_fetch_array($query) ) {
 
         $nestedData=array(); 
-        $nestedData[] = $row["Staff_No"];
         $nestedData[] = $row["Staff_ID"];
         $nestedData[] = $row["Staff_Name"];
         $nestedData[] = $row["Staff_Tempat_Lahir"].", ".$row["Staff_Tgl_Lahir"];
