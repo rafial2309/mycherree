@@ -57,7 +57,7 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData[] = $row["Discount_Nama"];
         $nestedData[] = $row["Discount_Type"];
         $nestedData[] = $row["Persentase"].'%';
-        $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-discount-modal' onclick='btnEdit(".$row['Discount_No'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Discount_No'].")'>DISABLE</button>";
+        $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-discount-modal' onclick='btnEdit(".$row['Discount_No'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Discount_No'].")'>DELETE</button>";
         
         $data[] = $nestedData;
     }

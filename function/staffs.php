@@ -75,7 +75,7 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData[] = $row["Staff_Telp"];
         $nestedData[] = $row["Staff_Alamat"];
         $nestedData[] = $row["Staff_Access"];
-        $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-staff-modal' onclick='btnEdit(".$row['Staff_No'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Staff_No'].")'>DISABLE</button>";
+        $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-staff-modal' onclick='btnEdit(".$row['Staff_No'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Staff_No'].")'>DELETE</button>";
         
         $data[] = $nestedData;
     }

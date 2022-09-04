@@ -49,7 +49,7 @@ if ($_GET['menu'] == 'create' ) {
 
         $nestedData=array(); 
         $nestedData[] = $row["Colour_Name"];
-        $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-colour-modal' onclick='btnEdit(".$row['Colour_ID'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Colour_ID'].")'>DISABLE</button>";
+        $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-colour-modal' onclick='btnEdit(".$row['Colour_ID'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Colour_ID'].")'>DELETE</button>";
         
         $data[] = $nestedData;
     }

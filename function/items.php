@@ -62,7 +62,7 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData[] = $row["Item_Category"];
         $nestedData[] = number_format($row["Item_Price"],0,',','.');
         $nestedData[] = $row["Item_Pcs"];
-        $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-item-modal' onclick='btnEdit(".$row['Item_ID'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Item_ID'].")'>DISABLE</button>";
+        $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-item-modal' onclick='btnEdit(".$row['Item_ID'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Item_ID'].")'>DELETE</button>";
         
         $data[] = $nestedData;
     }
