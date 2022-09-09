@@ -48,11 +48,11 @@
                                 </div>
                                 <div class="col-span-12">
                                     <label for="pos-form-2" class="form-label">Price</label>
-                                    <input id="pos-form-1" name="Item_Price" type="text" class="form-control flex-1" placeholder="Item Price">
+                                    <input id="pos-form-1" name="Item_Price" type="text" class="form-control flex-1 uang" placeholder="Item Price">
                                 </div>
                                 <div class="col-span-12">
                                     <label for="pos-form-2" class="form-label">Pcs</label>
-                                    <input id="pos-form-1" name="Item_Pcs" type="text" class="form-control flex-1" placeholder="Item Pcs">
+                                    <input id="pos-form-1" name="Item_Pcs" type="text" class="form-control flex-1 uang" placeholder="Item Pcs">
                                 </div>
                             </div>
                             <div class="modal-footer text-right">
@@ -84,11 +84,11 @@
                                 </div>
                                 <div class="col-span-12">
                                     <label for="edit-price" class="form-label">Price</label>
-                                    <input id="edit-price" name="Item_Price" type="text" class="form-control flex-1" placeholder="Item Price">
+                                    <input id="edit-price" name="Item_Price" type="text" class="form-control flex-1 uang" placeholder="Item Price">
                                 </div>
                                 <div class="col-span-12">
                                     <label for="edit-pcs" class="form-label">Pcs</label>
-                                    <input id="edit-pcs" name="Item_Pcs" type="text" class="form-control flex-1" placeholder="Item Pcs">
+                                    <input id="edit-pcs" name="Item_Pcs" type="text" class="form-control flex-1 uang" placeholder="Item Pcs">
                                 </div>
                             </div>
                             <div class="modal-footer text-right">
@@ -153,7 +153,12 @@
                 }    
                 function btnDelete(id) {
                     location.href = "function/items?menu=delete&id="+id;
-                }    
+                }  
+
+                $(document).ready(function(){
+                    // Format mata uang.
+                    $( '.uang' ).mask('000.000.000', {reverse: true});
+                })  
             </script>
 
             

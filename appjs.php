@@ -5,3 +5,4 @@
 <script type="text/javascript" src="plugin/datatable/buttons.flash.min.js"></script>
 <script type="text/javascript" src="plugin/datatable/jszip.min.js"></script>
 <script type="text/javascript" src="plugin/datatable/buttons.html5.min.js"></script>
+<script type="text/javascript" src="plugin/mask/jquery.mask.min.js"></script>
