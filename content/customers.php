@@ -42,22 +42,23 @@
                             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
                                 <div class="col-span-12">
                                     <label for="pos-form-1" class="form-label">Name</label>
-                                    <input id="pos-form-1" name="name" type="text" class="form-control flex-1" placeholder="Customer name">
+                                    <input id="pos-form-1" name="Cust_Nama" type="text" class="form-control flex-1" placeholder="Customer name">
+                                </div>
+                                <div class="col-span-6">
+                                    <label for="pos-form-2" class="form-label">No Telp</label>
+                                    <input id="pos-form-2" type="text" name="Cust_Telp" class="form-control flex-1" placeholder="081234567890 ">
+                                </div>
+                                <div class="col-span-6">
+                                    <label for="pos-form-3" class="form-label">Tgl Lahir</label>
+                                    <input id="pos-form-3" type="date" name="Cust_Tgl_Lahir" class="form-control flex-1">
                                 </div>
                                 <div class="col-span-12">
-                                    <label for="pos-form-2" class="form-label">Address</label>
-                                    <textarea id="pos-form-2" name="address" class="form-control flex-1" placeholder="Jl Mayjend Sungkono"></textarea>
+                                    <label for="pos-form-4" class="form-label">Alamat</label>
+                                    <textarea id="pos-form-4" name="Cust_Alamat" class="form-control flex-1" placeholder="Jl Mayjend Sungkono"></textarea>
                                 </div>
                                 <div class="col-span-12">
-                                    <label for="pos-form-3" class="form-label">Memberhip</label>
-                                    <select for="pos-form-3" class="form-select mt-2 sm:mr-2" name="membership">
-                                    <?php
-                                    $sql = mysqli_query($conn, 'SELECT *FROM membership');
-                                    while ($data = mysqli_fetch_assoc($sql)) {
-                                        echo "<option value='{$data["id"]}'>{$data['name']}</option>";
-                                    }
-                                    ?>
-                                    </select>
+                                    <label for="pos-form-5" class="form-label">Notes</label>
+                                    <textarea id="pos-form-5" name="Cust_Note" class="form-control flex-1" placeholder="notes : Jangan dijemur terik matahari"></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer text-right">
@@ -79,24 +80,25 @@
                             </div>
                             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
                                 <div class="col-span-12">
-                                    <label for="edit-name" class="form-label">Name</label>
-                                    <input type="hidden" id="edit-id" name="id">
-                                    <input id="edit-name" name="name" type="text" class="form-control flex-1" placeholder="Customer name">
+                                    <label for="edit-nama" class="form-label">Name</label>
+                                    <input id="edit-id" type="hidden" name="Cust_No">
+                                    <input id="edit-nama" type="text" name="Cust_Nama" class="form-control flex-1" placeholder="Customer name">
+                                </div>
+                                <div class="col-span-6">
+                                    <label for="edit-telp" class="form-label">No Telp</label>
+                                    <input id="edit-telp" type="text" name="Cust_Telp" class="form-control flex-1" placeholder="example : 081234567890 ">
+                                </div>
+                                <div class="col-span-6">
+                                    <label for="edit-tgl" class="form-label">Tgl Lahir</label>
+                                    <input id="edit-tgl" type="date" name="Cust_Tgl_Lahir" class="form-control flex-1">
                                 </div>
                                 <div class="col-span-12">
-                                    <label for="edit-address" class="form-label">Address</label>
-                                    <textarea id="edit-address" name="address" class="form-control flex-1" placeholder="Jl Mayjend Sungkono"></textarea>
+                                    <label for="edit-alamat" class="form-label">Alamat</label>
+                                    <textarea id="edit-alamat" name="Cust_Alamat" class="form-control flex-1" placeholder="Jl Mayjend Sungkono"></textarea>
                                 </div>
                                 <div class="col-span-12">
-                                    <label for="edit-membership" class="form-label">Memberhip</label>
-                                    <select id="edit-membership" class="form-select mt-2 sm:mr-2" name="membership">
-                                    <?php
-                                    $sql = mysqli_query($conn, 'SELECT *FROM membership');
-                                    while ($data = mysqli_fetch_assoc($sql)) {
-                                        echo "<option value='{$data["id"]}'>{$data['name']}</option>";
-                                    }
-                                    ?>
-                                    </select>
+                                    <label for="edit-note" class="form-label">Notes</label>
+                                    <textarea id="edit-note" name="Cust_Note" class="form-control flex-1" placeholder="notes : Jangan dijemur terik matahari"></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer text-right">
@@ -120,7 +122,7 @@
                 $(document).ready(function() {
                     $('#example').DataTable( {
                         "ajax":{
-                            url :"content/ajax/customers_processing.php",
+                            url :"function/customers?menu=data",
                             type: "post",
                             error: function(){
                                 $(".dataku-error").html("");
@@ -137,7 +139,7 @@
                     } );     
                 } );
 
-                function deleteButton(id){
+                function btnDelete(id){
                     let text = "Are you sure?";
                     if (confirm(text) == true) {
                         location.href="function/customers?menu=delete&id="+id;
@@ -145,7 +147,7 @@
                         text = "You canceled!";
                     }
                 }
-                function editButton(id){
+                function btnEdit(id){
                     $.ajax({
                         type:'POST',
                         url:'function/customers?menu=ajax',
@@ -153,11 +155,13 @@
                         success: function(data) { // Jika berhasil
                             var json = data,
                             obj = JSON.parse(json);
-                            $('#edit-id').val(obj.id);
-                            $('#edit-name').val(obj.name);
-                            $('#edit-address').val(obj.address);
-                            $('#edit-membership').val(obj.membership);
-                         }
+                            $('#edit-id').val(obj.Cust_No);
+                            $('#edit-nama').val(obj.Cust_Nama);
+                            $('#edit-alamat').val(obj.Cust_Alamat);
+                            $('#edit-telp').val(obj.Cust_Telp);
+                            $('#edit-note').val(obj.Cust_Note);
+                            $('#edit-tgl').val(obj.Cust_Tgl_Lahir);
+                        }
                     });
                 }
 
