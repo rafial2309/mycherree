@@ -12,7 +12,7 @@ if ($_GET['menu'] == 'create' ) {
 	$Cust_Note 		    = $_POST['Cust_Note'];
 	$Cust_Tgl_Join 		= date('Y-m-d');
 
-	mysqli_query($conn, "INSERT INTO Customer (Cust_Nama, Cust_Telp, Cust_Tgl_Lahir, Cust_Alamat, Cust_Note, Cust_Tgl_Join, Cust_Status) VALUES ('$Cust_Nama','$Cust_Telp','$Cust_Tgl_Lahir','$Cust_Alamat','$Cust_Note','$Cust_Tgl_Join','Y')");
+	mysqli_query($conn, "INSERT INTO Customer (Cust_Nama, Cust_Telp, Cust_Tgl_Lahir, Cust_Alamat, Cust_Note, Cust_Tgl_Join, Cust_Store, Cust_Status) VALUES ('$Cust_Nama','$Cust_Telp','$Cust_Tgl_Lahir','$Cust_Alamat','$Cust_Note','$Cust_Tgl_Join','PIK','Y')");
 
 } elseif ($_GET['menu'] == 'edit') {
     // UPDATE EXISTING CUSTOMER

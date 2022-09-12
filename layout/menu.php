@@ -778,7 +778,7 @@
                         <li>
                             <a href="app?p=transactions" class="top-menu">
                                 <div class="top-menu__icon"> <i data-lucide="file-text"></i> </div>
-                                <div class="top-menu__title"> Invoice / Taransaksi </div>
+                                <div class="top-menu__title"> Invoice / Transaksi </div>
                             </a>
                         </li>
                         <li>

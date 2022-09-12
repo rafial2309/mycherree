@@ -64,7 +64,7 @@
                                     </select>
                                 </div>
                                 <div class="col-span-12">
-                                    <label for="pos-form-3" class="form-label">Jumlah Pemabayaran</label>
+                                    <label for="pos-form-3" class="form-label">Jumlah Pembayaran</label>
                                     <input id="pos-form-3" type="text" name="Registrasi_Payment" class="form-control flex-1" placeholder="Jumlah Pembayaran">
                                 </div>
                                 <div class="col-span-6">
