@@ -703,7 +703,7 @@
                 <!-- END: Search -->
                 <!-- BEGIN: Notifications -->
                 <div class="intro-x dropdown mr-4 sm:mr-6" style="color: white;">
-                    STORE PIK
+                    <?php echo $_SESSION['Staff_Name'] ?>
                 </div>
                 <!-- END: Notifications -->
                 <!-- BEGIN: Account Menu -->
@@ -714,8 +714,8 @@
                     <div class="dropdown-menu w-56">
                         <ul class="dropdown-content bg-primary/80 before:block before:absolute before:bg-black before:inset-0 before:rounded-md before:z-[-1] text-white">
                             <li class="p-2">
-                                <div class="font-medium">Rafi Aldiansyah A</div>
-                                <div class="text-xs text-white/60 mt-0.5 dark:text-slate-500">50102</div>
+                                <div class="font-medium"><?php echo $_SESSION['Staff_Name'] ?></div>
+                                <div class="text-xs text-white/60 mt-0.5 dark:text-slate-500"><?php echo $_SESSION['Staff_ID'] ?></div>
                             </li>
                             <li>
                                 <hr class="dropdown-divider border-white/[0.08]">
@@ -729,7 +729,7 @@
                                 <hr class="dropdown-divider border-white/[0.08]">
                             </li>
                             <li>
-                                <a href="" class="dropdown-item hover:bg-white/5"> <i data-lucide="toggle-right" class="w-4 h-4 mr-2"></i> Logout </a>
+                                <a href="function/logout" class="dropdown-item hover:bg-white/5"> <i data-lucide="toggle-right" class="w-4 h-4 mr-2"></i> Logout </a>
                             </li>
                         </ul>
                     </div>

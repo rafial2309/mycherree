@@ -92,6 +92,28 @@ if ($_GET['menu'] == 'create' ) {
     // MERUBAH VARIABEL ARRAY KE FORMAT JSON
     echo json_encode($json);
     exit();
+} elseif ($_GET['menu'] == 'cariitem') { 
+    // KEYWORD DIKIRIM DENGAN METHOD POST
+    $keyword    = $_POST['keyword'];
+
+    $query = mysqli_query($conn,"SELECT * from Master_Item WHERE Item_Name LIKE '%$keyword%' order by Item_Name ASC LIMIT 8");
+    while ($dataitem = mysqli_fetch_array($query)) { ?>
+
+    <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#add-item-modal" class="intro-y block col-span-12 sm:col-span-4 2xl:col-span-3" onclick="tambahitem('<?php echo $dataitem['Item_ID'] ?>','<?php echo $dataitem['Item_Name'] ?>','<?php echo $dataitem['Item_Price'] ?>','<?php echo $dataitem['Item_Pcs'] ?>')">
+        <div class="box rounded-md p-3 relative zoom-in">
+            <div class="flex-none relative block before:block before:w-full before:pt-[100%]">
+                <div class="absolute top-0 left-0 w-full h-full image-fit">
+                    <img alt="My Cherree Laundry" class="rounded-md" src="src/images/item/<?php echo $dataitem['Item_ID'] ?>.webp" onerror="this.onerror=null; this.src='src/images/item/noimage.svg'">
+                </div>
+            </div>
+            <div class="block font-medium text-center truncate mt-3"><?php echo $dataitem['Item_Name'] ?></div>
+            <center><button class="btn btn-sm btn-outline-primary inline-block mt-1"><?php echo $dataitem['Item_Category'] ?></button></center>
+        </div>
+    </a>
+
+    <?php
+    }
+    exit();
 } else {
 	// SOFT DELETE ITEM
 	$Item_ID = $_GET['id'];
