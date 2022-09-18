@@ -1,3 +1,4 @@
+            
             <div class="wrapper-box">
                 <!-- BEGIN: Content -->
                 <div class="content">
@@ -33,37 +34,47 @@
                                         
                                         <th class="whitespace-nowrap">INVOICE</th>
                                         <th class="whitespace-nowrap">BUYER NAME</th>
-                                        <th class="whitespace-nowrap">FINISH</th>
-                                        <th class="whitespace-nowrap">PAYMENT</th>
-                                        <th class="text-right whitespace-nowrap">
-                                            <div class="pr-16">TOTAL TRANSACTION</div>
+                                        <th class="whitespace-nowrap" style="width: 205px;">FINISH</th>
+                                        <th class="whitespace-nowrap">STATUS</th>
+                                        <th class="text-right whitespace-nowrap" style="width: 190px;">
+                                            <div class="pr-16">PAYMENT</div>
                                         </th>
                                         <th class="text-center whitespace-nowrap">ACTIONS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php
+                                        $query = mysqli_query($conn,"SELECT * from Invoice order by Inv_No DESC LIMIT 20");
+                                        while($data=mysqli_fetch_assoc($query)){
+                                    ?>
                                     <tr class="intro-x">
                                         
-                                        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;">#INV-2200001</a> </td>
+                                        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;">#INV-<?php echo $data['Inv_Number'] ?></a> </td>
                                         <td class="w-40">
-                                            <a href="" class="font-medium whitespace-nowrap">Mustafa Amien</a> 
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">Jl. Merdeka Indah Jaya Sentosa, Jakarta</div>
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">081263723</div>
+                                            <a href="" class="font-medium whitespace-nowrap"><?php echo $data['Cust_Nama'] ?></a> 
+                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
+                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Telp'] ?></div>
                                         </td>
                                         <td>
-                                            <div class="pr-16">Mon, 23 Sep 2022</div>
+                                            <div class="pr-16"><?php echo date('D, d-m-Y', strtotime($data['Inv_Tgl_Masuk'])); ?></div>
+                                            <div class="pr-16"><?php echo date('D, d-m-Y', strtotime($data['Inv_Tg_Selesai'])); ?></div>
                                         </td>
                                         <td>
-                                            <div class="flex items-center whitespace-nowrap text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Completed </div>
-                                            <div class="whitespace-nowrap">Direct bank transfer</div>
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">25 March, 12:55</div>
+                                            <?php if ($data['Status_Payment']=='N') { ?>
+                                                <div class="flex items-center whitespace-nowrap text-warning"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> UNPAID </div>
+                                                
+                                            <?php }else{ ?>
+                                                <div class="flex items-center whitespace-nowrap text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Completed </div>
+                                                <div class="whitespace-nowrap">Direct bank transfer</div>
+                                                <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">25 March, 12:55</div>
+                                            <?php } ?>
                                         </td>
                                         <td class="w-40 text-right">
-                                            <div class="pr-16">Rp 370.000</div>
+                                            <div class="pr-16">Rp <?php echo number_format($data['Payment_Amount'] ,0,",",".")?></div>
                                         </td>
                                         <td class="table-report__action">
                                             <div class="flex justify-center items-center">
-                                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> View Details </a>
+                                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="app?p=transactions_detail&invoice=<?php echo $data['Inv_Number'] ?>"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> View Details </a>
                                                 
                                                 <div class="dropdown"> 
                                                     <button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown"><i data-lucide="send" class="w-4 h-4 mr-2"></i> Process Invoice</button> 
@@ -83,47 +94,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr class="intro-x">
-                                        
-                                        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;">#INV-2200002</a> </td>
-                                        <td class="w-40">
-                                            <a href="" class="font-medium whitespace-nowrap">Aldiansyah A</a> 
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">Jl. PIK Indah, Jakarta</div>
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">01237823</div>
-                                        </td>
-                                        <td>
-                                            <div class="pr-16">Tue, 24 Sep 2022</div>
-                                        </td>
-                                        <td>
-                                            <div class="flex items-center whitespace-nowrap text-warning"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Unpaid </div>
-                                            <button class="btn btn-sm btn-warning shadow-md mr-2 mt-2"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> MAKE A PAYMENT </button>
-
-                                        </td>
-                                        <td class="w-40 text-right">
-                                            <div class="pr-16">Rp 370.000</div>
-                                        </td>
-                                        <td class="table-report__action">
-                                            <div class="flex justify-center items-center">
-                                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> View Details </a>
-                                                
-                                                <div class="dropdown"> 
-                                                    <button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown"><i data-lucide="send" class="w-4 h-4 mr-2"></i> Process Invoice</button> 
-                                                    <div class="dropdown-menu w-40"> 
-                                                        <ul class="dropdown-content"> 
-                                                            <li> <div class="dropdown-header">Process</div> </li> 
-                                                            <li> <hr class="dropdown-divider"> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice </a> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Payment </a> 
-                                                            </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="x-circle" class="w-4 h-4 mr-2"></i> Cancel </a> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Rewash </a> </li> 
-                                                            
-                                                        </ul> 
-                                                    </div> 
-                                                </div> 
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
