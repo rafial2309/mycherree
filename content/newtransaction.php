@@ -1,3 +1,4 @@
+
 <div class="wrapper-box">
                 <!-- BEGIN: Content -->
                 <div class="content">
@@ -5,26 +6,10 @@
                         <h2 class="text-lg font-medium mr-auto">
                             New Invoice
                         </h2>
+
                         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-                            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-order-modal" class="btn btn-primary shadow-md mr-2">New Order</a> 
-                            <div class="pos-dropdown dropdown ml-auto sm:ml-0">
-                                <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
-                                    <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="chevron-down"></i> </span>
-                                </button>
-                                <div class="pos-dropdown__dropdown-menu dropdown-menu">
-                                    <ul class="dropdown-content">
-                                        <li>
-                                            <a href="" class="dropdown-item"> <i data-lucide="activity" class="w-4 h-4 mr-2"></i> <span class="truncate">INV-0206020 - Angelina Jolie</span> </a>
-                                        </li>
-                                        <li>
-                                            <a href="" class="dropdown-item"> <i data-lucide="activity" class="w-4 h-4 mr-2"></i> <span class="truncate">INV-0206022 - Edward Norton</span> </a>
-                                        </li>
-                                        <li>
-                                            <a href="" class="dropdown-item"> <i data-lucide="activity" class="w-4 h-4 mr-2"></i> <span class="truncate">INV-0206021 - Johnny Depp</span> </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                            
+                            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-order-modal" class="btn btn-primary shadow-md mr-2"> <i data-lucide="user" class="w-4 h-4 mr-2"></i> <c id="tombolcust"><?php if (!isset($_SESSION['Cust_No'])) { echo "SELECT CUSTOMER";} else{ echo "UPDATE CUSTOMER"; } ?></c> </a> 
                         </div>
                     </div>
                     <div class="intro-y grid grid-cols-12 gap-5 mt-5">
@@ -72,73 +57,66 @@
                                         <li id="ticket-tab" class="nav-item flex-1" role="presentation">
                                             <button class="nav-link w-full py-2 active" data-tw-toggle="pill" data-tw-target="#ticket" type="button" role="tab" aria-controls="ticket" aria-selected="true" > Item(s) </button>
                                         </li>
-                                        <li id="details-tab" class="nav-item flex-1" role="presentation">
-                                            <button class="nav-link w-full py-2" data-tw-toggle="pill" data-tw-target="#details" type="button" role="tab" aria-controls="details" aria-selected="false" > Detail Transaction </button>
-                                        </li>
+                                        
                                     </ul>
                                 </div>
                             </div>
                             <div class="tab-content">
                                 <div id="ticket" class="tab-pane active" role="tabpanel" aria-labelledby="ticket-tab">
-                                    <div class="box p-2 mt-5" id="hasilcart">
+                              
+                                    <form method="POST" action="#">
+                                    <div class="box p-2 mt-5">
+                                        <div class="flex items-center border-b border-slate-200 dark:border-darkmode-400 p-2">
+                                            <div>
+                                                <div class="text-slate-500">Customer</div>
+                                                <div class="mt-1"><b style="font-size: 16px;" id="namacustomer"><?php if (isset($_SESSION['Cust_No'])) {
+                                                    echo $_SESSION['Cust_Nama'];
+                                                }else{ echo 'CUSTOMER NOT SELECTED'; } ?></b></div>
+                                                <input type="hidden" name="Cust_No" id="Cust_No_Data" value="<?php if (isset($_SESSION['Cust_No'])) {
+                                                    echo $_SESSION['Cust_No'];
+                                                } ?>">
+                                                <input type="hidden" name="Cust_Nama" id="Cust_Nama_Data" value="<?php if (isset($_SESSION['Cust_No'])) {
+                                                    echo $_SESSION['Cust_Nama'];
+                                                } ?>">
+                                            </div>
+                                            <i data-lucide="user" class="w-4 h-4 text-slate-500 ml-auto"></i> 
+                                        </div>
+                                        <div class="mt-2" id="hasilcart">
+                                            
+                                        </div>
+                                        
+                                        
+                                        
+                                    </div>
+                                  
+                                    
+                                    <div class="box p-5 mt-5" id="totalan">
 
                                         
-                                        
-                                        
                                     </div>
-                                    <div class="box flex p-5 mt-5">
-                                         <input type="text" class="datepicker form-control w-56 block mx-auto" data-single-mode="true" style="width: 60%;"> 
-                                        <button class="btn btn-primary ml-2" style="width: 40%;">Apply Date</button>
-                                    </div>
-                                    
                                     <div class="box p-5 mt-5">
-                                        <div class="flex">
-                                            <div class="mr-auto">Subtotal</div>
-                                            <div class="font-medium">Rp 230.000</div>
-                                        </div>
-                                        <div class="flex mt-4">
-                                            <div class="mr-auto">Discount</div>
-                                            <div class="font-medium text-danger">-Rp0</div>
-                                        </div>
-                                        
-                                        <div class="flex mt-4 pt-4 border-t border-slate-200/60 dark:border-darkmode-400">
-                                            <div class="mr-auto font-medium text-base">Total Charge</div>
-                                            <div class="font-medium text-base">Rp 230.000</div>
+                                        <div style="width: 100%;">
+                                            <div class="text-slate-500">Ready Date</div>
+                                            <div class="mt-1">
+                                                <input type="text" class="datepicker form-control block mx-auto" data-single-mode="true"> 
+                                            </div>
+                                            
+                                        </div> 
+                                        <div class="mt-2" style="width: 100%;">
+                                            <div class="text-slate-500">Note Transaction</div>
+                                            <div class="mt-1">
+                                                <textarea class="form-control" style="width: 100%;"></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="flex mt-5">
                                         <button class="btn w-40 border-slate-300 dark:border-darkmode-400 text-slate-500">Cancel Transaction</button>
                                         <button class="btn btn-primary w-40 shadow-md ml-auto">Save Transaction</button>
                                     </div>
+                                    </form>
+
                                 </div>
-                                <div id="details" class="tab-pane" role="tabpanel" aria-labelledby="details-tab">
-                                    <div class="box p-5 mt-5">
-                                        
-                                        <div class="flex items-center border-b border-slate-200 dark:border-darkmode-400 py-5">
-                                            <div>
-                                                <div class="text-slate-500">Customer</div>
-                                                <div class="mt-1">Mustafa Amien</div>
-                                            </div>
-                                            <i data-lucide="user" class="w-4 h-4 text-slate-500 ml-auto"></i> 
-                                        </div>
-                                        <div class="flex items-center border-b border-slate-200 dark:border-darkmode-400 py-5">
-                                            <div>
-                                                <div class="text-slate-500">Membership</div>
-                                                <div class="mt-1">NONE</div>
-                                            </div>
-                                            <i data-lucide="users" class="w-4 h-4 text-slate-500 ml-auto"></i> 
-                                        </div>
-                                        <div class="flex items-center pt-5">
-                                            <div style="width: 100%;">
-                                                <div class="text-slate-500">Note Transaction</div>
-                                                <div class="mt-1">
-                                                    <textarea class="form-control" style="width: 100%;"></textarea>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                         <!-- END: Ticket -->
@@ -149,26 +127,32 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h2 class="font-medium text-base mr-auto">
-                                        New Order
+                                        New Order Customer
                                     </h2>
                                 </div>
                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
                                     <div class="col-span-12">
-                                        <label for="pos-form-1" class="form-label">Name</label>
-                                        <input id="pos-form-1" type="text" class="form-control flex-1" placeholder="Customer name">
+                                         <label class="form-label">Customers</label>
+                                         <div class="mt-1">
+                                             <select name="customer" id="customer" data-placeholder="Select Customers" class="tom-select w-full" onchange="cekcust()">
+                                                <option>-- SELECT CUSTOMER --</option>
+                                                <?php 
+                                                    $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
+                                                    while($datacust = mysqli_fetch_assoc($querycust)){
+                                                ?>
+                                                    <option value="<?php echo $datacust['Cust_No'] ?>+<?php echo $datacust['Cust_Nama'] ?>"><?php echo $datacust['Cust_Nama'] ?></option>
+                                                <?php } ?>
+                                             </select> 
+                                         </div>
                                     </div>
                                     <div class="col-span-12">
-                                        <label for="pos-form-2" class="form-label">Table</label>
-                                        <input id="pos-form-2" type="text" class="form-control flex-1" placeholder="Customer table">
+                                        <button class="btn btn-outline-primary w-full inline-block mr-1 mb-2" id="hasilcekmember">-</button>
                                     </div>
-                                    <div class="col-span-12">
-                                        <label for="pos-form-3" class="form-label">Number of People</label>
-                                        <input id="pos-form-3" type="text" class="form-control flex-1" placeholder="People">
-                                    </div>
+                                    
                                 </div>
                                 <div class="modal-footer text-right">
-                                    <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
-                                    <button type="button" class="btn btn-primary w-32">Create Ticket</button>
+                                    <button type="button" id="closemodalcustomer" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
+                                    <button type="button" onclick="pilihcust()" class="btn btn-primary w-32">Apply</button>
                                 </div>
                             </div>
                         </div>
@@ -177,7 +161,7 @@
                     <!-- BEGIN: Add Item Modal -->
                     <div id="add-item-modal" class="modal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog" style="width: 600px;">
-                            <form method="POST" action="function/saveitem_new" id="simpanitem">
+                            <form method="POST" action="function/transaksi_item?menu=savenew" id="simpanitem">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h2 class="font-medium text-base mr-auto" id="Item_Name_Tampil">
@@ -197,7 +181,7 @@
                                          <!-- BEGIN: Basic Select -->
                                          <label class="form-label">Colour</label>
                                          <div class="mt-1">
-                                             <select name="colour" data-placeholder="Select your favorite actors" class="tom-select w-full">
+                                             <select name="colour" data-placeholder="Select Colour" class="tom-select w-full">
                                                 <?php 
                                                     $querycolor = mysqli_query($conn,"SELECT * from Master_Colour WHERE Colour_Status='Y' order by Colour_Name asc");
                                                     while($datacolour = mysqli_fetch_assoc($querycolor)){
@@ -211,7 +195,7 @@
                                          <!-- BEGIN: Basic Select -->
                                          <label class="form-label">Brand</label>
                                          <div class="mt-1">
-                                             <select name="brand" data-placeholder="Select your favorite actors" class="tom-select w-full">
+                                             <select name="brand" data-placeholder="Select Brand" class="tom-select w-full">
                                                 <?php 
                                                     $querybrand = mysqli_query($conn,"SELECT * from Master_Brand WHERE Brand_Status='Y' order by Brand_Name asc");
                                                     while($databrand = mysqli_fetch_assoc($querybrand)){
@@ -252,7 +236,7 @@
                                              <input type="hidden" name="Item_Name" id="Item_Name" value="">
                                              <input type="hidden" name="Item_Price" id="Item_Price" value="">
                                              <input type="hidden" name="Item_Pcs" id="Item_Pcs" value="">
-                                             <input type="text" name="Total_Price" id="Total_Price" value="">
+                                             <input type="hidden" name="Total_Price" id="Total_Price" value="">
 
                                             
                                              <!-- kirimdata -->
@@ -268,9 +252,19 @@
                             </form>
                         </div>
                     </div>
+                    <div id="add-item-modal-edit" class="modal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog" style="width: 600px;">
+                            <form method="POST" action="function/transaksi_item?menu=saveedit" id="simpanitemedit">
+                            <div class="modal-content" id="hasiledit">
+                                
+                            </div>
+                            </form>
+                        </div>
+                    </div>
                     <!-- END: Add Item Modal -->
                      <div class="text-center"> 
                         <a id="success-additem" href="javascript:;" style="opacity:0" data-tw-toggle="modal" data-tw-target="#success-modal-preview" class="btn btn-primary">-</a> 
+                        <a id="danger-additem" href="javascript:;" style="opacity:0" data-tw-toggle="modal" data-tw-target="#danger-modal-preview" class="btn btn-danger">-</a> 
                      </div> <!-- END: Modal Toggle --> 
                      <!-- BEGIN: Modal Content --> 
                      <div id="success-modal-preview" class="modal" tabindex="-1" aria-hidden="true"> 
@@ -288,7 +282,24 @@
                                 </div> 
                             </div> 
                         </div> 
-                     </div> <!-- END: Modal Content --> 
+                     </div> 
+                     <div id="danger-modal-preview" class="modal" tabindex="-1" aria-hidden="true"> 
+                        <div class="modal-dialog"> 
+                            <div class="modal-content"> 
+                                <div class="modal-body p-0"> 
+                                    <div class="p-5 text-center"> 
+                                        <i data-lucide="check-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i> 
+                                        <div class="text-3xl mt-5">Delete Success!</div> 
+                                        <div class="text-slate-500 mt-2">Item deleted.</div> 
+                                    </div> 
+                                    <div class="px-5 pb-8 text-center"> 
+                                        <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div> 
+                     </div> 
+                     <!-- END: Modal Content --> 
                 </div>
                 <!-- END: Content -->
             </div>
@@ -331,6 +342,38 @@
                     $( '.uang' ).mask('000.000.000', {reverse: true});
                 }) 
 
+                function cekcust(){
+                    var id = document.getElementById('customer').value;
+                    $.ajax({
+                        url:'function/transaksi_item?menu=cekcust',
+                        type:'POST',
+                        data:'id='+id,
+                        dataType:'html',
+                        success:function (response) {
+                            $('#hasilcekmember').html(response);
+                        },
+
+                    })
+                }
+                function pilihcust(){
+                    var id = document.getElementById('customer').value;
+                    var Cust_No_Data = id.split("+");
+                    $.ajax({
+                        url:'function/transaksi_item?menu=pilihcust',
+                        type:'POST',
+                        data:'id='+id,
+                        dataType:'html',
+                        success:function (response) {
+                            document.getElementById('closemodalcustomer').click();
+                            document.getElementById('Cust_No_Data').value = Cust_No_Data[0];
+                            document.getElementById('Cust_Nama_Data').value = Cust_No_Data[1];
+                            document.getElementById('namacustomer').innerHTML = Cust_No_Data[1];
+                            document.getElementById('tombolcust').innerHTML = "UPDATE CUSTOMER";
+                            getcart();
+                        },
+
+                    })
+                }
 
                 function tambahitem(Item_ID,Item_Name,Item_Price,Item_Pcs){
                     // RESET DATA
@@ -375,15 +418,88 @@
                     document.getElementById('Total_Price').value = priceupdate;
                     document.getElementById('pricetampil').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");;
                 }
+                function updateitemqty1(data){
+                    if (data=='plus') {
+                        var item_qty = document.getElementById('item_qty_edit').value;
+                        var item_qty_update = parseInt(item_qty) + 1;
+                        document.getElementById('item_qty_edit').value = item_qty_update;
+                    }else if(data=='minus'){
+                        var item_qty = document.getElementById('item_qty_edit').value;
+                        var item_qty_update = parseInt(item_qty) - 1;
+                        if(item_qty_update < 1){ item_qty_update = '1';}
+                        document.getElementById('item_qty_edit').value = item_qty_update;
+                    }
+                    updateitemprice1();
+                }
+
+                function updateitemprice1(){
+                    var Item_Price = document.getElementById('Item_Price_edit').value;
+                    var item_qty = document.getElementById('item_qty_edit').value
+                    var adjustment = document.getElementById('adjustment_edit').value;
+                    if (adjustment=='') {adjustment='0';}
+
+                    var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) + parseInt(adjustment.replace(".", "")));
+
+                    document.getElementById('Total_Price_edit').value = priceupdate;
+                    document.getElementById('pricetampiledit').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");;
+                }
+
 
                 function getcart(){
                    
                     $.ajax({
-                        url:'function/getcart',
+                        url:'function/transaksi_item?menu=getitem',
                         type:'POST',
                         dataType:'html',
                         success:function (response) {
                             $('#hasilcart').html(response);
+
+                        },
+
+                    })
+
+                    $.ajax({
+                        url:'function/transaksi_item?menu=totalan',
+                        type:'POST',
+                        dataType:'html',
+                        success:function (response) {
+                            $('#totalan').html(response);
+
+                        },
+
+                    })
+                }
+
+
+
+           
+                
+                function hapusitem(id){
+                   
+                    $.ajax({
+                        url:'function/transaksi_item?menu=hapusitem',
+                        type:'POST',
+                        data:'id='+id,
+                        dataType:'html',
+                        success:function (response) {
+                            document.getElementById('closemodalitemnewedit').click();
+                            getcart();
+                            document.getElementById('danger-additem').click();
+                        },
+
+                    })
+                }
+
+                function edititem(id){
+                    $.ajax({
+                        url:'function/transaksi_item?menu=edititem',
+                        type:'POST',
+                        data:'id='+id,
+                        dataType:'html',
+                        success:function (response) {
+                            $('#hasiledit').html(response);
+                          
+                            
                         },
 
                     })
@@ -408,6 +524,33 @@
                     success: function (data) {
                       console.log("success");
                       document.getElementById('closemodalitemnew').click();
+                      getcart();
+                      document.getElementById('success-additem').click();
+                    },
+                    error: function(request, status, error) {
+                      console.log("error")
+                    }
+                  });
+                });
+
+                var frm2 = $('#simpanitemedit');
+                frm2.submit(function (e) {
+                  e.preventDefault(e);
+
+                  var formData = new FormData(this);
+
+                  $.ajax({
+                    async: true,
+                    type: frm2.attr('method'),
+                    url: frm2.attr('action'),
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+
+                    success: function (data) {
+                      console.log("success");
+                      document.getElementById('closemodalitemnewedit').click();
                       getcart();
                       document.getElementById('success-additem').click();
                     },

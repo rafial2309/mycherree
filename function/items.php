@@ -82,6 +82,13 @@ if ($_GET['menu'] == 'create' ) {
     $sql 	= mysqli_query($conn, "SELECT * FROM Master_Item WHERE Item_ID='$Item_ID'");
     $data 	= mysqli_fetch_assoc($sql);
 
+//     Deskripsi
+// Qty
+// Size
+// Item_Note
+// Adjustment
+// Adjustment_Note
+
     $json = [ 
         'Item_ID'	        => $Item_ID, 
         'Item_Name' 		=> $data['Item_Name'],

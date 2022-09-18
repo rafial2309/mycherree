@@ -38,7 +38,7 @@ $r=mysqli_fetch_array($login);
 	if (mysqli_num_rows($login)) {
 
 		session_start();
-		if ($r['status']=='N') {
+		if ($r['Staff_Status']=='N') {
 			echo "<script>window.location=('../login?error=error&msg=Akun sudah dinonaktifkan')</script>";
 			exit();
 		}
