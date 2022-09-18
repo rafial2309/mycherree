@@ -5,6 +5,27 @@ include "../config/configuration.php";
 $Staff_ID 			= $_SESSION['Staff_ID'];
 $Staff_Name 		= $_SESSION['Staff_Name'];
 
+function angka_pembulatan($angka,$digit,$minimal)
+{
+ if (substr($angka, -2)=='00') {
+     return $angka;
+ }else{
+    $digitvalue=substr($angka,-($digit));  $bulat=0;
+     $nolnol="";
+     for($i=1;$i<=$digit;$i++)
+     {
+     $nolnol.="0";
+     }
+     if($digitvalue<$minimal && $digit!=$nolnol)
+     {  $x1=$minimal-$digitvalue;
+     $bulat=$angka+$x1;
+     }else{
+     $bulat=$angka;
+     }
+     return $bulat; 
+ } 
+}
+
 if ($_GET['menu'] == 'getitem' ) {
 	
 
@@ -21,23 +42,44 @@ if ($_GET['menu'] == 'getitem' ) {
 	}
 } elseif ($_GET['menu'] == 'cekcust') { 
 	$id = 	explode('+',$_POST['id']);
-	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount_No, Cust_Member_Name from Customer WHERE Cust_No='$id[0]'"));
+	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Customer WHERE Cust_No='$id[0]'"));
 
 	if ($data['Discount_No']!='0') {
-		echo $data['Cust_Member_Name'];
+		$member = $data['Cust_Member_Name'];
 	}else{
-		echo 'NON-MEMBER';
+		$member = 'NON-MEMBER';
 	}
+	$json = [ 
+        'Cust_No' 		=> $data['Cust_No'],
+	    'Cust_Nama'     => $data['Cust_Nama'],
+	    'Cust_Alamat'   => $data['Cust_Alamat'],
+	    'Cust_Telp'     => $data['Cust_Telp'],
+	    'member'     	=> $member,
+	];
+    // MERUBAH VARIABEL ARRAY KE FORMAT JSON
+    echo json_encode($json);
+    exit();
 
 } elseif ($_GET['menu'] == 'pilihcust') { 
 	$id = 	explode('+',$_POST['id']);
-	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Cust_No,Cust_Nama from Customer WHERE Cust_No='$id[0]'"));
+	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Cust_No,Cust_Nama,Discount_No from Customer WHERE Cust_No='$id[0]'"));
 
-	$_SESSION['Cust_No'] 	= $data['Cust_No'];
-	$_SESSION['Cust_Nama'] 	= $data['Cust_Nama'];
+	$_SESSION['Cust_No'] 		= $data['Cust_No'];
+	$_SESSION['Cust_Nama'] 		= $data['Cust_Nama'];
+	$_SESSION['Cust_Telp'] 		= $_POST['Cust_Telp'];
+	$_SESSION['Cust_Alamat'] 	= $_POST['Cust_Alamat'];
+	$_SESSION['Discount_No'] 	= $data['Discount_No'];
+
+	$json = [ 
+        'Discount_No' => $data['Discount_No'],
+	];
+	echo json_encode($json);
+    exit();
 
 } elseif ($_GET['menu'] == 'totalan') { 
 	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price from Invoice_Item WHERE Inv_Number='' AND Staff_ID='$Staff_ID'"));
+
+	$datapcs = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Item_Pcs*Qty) as Total_Pcs from Invoice_Item WHERE Inv_Number='' AND Staff_ID='$Staff_ID'"));
 
 	$subtotal 	= $data['Total_Price'];
 
@@ -75,6 +117,7 @@ if ($_GET['menu'] == 'getitem' ) {
         <div class="mr-auto font-medium text-base">Total</div>
         <div class="font-medium text-base">Rp <c id="total"><?php echo number_format($total ,0,",",".")?></c></div>
     </div>
+    <input type="hidden" name="totalpcs" id="totalpcsdata" value="<?php echo $datapcs['Total_Pcs']; ?>">
     <input type="hidden" name="subtotal" id="subtotaldata" value="<?php echo $subtotal; ?>">
     <input type="hidden" name="diskon" id="diskondata" value="<?php echo $diskon; ?>">
     <input type="hidden" name="total" id="totaldata" value="<?php echo $total; ?>">
@@ -106,8 +149,8 @@ if ($_GET['menu'] == 'getitem' ) {
 }elseif ($_GET['menu'] == 'edititem') { 
 	$id = $_POST['id'];
 	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Item WHERE Inv_Item_No='$id'"));
-	$databrand = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Brand_Name from Master_Brand WHERE Brand_ID='$data[Brand_ID]'"));
-	$datacolour = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Colour_Name from Master_Colour WHERE Colour_ID='$data[Colour_ID]'"));
+	$databrand = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Brand_ID,Brand_Name from Master_Brand WHERE Brand_ID='$data[Brand_ID]'"));
+	$datacolour = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Colour_ID,Colour_Name from Master_Colour WHERE Colour_ID='$data[Colour_ID]'"));
 
  ?>
  		<link rel="stylesheet" href="plugin/selectize/selectize.css" />
@@ -246,6 +289,61 @@ if ($_GET['menu'] == 'getitem' ) {
 	mysqli_query($conn,"UPDATE Invoice_Item SET Deskripsi='$Deskripsi', Colour_ID='$Colour_ID',Brand_ID='$Brand_ID',Size='$Size',Item_Note='$Item_Note',Adjustment='$Adjustment',Adjustment_Note='$Adjustment_Note',Qty='$Qty',Total_Price='$Total_Price' WHERE Inv_Item_No='$Inv_Item_No'");
 
 
-	var_dump($_POST);
+	exit();
+} elseif ($_GET['menu'] == 'savetransaksi') { 
+
+	if (!isset($_SESSION["Cust_No"])) {
+		echo "PILIHCUSTOMER";
+		exit();
+	}
+	
+	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Inv_Number from Invoice order by Inv_No DESC LIMIT 1"));
+
+	if (!isset($data['Inv_Number'])) {
+		$inv_terakhir 	= 1;
+		$numbernew 		= sprintf('%05d',$inv_terakhir);
+		$inv_baru 		= date("y").$numbernew;
+	}else{
+
+		$inv_terakhir   = intval(substr($data['Inv_Number'],-5))+1;
+		$numbernew 		= sprintf('%05d',$inv_terakhir);
+		$inv_baru 		= date("y").$numbernew;
+	}
+	
+
+
+	$Inv_Number			= $inv_baru;
+	$Inv_Tgl_Masuk		= date('Y-m-d');
+	$Inv_Tg_Selesai		= $_POST['Inv_Tg_Selesai'];
+	$Cust_ID			= $_POST['Cust_No'];
+	$Cust_Nama			= $_POST['Cust_Nama'];
+	$Cust_Alamat		= $_POST['Cust_Alamat'];
+	$Cust_Telp			= $_POST['Cust_Telp'];
+	$Discount_No		= $_POST['Discount_No'];
+	$Total_PCS			= $_POST['totalpcs'];
+	$Total_Diskon		= $_POST['diskon'];
+	$Total_Voucher		= 0;
+	$Payment_Before		= round($_POST['total']);
+	$Payment_Amount		= angka_pembulatan($Payment_Before,2,100);
+	$Payment_Rounding	= $Payment_Amount-$Payment_Before;
+	$Status_Payment		= 'N';
+	$Status_Taken		= 'N';
+	$Status_Inv			= 'Y';
+	$Note 				= $_POST['Note'];
+	$Staff_Name			= $Staff_Name;
+	$Staff_ID			= $Staff_ID;
+	$Point_Transaksi	= 0;
+
+
+	mysqli_query($conn,"INSERT into Invoice VALUES(0,'$Inv_Number','$Inv_Tgl_Masuk','$Inv_Tg_Selesai','$Cust_ID','$Cust_Nama','$Cust_Alamat','$Cust_Telp','$Discount_No','$Total_PCS','$Total_Diskon','$Total_Voucher','$Payment_Before','$Payment_Rounding','$Payment_Amount','$Status_Payment','$Status_Taken','$Status_Inv','$Note','$Staff_Name','$Staff_ID','$Point_Transaksi')");
+
+	mysqli_query($conn,"UPDATE Invoice_Item SET Inv_Number='$Inv_Number' WHERE Inv_Number='' AND Staff_ID='$Staff_ID'");
+
+	unset($_SESSION["Cust_No"]);
+	unset($_SESSION["Cust_Nama"]);
+	unset($_SESSION["Cust_Telp"]);
+	unset($_SESSION["Cust_Alamat"]);
+	unset($_SESSION["Discount_No"]);
+
 	exit();
 }

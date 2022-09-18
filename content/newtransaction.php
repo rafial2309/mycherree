@@ -64,19 +64,32 @@
                             <div class="tab-content">
                                 <div id="ticket" class="tab-pane active" role="tabpanel" aria-labelledby="ticket-tab">
                               
-                                    <form method="POST" action="#">
+                                    <form method="POST" action="function/transaksi_item?menu=savetransaksi" id="simpantransaksi">
                                     <div class="box p-2 mt-5">
                                         <div class="flex items-center border-b border-slate-200 dark:border-darkmode-400 p-2">
                                             <div>
                                                 <div class="text-slate-500">Customer</div>
                                                 <div class="mt-1"><b style="font-size: 16px;" id="namacustomer"><?php if (isset($_SESSION['Cust_No'])) {
                                                     echo $_SESSION['Cust_Nama'];
-                                                }else{ echo 'CUSTOMER NOT SELECTED'; } ?></b></div>
+                                                }else{ echo 'CUSTOMER NOT SELECTED'; } ?></b><br><c id="alamatcustomer"><?php if (isset($_SESSION['Cust_Alamat'])) {
+                                                    echo $_SESSION['Cust_Alamat'];
+                                                } ?></c><br><c id="telpcustomer"><?php if (isset($_SESSION['Cust_Telp'])) {
+                                                    echo $_SESSION['Cust_Telp'];
+                                                } ?></c></div>
                                                 <input type="hidden" name="Cust_No" id="Cust_No_Data" value="<?php if (isset($_SESSION['Cust_No'])) {
                                                     echo $_SESSION['Cust_No'];
                                                 } ?>">
                                                 <input type="hidden" name="Cust_Nama" id="Cust_Nama_Data" value="<?php if (isset($_SESSION['Cust_No'])) {
                                                     echo $_SESSION['Cust_Nama'];
+                                                } ?>">
+                                                <input type="hidden" name="Cust_Telp" id="Cust_Telp_Data" value="<?php if (isset($_SESSION['Cust_Telp'])) {
+                                                    echo $_SESSION['Cust_Telp'];
+                                                } ?>">
+                                                <input type="hidden" name="Cust_Alamat" id="Cust_Alamat_Data" value="<?php if (isset($_SESSION['Cust_Alamat'])) {
+                                                    echo $_SESSION['Cust_Alamat'];
+                                                } ?>">
+                                                <input type="hidden" name="Discount_No" id="Discount_No_Data" value="<?php if (isset($_SESSION['Discount_No'])) {
+                                                    echo $_SESSION['Discount_No'];
                                                 } ?>">
                                             </div>
                                             <i data-lucide="user" class="w-4 h-4 text-slate-500 ml-auto"></i> 
@@ -98,14 +111,14 @@
                                         <div style="width: 100%;">
                                             <div class="text-slate-500">Ready Date</div>
                                             <div class="mt-1">
-                                                <input type="text" class="datepicker form-control block mx-auto" data-single-mode="true"> 
+                                                <input type="date" name="Inv_Tg_Selesai" class=" form-control block mx-auto" onchange="gantitgl()" data-single-mode="true" required> 
                                             </div>
                                             
                                         </div> 
                                         <div class="mt-2" style="width: 100%;">
                                             <div class="text-slate-500">Note Transaction</div>
                                             <div class="mt-1">
-                                                <textarea class="form-control" style="width: 100%;"></textarea>
+                                                <textarea id="Note" name="Note" class="form-control" style="width: 100%;"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -144,6 +157,12 @@
                                                 <?php } ?>
                                              </select> 
                                          </div>
+                                    </div>
+                                    <div class="col-span-12">
+                                        <input type="text" name="telp" id="telp" class="form-control" placeholder="Input Phone">
+                                    </div>
+                                    <div class="col-span-12">
+                                        <input type="text" name="alamat" id="alamat" class="form-control" placeholder="Input Address">
                                     </div>
                                     <div class="col-span-12">
                                         <button class="btn btn-outline-primary w-full inline-block mr-1 mb-2" id="hasilcekmember">-</button>
@@ -350,29 +369,53 @@
                         data:'id='+id,
                         dataType:'html',
                         success:function (response) {
-                            $('#hasilcekmember').html(response);
+                            var json = response,
+                            obj = JSON.parse(json);
+                            $('#telp').val(obj.Cust_Telp);
+                            $('#alamat').val(obj.Cust_Alamat);
+                            document.getElementById('hasilcekmember').innerHTML = obj.member;
                         },
 
                     })
                 }
                 function pilihcust(){
-                    var id = document.getElementById('customer').value;
+                    var id           = document.getElementById('customer').value;
+                    var Cust_Telp    = document.getElementById('telp').value;
+                    var Cust_Alamat  = document.getElementById('alamat').value;
                     var Cust_No_Data = id.split("+");
                     $.ajax({
                         url:'function/transaksi_item?menu=pilihcust',
                         type:'POST',
-                        data:'id='+id,
-                        dataType:'html',
+                        data:{
+                          id: id,
+                          Cust_Telp: Cust_Telp,
+                          Cust_Alamat: Cust_Alamat,
+                        },
                         success:function (response) {
+                            var json = response,
+                            obj = JSON.parse(json);
                             document.getElementById('closemodalcustomer').click();
                             document.getElementById('Cust_No_Data').value = Cust_No_Data[0];
                             document.getElementById('Cust_Nama_Data').value = Cust_No_Data[1];
                             document.getElementById('namacustomer').innerHTML = Cust_No_Data[1];
+                            document.getElementById('Cust_Telp_Data').value = Cust_Telp;
+                            document.getElementById('Cust_Alamat_Data').value = Cust_Alamat;
+                            document.getElementById('Discount_No_Data').value = obj.Discount_No;
+                            document.getElementById('alamatcustomer').innerHTML = Cust_Alamat;
+                            document.getElementById('telpcustomer').innerHTML = Cust_Telp;
+                            
+                            
                             document.getElementById('tombolcust').innerHTML = "UPDATE CUSTOMER";
+
                             getcart();
                         },
 
                     })
+                }
+
+
+                function gantitgl(){
+                    document.getElementById('Note').focus();
                 }
 
                 function tambahitem(Item_ID,Item_Name,Item_Price,Item_Pcs){
@@ -553,6 +596,37 @@
                       document.getElementById('closemodalitemnewedit').click();
                       getcart();
                       document.getElementById('success-additem').click();
+                    },
+                    error: function(request, status, error) {
+                      console.log("error")
+                    }
+                  });
+                });
+
+                var frm3 = $('#simpantransaksi');
+                frm3.submit(function (e) {
+                  e.preventDefault(e);
+
+                  var formData = new FormData(this);
+
+                  $.ajax({
+                    async: true,
+                    type: frm3.attr('method'),
+                    url: frm3.attr('action'),
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+
+                    success: function (data) {
+                      if(data=='PILIHCUSTOMER'){
+                        alert('Please select customer before save transaction');
+                      }else{
+                          console.log("success");
+                          document.getElementById('success-additem').click();
+                          setTimeout(function() { window.location.reload(); }, 2000);
+                      }
+                      
                     },
                     error: function(request, status, error) {
                       console.log("error")
