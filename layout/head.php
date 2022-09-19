@@ -8,5 +8,17 @@
         <!-- BEGIN: CSS Assets-->
         <link rel="stylesheet" href="dist/css/app.css" />
         <link rel="stylesheet" href="plugin/datatable/jquery.dataTables.min.css" />
-        
+        <style type="text/css">
+            input[type=radio]
+            {
+              /* Double-sized Checkboxes */
+              -ms-transform: scale(1.3); /* IE */
+              -moz-transform: scale(1.3); /* FF */
+              -webkit-transform: scale(1.3); /* Safari and Chrome */
+              -o-transform: scale(1.3); /* Opera */
+              transform: scale(1.3);
+              padding: 10px;
+              margin-right: 3px;
+            }
+        </style>
         <!-- END: CSS Assets-->

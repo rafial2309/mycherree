@@ -9,20 +9,23 @@
                         <div class="intro-y col-span-12 flex flex-wrap xl:flex-nowrap items-center mt-2">
                             <div class="flex w-full sm:w-auto">
                                 <div class="w-48 relative text-slate-500">
-                                    <input type="text" class="form-control w-48 box pr-10" placeholder="Search by invoice...">
+                                    <input type="text" id="inputcari" class="form-control w-48 box pr-10" placeholder="Search by invoice...">
                                     <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i> 
                                 </div>
-                                <select class="form-select box ml-2">
-                                    <option>Status</option>
-                                    <option>Unpaid</option>
-                                    <option>Paid</option>
-                                    <option>Taken</option>
+                                <select class="form-select box ml-2" id="status" onchange="gantistatus()">
+                                    <option value="ALL">All</option>
+                                    <option value="UNPAID">Unpaid</option>
+                                    <option value="PAID">Paid</option>
+                                    <option value="UNTAKEN">UnTaken</option>
+                                    <option value="TAKEN">Taken</option>
                                 </select>
                             </div>
                             <div class="hidden xl:block mx-auto text-slate-500">&nbsp;</div>
                             <div class="w-full xl:w-auto flex items-center mt-3 xl:mt-0">
                                 
                                 <button onclick="window.location='app?p=newtransaction'" class="btn btn-primary shadow-md mr-2"> <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> NEW TRANSACTION </button>
+
+                                <button data-tw-toggle="modal" data-tw-target="#payment-modal" onclick="gopayment()" class="btn btn-primary shadow-md mr-2"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> PAYMENT </button>
                                
                             </div>
                         </div>
@@ -42,7 +45,7 @@
                                         <th class="text-center whitespace-nowrap">ACTIONS</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="hasilcari">
                                     <?php
                                         $query = mysqli_query($conn,"SELECT * from Invoice order by Inv_No DESC LIMIT 20");
                                         while($data=mysqli_fetch_assoc($query)){
@@ -83,7 +86,7 @@
                                                             <li> <div class="dropdown-header">Process</div> </li> 
                                                             <li> <hr class="dropdown-divider"> </li> 
                                                             <li> <a href="" class="dropdown-item"> <i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice </a> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Payment </a> 
+                                                            <li> <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#payment-modal" class="dropdown-item"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Payment </a> 
                                                             </li> 
                                                             <li> <a href="" class="dropdown-item"> <i data-lucide="x-circle" class="w-4 h-4 mr-2"></i> Cancel </a> </li> 
                                                             <li> <a href="" class="dropdown-item"> <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Rewash </a> </li> 
@@ -124,7 +127,97 @@
                         </div>
                     </div>
                     <!-- END: Delete Confirmation Modal -->
+                    <div id="payment-modal" class="modal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog" style="width:50%">
+                            <div class="modal-content" id="hasilpaymentpop">
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- END: Content -->
             </div>
             <?php include 'appjs.php'; ?>
+            <script type="text/javascript">
+                $(document).ready(function(e) {
+                    var timeout;
+                    var delay = 600;   // 2 seconds
+
+                    $('#inputcari').keyup(function(e) {
+                        //$('#status').html("User started typing!");
+                        if(timeout) {
+                            clearTimeout(timeout);
+                        }
+                        timeout = setTimeout(function() {
+                            myFunction();
+                        }, delay);
+                    });
+
+                    function myFunction() {
+                        var keyword     = document.getElementById('inputcari').value;
+                        var status      = document.getElementById('status').value;
+                        $.ajax({
+                            url:'function/transaksi?menu=cari',
+                            type:'POST',
+                            dataType:'html',
+                            data:{
+                              keyword: keyword,
+                              status: status,
+                            },
+                            success:function (response) {
+                                $('#hasilcari').html(response);
+                            },
+
+                        })
+                    }
+                });
+
+                function gantistatus(){
+                    var keyword     = document.getElementById('inputcari').value;
+                    var status      = document.getElementById('status').value;
+                    $.ajax({
+                        url:'function/transaksi?menu=cari',
+                        type:'POST',
+                        dataType:'html',
+                        data:{
+                          keyword: keyword,
+                          status: status,
+                        },
+                        success:function (response) {
+                            $('#hasilcari').html(response);
+                        },
+
+                    })
+                }
+                function gopayment(){
+                    $.ajax({
+                        url:'function/transaksi_payment?menu=tampilcust',
+                        type:'POST',
+                        dataType:'html',
+                        success:function (response) {
+                            $('#hasilpaymentpop').html(response);
+                        },
+
+                    })
+                }
+                function ganticustpay(){
+                    var customer_data     = document.getElementById('customer_data').value;
+                    var cust              = customer_data.split("###");
+                    document.getElementById('cust_nama').innerHTML      = cust[1];
+                    document.getElementById('cust_alamat').innerHTML    = cust[2];
+                    document.getElementById('cust_telp').innerHTML      = cust[3];
+                    
+                    $.ajax({
+                        url:'function/transaksi_payment?menu=cari_invoice',
+                        type:'POST',
+                        dataType:'html',
+                        data:{
+                          customer_data: cust[0]
+                        },
+                        success:function (response) {
+                            $('#hasilinvoice').html(response);
+                        },
+
+                    })
+                }
+            </script>
