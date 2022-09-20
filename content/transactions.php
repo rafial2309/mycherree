@@ -128,11 +128,13 @@
                     </div>
                     <!-- END: Delete Confirmation Modal -->
                     <div id="payment-modal" class="modal" tabindex="-1" aria-hidden="true">
+                        <form method="POST" id="savepayment" action="function/transaksi_payment?menu=savepayment">
                         <div class="modal-dialog" style="width:50%">
                             <div class="modal-content" id="hasilpaymentpop">
                                 
                             </div>
                         </div>
+                        </form>
                     </div>
                 </div>
                 <!-- END: Content -->
@@ -216,6 +218,10 @@
                         },
                         success:function (response) {
                             $('#hasilinvoice').html(response);
+                            $('#isi_inv').html('');
+                            document.getElementById("totalpay_data").value = '0';
+                            document.getElementById("totalpay").innerHTML = '0';
+                            jQuery('.datainv').remove();
                         },
 
                     })
@@ -225,14 +231,55 @@
                     var invoice_data     = document.getElementById('invoice_data').value;
                     var inv              = invoice_data.split("###");
                     var payment          = inv[1].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-                    document.getElementById("isi_inv").insertAdjacentHTML("afterend",
-                    "<div class='flex items-center mb-1'>&nbsp; INV-"+inv[0]+"<div class='ml-auto'>Rp "+payment+"</div><input type='hidden' name='amountz[]' value='"+inv[1]+"'><input type='hidden' name='invoice[]' value='"+inv[0]+"'></div>");
+                    var sudahada         = 'N';
+
+                    $("input[name='invoice[]']").each(function() {
+                        if ($(this).val()==inv[0]) {
+                            sudahada = 'Y';
+                        }
+                    });
+
+                    if (sudahada=='Y') {
+                        alert('INVOICE LISTED!')
+                    }else{
+                        if (inv[0]!='') {
+                            document.getElementById("isi_inv").insertAdjacentHTML("afterend",
+                            "<div class='flex items-center mb-1 datainv'>&nbsp; INV-"+inv[0]+"<div class='ml-auto'>Rp "+payment+"</div><input type='hidden' name='amountz[]' value='"+inv[1]+"'><input type='hidden' name='invoice[]' value='"+inv[0]+"'></div>");
+                        }
+                        
+                    }
 
                     var tot              = 0;
                     $("input[name='amountz[]']").each(function() {
                         tot = parseInt(tot) + parseInt($(this).val())
                     });
-
+                    
+                    document.getElementById("totalpay_data").value = tot;
                     document.getElementById("totalpay").innerHTML = tot.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                 }
+
+                var frm = $('#savepayment');
+                frm.submit(function (e) {
+                  e.preventDefault(e);
+
+                  var formData = new FormData(this);
+
+                  $.ajax({
+                    async: true,
+                    type: frm.attr('method'),
+                    url: frm.attr('action'),
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+
+                    success: function (data) {
+                      console.log("success");
+                      
+                    },
+                    error: function(request, status, error) {
+                      console.log("error")
+                    }
+                  });
+                });
             </script>
