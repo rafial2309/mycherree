@@ -220,4 +220,19 @@
 
                     })
                 }
+
+                function pilihinv(){
+                    var invoice_data     = document.getElementById('invoice_data').value;
+                    var inv              = invoice_data.split("###");
+                    var payment          = inv[1].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                    document.getElementById("isi_inv").insertAdjacentHTML("afterend",
+                    "<div class='flex items-center mb-1'>&nbsp; INV-"+inv[0]+"<div class='ml-auto'>Rp "+payment+"</div><input type='hidden' name='amountz[]' value='"+inv[1]+"'><input type='hidden' name='invoice[]' value='"+inv[0]+"'></div>");
+
+                    var tot              = 0;
+                    $("input[name='amountz[]']").each(function() {
+                        tot = parseInt(tot) + parseInt($(this).val())
+                    });
+
+                    document.getElementById("totalpay").innerHTML = tot.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                }
             </script>

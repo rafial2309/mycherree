@@ -43,20 +43,42 @@ $Staff_Name         = $_SESSION['Staff_Name'];
     <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
         <div class="col-span-12">
             <div class="mt-1" id="hasilinvoice">
-                 
+                 <select id="invoice_datax" data-placeholder="Select Invoice" class="tom-select w-full colour" style="z-index: 99999;">
+                    <option></option>
+                  
+                 </select> 
+                 <script type="text/javascript">
+                    $('#invoice_datax').selectize();
+                 </script>
              </div>
+            
+                <div class="col-span-12 lg:col-span-12 2xl:col-span-12">
+                   
+                    <div class="box p-3 rounded-md mt-3">
+                        <div id="isi_inv">
+                            
+                            
+                        </div>
+                        
+                        
 
-            <!-- 
-            <div class="input-group mt-2"> <input type="text" class="form-control" placeholder="Price" aria-label="Price" aria-describedby="input-group-price" value="INV-2200001 - Rp 300.000">
-                <div id="input-group-price" class="input-group-text"><img src="plugin/lucide/trash.svg" class="w-5 h-5" style="box-shadow: none;filter: invert(34%) sepia(26%) saturate(256%) hue-rotate(175deg) brightness(89%) contrast(88%);"></div>
-            </div> -->
+                        <div class="flex items-center border-t border-slate-200/60 dark:border-darkmode-400 pt-3 mt-3 font-medium">
+                            &nbsp;  Total Payment: 
+                            <div class="ml-auto">Rp <c id="totalpay">-</c></div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <input type="hidden" name="amount[]" value="">
+                <input type="hidden" name="invoice[]" value="">
+         
         </div>
         <div class="col-span-12">
             <hr>
         </div>
         <div class="col-span-6">
              <div class="mt-1 mb-2"> <label>Paymet Method</label>
-                 <div class="flex flex-col sm:flex-row mt-2">
+                 <div class="flex flex-col sm:flex-row mt-3">
                      <div class="form-check mr-3"> <input id="radio-cash" class="form-check-input" type="radio" name="payment_method" value="horizontal-radio-chris-evans" checked> 
                         <label class="form-check-label" for="radio-cash"> CASH</label> </div>
 
@@ -68,7 +90,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
         </div>
         <div class="col-span-6">
              <div class="mt-1 mb-2"> <label>Status Taken</label>
-                 <div class="flex flex-col sm:flex-row mt-2">
+                 <div class="flex flex-col sm:flex-row mt-3">
                      <div class="form-check mr-3"> <input id="radio-taken" class="form-check-input" type="radio" name="status_taken" value="horizontal-radio-chris-evans" checked> 
                         <label class="form-check-label" for="radio-taken"> TAKEN</label> </div>
 
@@ -94,13 +116,13 @@ $Staff_Name         = $_SESSION['Staff_Name'];
 <?php }elseif($_GET['menu'] == 'cari_invoice'){ 
     $customer_data = $_POST['customer_data'];
     ?>
-    <select id="invoice_data" data-placeholder="Select Invoice" class="tom-select w-full colour" style="z-index: 99999;">
+    <select id="invoice_data" onchange="pilihinv()" data-placeholder="Select Invoice" class="tom-select w-full colour" style="z-index: 99999;">
         <option></option>
         <?php 
             $queryinv = mysqli_query($conn,"SELECT * from Invoice WHERE Cust_ID='$customer_data' AND Status_Payment='N' ");
             while($datainv = mysqli_fetch_assoc($queryinv)){
         ?>
-            <option value="<?php echo $datainv['Inv_Number'] ?>">INV-<?php echo $datainv['Inv_Number'] ?> &nbsp; Rp <?php echo number_format($datainv['Payment_Amount'] ,0,",",".")?></option>
+            <option value="<?php echo $datainv['Inv_Number'] ?>###<?php echo $datainv['Payment_Amount'] ?>">INV-<?php echo $datainv['Inv_Number'] ?> &nbsp; Rp <?php echo number_format($datainv['Payment_Amount'] ,0,",",".")?></option>
         <?php } ?>
      </select> 
      <script type="text/javascript">
