@@ -130,9 +130,31 @@ $Staff_Name         = $_SESSION['Staff_Name'];
      </script>
 <?php } elseif($_GET['menu'] == 'savepayment'){ 
 
-    array(8) { ["customer"]=> string(46) "2###Mustafa Kemal###Jl Bekasi###08812 8282 222" ["amountz"]=> array(2) { [0]=> string(6) "240300" [1]=> string(6) "255600" } ["invoice"]=> array(2) { [0]=> string(7) "2200002" [1]=> string(7) "2200001" } ["totalpay"]=> string(6) "495900" ["payment_method"]=> string(28) "horizontal-radio-chris-evans" ["status_taken"]=> string(28) "horizontal-radio-chris-evans" ["payer_name"]=> string(11) "rafi aldian" ["note"]=> string(7) "notenya" } 
+   
+    $customer = explode("###",$_POST['customer']);
+    $payment_method         = $_POST['payment_method'];
+    $status_taken           = $_POST['status_taken'];
+    $payer_name             = $_POST['payer_name'];
+    $note                   = $_POST['note'];
+    $pay_tgl                = date('Y-m-d H:i:s');
 
+    foreach ($_POST['invoice'] as $invoice) {
+        if ($invoice=='') {
+            break;
+        }
 
-    var_dump($_POST);
+        $invoicedata = explode("--",$invoice);
+
+        mysqli_query($conn,"INSERT into Invoice_Payment VALUES (0,'$invoicedata[0]','$payer_name','$invoicedata[1]','$pay_tgl','$payment_method','$note','$Staff_Name','$Staff_ID')");
+
+        mysqli_query($conn,"UPDATE Invoice SET Status_Payment='Y' where Inv_Number='$invoicedata[0]'");
+
+        if ($status_taken=='TAKEN') {
+            $isitaken = "TAKEN#BY ". $payer_name;
+            mysqli_query($conn,"UPDATE Invoice SET Status_Taken='$isitaken' where Inv_Number='$invoicedata[0]'");
+        }
+    }
+
+    
     exit();
 }

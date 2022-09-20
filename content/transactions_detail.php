@@ -23,10 +23,10 @@
                                     <a href="" class="flex items-center ml-auto text-primary"> <i data-lucide="edit" class="w-4 h-4 mr-2"></i> Change Status </a>
                                 </div>
                                 <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Invoice: <a href="" class="underline decoration-dotted ml-1">#INV-<?php echo $data['Inv_Number'] ?></a> </div>
-                                <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Transaction Date: <?php echo date('D, d-m-Y', strtotime($data['Inv_Tgl_Masuk'])); ?> </div>
-                                <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Ready Date: <?php echo date('D, d-m-Y', strtotime($data['Inv_Tg_Selesai'])); ?> </div>
+                                <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Transaction Date: <?php echo date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])); ?> </div>
+                                <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Ready Date: <?php echo date('D, d M Y', strtotime($data['Inv_Tg_Selesai'])); ?> </div>
                                 <div class="flex items-center mt-3"> <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i> Payment Status: <?php if ($data['Status_Payment']=='N') { echo '<span class="bg-warning/20 text-warning rounded px-2 ml-1">UNPAID</span>'; }else{ echo '<span class="bg-success/20 text-success rounded px-2 ml-1">PAID</span>'; }?> </div>
-                                <div class="flex items-center mt-3"> <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i> Taken Status: <?php if ($data['Status_Taken']=='N') { echo '<span class="bg-warning/20 text-warning rounded px-2 ml-1">UNTAKEN</span>'; }else{ echo '<span class="bg-success/20 text-success rounded px-2 ml-1">TAKEN</span>';}?> </div>
+                                <div class="flex items-center mt-3"> <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i> Taken Status: <?php if ($data['Status_Taken']=='N') { echo '<span class="bg-warning/20 text-warning rounded px-2 ml-1">UNTAKEN</span>'; }else{ echo '<span class="bg-success/20 text-success rounded px-2 ml-1">'.$data['Status_Taken'].'</span>';}?> </div>
                             </div>
                             <div class="box p-5 rounded-md mt-5">
                                 <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
@@ -44,8 +44,13 @@
                                 <div class="flex items-center">
                                     <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Payment Method: 
                                     <div class="ml-auto">
-                                        <?php if ($data['Status_Payment']=='N') { echo '<span class="bg-warning/20 text-warning rounded px-2 ml-1">UNPAID</span>'; }else{ echo '<span class="bg-success/20 text-success rounded px-2 ml-1">PAID</span>'; }?>
+                                        <?php $cekpay = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Payment where Inv_Number='$data[Inv_Number]'")); ?>
+                                        <?php if ($data['Status_Payment']=='N') { echo '<span class="bg-warning/20 text-warning rounded px-2 ml-1">UNPAID</span>'; }else{ echo '<span class="bg-success/20 text-success rounded px-2 ml-1">'.$cekpay['Payment_Type'].'</span>'; }?>
                                     </div>
+                                </div>
+                                <div class="flex items-center mt-3">
+                                    <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i> Date 
+                                    <div class="ml-auto"><?php echo date('d M Y H:i:s', strtotime($cekpay['Payment_Tgl'])); ?></div>
                                 </div>
                                 <div class="flex items-center mt-3">
                                     <i data-lucide="box" class="w-4 h-4 text-slate-500 mr-2"></i> Total Pcs: 

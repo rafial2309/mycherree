@@ -35,17 +35,26 @@ if ($_GET['menu'] == 'cari' ) {
             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Telp'] ?></div>
         </td>
         <td>
-            <div class="pr-16"><?php echo date('D, d-m-Y', strtotime($data['Inv_Tgl_Masuk'])); ?></div>
-            <div class="pr-16"><?php echo date('D, d-m-Y', strtotime($data['Inv_Tg_Selesai'])); ?></div>
+            <div class="pr-16"><?php echo date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])); ?></div>
+            <div class="pr-16"><?php echo date('D, d M Y', strtotime($data['Inv_Tg_Selesai'])); ?></div>
         </td>
         <td>
             <?php if ($data['Status_Payment']=='N') { ?>
                 <div class="flex items-center whitespace-nowrap text-warning"> <img src="plugin/lucide/check-square.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(78%) sepia(61%) saturate(588%) hue-rotate(331deg) brightness(99%) contrast(96%);"> UNPAID </div>
                 
-            <?php }else{ ?>
-                <div class="flex items-center whitespace-nowrap text-success"> <img src="plugin/lucide/check-square.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(28%) sepia(73%) saturate(3769%) hue-rotate(160deg) brightness(102%) contrast(90%);"> Completed </div>
-                <div class="whitespace-nowrap">Direct bank transfer</div>
-                <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">25 March, 12:55</div>
+            <?php }else{ 
+                $cekpay = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Payment where Inv_Number='$data[Inv_Number]'"));
+                ?>
+                <div class="flex items-center whitespace-nowrap text-success"> <img src="plugin/lucide/check-square.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(28%) sepia(73%) saturate(3769%) hue-rotate(160deg) brightness(102%) contrast(90%);"> PAID </div>
+                <div class="whitespace-nowrap"><?php echo $cekpay['Payment_Type'] ?></div>
+                <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo date('d M Y H:i:s', strtotime($cekpay['Payment_Tgl'])); ?>
+                    <br>
+                    <?php if ($data['Status_Taken']=='N') {
+                        echo "<b class='text-danger'>UNTAKEN</b>";
+                    }else{
+                        echo "<b class='text-success'>".$data['Status_Taken']."</b>"; 
+                    }?>
+                </div>
             <?php } ?>
         </td>
         <td class="w-40 text-right">

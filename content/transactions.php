@@ -37,7 +37,7 @@
                                         
                                         <th class="whitespace-nowrap">INVOICE</th>
                                         <th class="whitespace-nowrap">BUYER NAME</th>
-                                        <th class="whitespace-nowrap" style="width: 205px;">FINISH</th>
+                                        <th class="whitespace-nowrap" style="width: 220px;">FINISH</th>
                                         <th class="whitespace-nowrap">STATUS</th>
                                         <th class="text-right whitespace-nowrap" style="width: 190px;">
                                             <div class="pr-16">PAYMENT</div>
@@ -59,17 +59,26 @@
                                             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Telp'] ?></div>
                                         </td>
                                         <td>
-                                            <div class="pr-16"><?php echo date('D, d-m-Y', strtotime($data['Inv_Tgl_Masuk'])); ?></div>
-                                            <div class="pr-16"><?php echo date('D, d-m-Y', strtotime($data['Inv_Tg_Selesai'])); ?></div>
+                                            <div class="pr-16"><?php echo date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])); ?></div>
+                                            <div class="pr-16"><?php echo date('D, d M Y', strtotime($data['Inv_Tg_Selesai'])); ?></div>
                                         </td>
                                         <td>
                                             <?php if ($data['Status_Payment']=='N') { ?>
                                                 <div class="flex items-center whitespace-nowrap text-warning"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> UNPAID </div>
                                                 
-                                            <?php }else{ ?>
-                                                <div class="flex items-center whitespace-nowrap text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Completed </div>
-                                                <div class="whitespace-nowrap">Direct bank transfer</div>
-                                                <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">25 March, 12:55</div>
+                                            <?php }else{ 
+                                                $cekpay = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Payment where Inv_Number='$data[Inv_Number]'"));
+                                                ?>
+                                                <div class="flex items-center whitespace-nowrap text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> PAID </div>
+                                                <div class="whitespace-nowrap"><?php echo $cekpay['Payment_Type'] ?></div>
+                                                <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo date('d M Y H:i:s', strtotime($cekpay['Payment_Tgl'])); ?>
+                                                    <br>
+                                                    <?php if ($data['Status_Taken']=='N') {
+                                                        echo "<b class='text-danger'>UNTAKEN</b>";
+                                                    }else{
+                                                        echo "<b class='text-success'>".$data['Status_Taken']."</b>"; 
+                                                    }?>
+                                                </div>
                                             <?php } ?>
                                         </td>
                                         <td class="w-40 text-right">
@@ -80,7 +89,7 @@
                                                 <a class="flex items-center text-primary whitespace-nowrap mr-5" href="app?p=transactions_detail&invoice=<?php echo $data['Inv_Number'] ?>"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> View Details </a>
                                                 
                                                 <div class="dropdown"> 
-                                                    <button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown"><i data-lucide="send" class="w-4 h-4 mr-2"></i> Process Invoice</button> 
+                                                    <button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown"><i data-lucide="send" class="w-4 h-4 mr-2"></i> Process</button> 
                                                     <div class="dropdown-menu w-40"> 
                                                         <ul class="dropdown-content"> 
                                                             <li> <div class="dropdown-header">Process</div> </li> 
@@ -128,16 +137,57 @@
                     </div>
                     <!-- END: Delete Confirmation Modal -->
                     <div id="payment-modal" class="modal" tabindex="-1" aria-hidden="true">
-                        <form method="POST" id="savepayment" action="function/transaksi_payment?menu=savepayment">
+                        
                         <div class="modal-dialog" style="width:50%">
+                            <form method="POST" id="savepayment" action="function/transaksi_payment?menu=savepayment">
                             <div class="modal-content" id="hasilpaymentpop">
                                 
                             </div>
+                            </form>
                         </div>
-                        </form>
+                        
                     </div>
                 </div>
                 <!-- END: Content -->
+                <!-- END: Add Item Modal -->
+                     <div class="text-center"> 
+                        <a id="success-additem" href="javascript:;" style="opacity:0" data-tw-toggle="modal" data-tw-target="#success-modal-preview" class="btn btn-primary">-</a> 
+                        <a id="danger-additem" href="javascript:;" style="opacity:0" data-tw-toggle="modal" data-tw-target="#danger-modal-preview" class="btn btn-danger">-</a> 
+                     </div> <!-- END: Modal Toggle --> 
+                     <!-- BEGIN: Modal Content --> 
+                     <div id="success-modal-preview" class="modal" tabindex="-1" aria-hidden="true"> 
+                        <div class="modal-dialog"> 
+                            <div class="modal-content"> 
+                                <div class="modal-body p-0"> 
+                                    <div class="p-5 text-center"> 
+                                        <i data-lucide="check-circle" class="w-16 h-16 text-success mx-auto mt-3"></i> 
+                                        <div class="text-3xl mt-5">Save Success!</div> 
+                                        <div class="text-slate-500 mt-2">Data saved</div> 
+                                    </div> 
+                                    <div class="px-5 pb-8 text-center"> 
+                                        <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div> 
+                     </div> 
+                     <div id="danger-modal-preview" class="modal" tabindex="-1" aria-hidden="true"> 
+                        <div class="modal-dialog"> 
+                            <div class="modal-content"> 
+                                <div class="modal-body p-0"> 
+                                    <div class="p-5 text-center"> 
+                                        <i data-lucide="check-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i> 
+                                        <div class="text-3xl mt-5">Delete Success!</div> 
+                                        <div class="text-slate-500 mt-2">Item deleted.</div> 
+                                    </div> 
+                                    <div class="px-5 pb-8 text-center"> 
+                                        <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div> 
+                     </div> 
+                     <!-- END: Modal Content --> 
             </div>
             <?php include 'appjs.php'; ?>
             <script type="text/javascript">
@@ -243,8 +293,8 @@
                         alert('INVOICE LISTED!')
                     }else{
                         if (inv[0]!='') {
-                            document.getElementById("isi_inv").insertAdjacentHTML("afterend",
-                            "<div class='flex items-center mb-1 datainv'>&nbsp; INV-"+inv[0]+"<div class='ml-auto'>Rp "+payment+"</div><input type='hidden' name='amountz[]' value='"+inv[1]+"'><input type='hidden' name='invoice[]' value='"+inv[0]+"'></div>");
+                            document.getElementById("isi_inv").insertAdjacentHTML("beforeend",
+                            "<div class='flex items-center mb-1 datainv'>&nbsp; INV-"+inv[0]+"<div class='ml-auto'>Rp "+payment+"</div><input type='hidden' name='invoice[]' value='"+inv[0]+"--"+inv[1]+"'></div>");
                         }
                         
                     }
@@ -275,7 +325,9 @@
 
                     success: function (data) {
                       console.log("success");
-                      
+                      document.getElementById('closemodalpayment').click();
+                      document.getElementById('success-additem').click();
+                      setTimeout(function() { window.location.reload(); }, 1500);
                     },
                     error: function(request, status, error) {
                       console.log("error")
