@@ -9,24 +9,40 @@ $Staff_Name         = $_SESSION['Staff_Name'];
 <link rel="stylesheet" href="plugin/selectize/selectize.css" />
 <script type="text/javascript" src="plugin/selectize/selectize.min.js"></script>
 
-<?php if ($_GET['menu'] == 'tampilcust' ) { ?>
+<?php if ($_GET['menu'] == 'tampilcust' ) { 
+    $noinv = explode("###",$_POST['data']);
+    if ($noinv!='MULTI') {
+        $datainv = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice where Inv_Number='$noinv[0]'"));
+    }
+    ?>
     <div class="modal-header">
         <h2 class="font-medium text-base mr-auto w-full">
             Payment Invoice
             <div class="grid grid-cols-12 mt-2">
                 <div class="col-span-5 mr-3">
-                    <select id="customer_data" name="customer" data-placeholder="Select Customer" class="tom-select w-full colour" style="" onchange="ganticustpay()">
-                        <option></option>
-                        <option>-- SELECT CUSTOMER --</option>
-                        <?php 
+                    <select id="customer_data" name="customer" data-placeholder="Select Customer" class="tom-select w-full colour" style="" onchange="ganticustpay('MULTI')">
+                        <?php if ($noinv[0]!='MULTI') { ?>
+                            <option value="<?php echo $datainv['Cust_ID'] ?>###<?php echo $datainv['Cust_Nama'] ?>###<?php echo $datainv['Cust_Alamat'] ?>###<?php echo $datainv['Cust_Telp'] ?>"><?php echo $datainv['Cust_Nama'] ?></option>
+                        <?php }else{ ?>
+                            <option></option>
+                            <option>-- SELECT CUSTOMER --</option>
+                        <?php
                             $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
                             while($datacust = mysqli_fetch_assoc($querycust)){
                         ?>
                             <option value="<?php echo $datacust['Cust_No'] ?>###<?php echo $datacust['Cust_Nama'] ?>###<?php echo $datacust['Cust_Alamat'] ?>###<?php echo $datacust['Cust_Telp'] ?>"><?php echo $datacust['Cust_Nama'] ?></option>
-                        <?php } ?>
+                        <?php }
+                        } ?>
                      </select> 
                      <script type="text/javascript">
                         $('#customer_data').selectize();
+
+                         <?php if ($noinv[0]!='MULTI') { ?>
+                            setTimeout(function() { 
+                                ganticustpay("<?php echo $_POST['data']; ?>");
+                            }, 500);
+                            
+                        <?php } ?>
                      </script>
                 </div>
                 <div class="col-span-7 whitespace-nowrap">
@@ -116,7 +132,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
 <?php }elseif($_GET['menu'] == 'cari_invoice'){ 
     $customer_data = $_POST['customer_data'];
     ?>
-    <select id="invoice_data" onchange="pilihinv()" data-placeholder="Select Invoice" class="tom-select w-full colour" style="z-index: 99999;">
+    <select id="invoice_data" onchange="pilihinv('MULTI')" data-placeholder="Select Invoice" class="tom-select w-full colour" style="z-index: 99999;">
         <option></option>
         <?php 
             $queryinv = mysqli_query($conn,"SELECT * from Invoice WHERE Cust_ID='$customer_data' AND Status_Payment='N' ");

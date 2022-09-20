@@ -25,7 +25,7 @@
                                 
                                 <button onclick="window.location='app?p=newtransaction'" class="btn btn-primary shadow-md mr-2"> <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> NEW TRANSACTION </button>
 
-                                <button data-tw-toggle="modal" data-tw-target="#payment-modal" onclick="gopayment()" class="btn btn-primary shadow-md mr-2"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> PAYMENT </button>
+                                <button data-tw-toggle="modal" data-tw-target="#payment-modal" onclick="gopayment('MULTI')" class="btn btn-primary shadow-md mr-2"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> PAYMENT </button>
                                
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                                                             <li> <div class="dropdown-header">Process</div> </li> 
                                                             <li> <hr class="dropdown-divider"> </li> 
                                                             <li> <a href="" class="dropdown-item"> <i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice </a> </li> 
-                                                            <li> <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#payment-modal" class="dropdown-item"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Payment </a> 
+                                                            <li> <a href="javascript:;" onclick="gopayment('<?php echo $data['Inv_Number']  ?>###<?php echo $data['Payment_Amount']  ?>')" data-tw-toggle="modal" data-tw-target="#payment-modal" class="dropdown-item"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Payment </a> 
                                                             </li> 
                                                             <li> <a href="" class="dropdown-item"> <i data-lucide="x-circle" class="w-4 h-4 mr-2"></i> Cancel </a> </li> 
                                                             <li> <a href="" class="dropdown-item"> <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Rewash </a> </li> 
@@ -241,10 +241,13 @@
 
                     })
                 }
-                function gopayment(){
+                function gopayment(data){
                     $.ajax({
                         url:'function/transaksi_payment?menu=tampilcust',
                         type:'POST',
+                        data:{
+                          data: data,
+                        },
                         dataType:'html',
                         success:function (response) {
                             $('#hasilpaymentpop').html(response);
@@ -252,39 +255,50 @@
 
                     })
                 }
-                function ganticustpay(){
+                function ganticustpay(data){
                     var customer_data     = document.getElementById('customer_data').value;
                     var cust              = customer_data.split("###");
                     document.getElementById('cust_nama').innerHTML      = cust[1];
                     document.getElementById('cust_alamat').innerHTML    = cust[2];
                     document.getElementById('cust_telp').innerHTML      = cust[3];
-                    
-                    $.ajax({
-                        url:'function/transaksi_payment?menu=cari_invoice',
-                        type:'POST',
-                        dataType:'html',
-                        data:{
-                          customer_data: cust[0]
-                        },
-                        success:function (response) {
-                            $('#hasilinvoice').html(response);
-                            $('#isi_inv').html('');
-                            document.getElementById("totalpay_data").value = '0';
-                            document.getElementById("totalpay").innerHTML = '0';
-                            jQuery('.datainv').remove();
-                        },
+                    if(data!='MULTI'){
+                       pilihinv(data);
+                    }else{
+                        
+                        $.ajax({
+                            url:'function/transaksi_payment?menu=cari_invoice',
+                            type:'POST',
+                            dataType:'html',
+                            data:{
+                              customer_data: cust[0],
+                            },
+                            success:function (response) {
+                                $('#hasilinvoice').html(response);
+                                $('#isi_inv').html('');
+                                document.getElementById("totalpay_data").value = '0';
+                                document.getElementById("totalpay").innerHTML = '0';
+                                jQuery('.datainv').remove();
+                            },
 
-                    })
+                        })
+                    }
+                    
                 }
 
-                function pilihinv(){
-                    var invoice_data     = document.getElementById('invoice_data').value;
+                function pilihinv(data){
+                    if (data=='MULTI') {
+                        var invoice_data     = document.getElementById('invoice_data').value;
+                    }else{
+                        var invoice_data     = data;
+                    }
+                    
                     var inv              = invoice_data.split("###");
                     var payment          = inv[1].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
                     var sudahada         = 'N';
 
                     $("input[name='invoice[]']").each(function() {
-                        if ($(this).val()==inv[0]) {
+                        var valsiki = $(this).val().substring(0, 7);
+                        if (valsiki==inv[0]) {
                             sudahada = 'Y';
                         }
                     });
@@ -300,8 +314,9 @@
                     }
 
                     var tot              = 0;
-                    $("input[name='amountz[]']").each(function() {
-                        tot = parseInt(tot) + parseInt($(this).val())
+                    $("input[name='invoice[]']").each(function() {
+                        var invdat = $(this).val().split("--");
+                        tot = parseInt(tot) + parseInt(invdat[1]);
                     });
                     
                     document.getElementById("totalpay_data").value = tot;
