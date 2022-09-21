@@ -173,4 +173,119 @@ $Staff_Name         = $_SESSION['Staff_Name'];
 
     
     exit();
-}
+}elseif($_GET['menu'] == 'takeninvoice'){ ?>
+    <div class="modal-header">
+        <h2 class="font-medium text-base mr-auto w-full">
+            Change Status Taken Invoice
+            <div class="grid grid-cols-12 mt-2">
+                <div class="col-span-5 mr-3">
+                    <select id="customer_data" name="customer" data-placeholder="Select Customer" class="tom-select w-full colour" style="" onchange="ganticustpay('MULTI')">
+                        <?php if ($noinv[0]!='MULTI') { ?>
+                            <option value="<?php echo $datainv['Cust_ID'] ?>###<?php echo $datainv['Cust_Nama'] ?>###<?php echo $datainv['Cust_Alamat'] ?>###<?php echo $datainv['Cust_Telp'] ?>"><?php echo $datainv['Cust_Nama'] ?></option>
+                        <?php }else{ ?>
+                            <option></option>
+                            <option>-- SELECT CUSTOMER --</option>
+                        <?php
+                            $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
+                            while($datacust = mysqli_fetch_assoc($querycust)){
+                        ?>
+                            <option value="<?php echo $datacust['Cust_No'] ?>###<?php echo $datacust['Cust_Nama'] ?>###<?php echo $datacust['Cust_Alamat'] ?>###<?php echo $datacust['Cust_Telp'] ?>"><?php echo $datacust['Cust_Nama'] ?></option>
+                        <?php }
+                        } ?>
+                     </select> 
+                     <script type="text/javascript">
+                        $('#customer_data').selectize();
+
+                         <?php if ($noinv[0]!='MULTI') { ?>
+                            setTimeout(function() { 
+                                ganticustpay("<?php echo $_POST['data']; ?>");
+                            }, 500);
+                            
+                        <?php } ?>
+                     </script>
+                </div>
+                <div class="col-span-7 whitespace-nowrap">
+                    <c id="cust_nama">-</c><br>
+                    <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
+                        <c id="cust_telp">-</c> <br>
+                    <c id="cust_alamat">-</c></div>
+                </div>
+            </div>
+            
+            
+        </h2>
+    </div>
+    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+        <div class="col-span-12">
+            <div class="mt-1" id="hasilinvoice">
+                 <select id="invoice_datax" data-placeholder="Select Invoice" class="tom-select w-full colour" style="z-index: 99999;">
+                    <option></option>
+                  
+                 </select> 
+                 <script type="text/javascript">
+                    $('#invoice_datax').selectize();
+                 </script>
+             </div>
+            
+                <div class="col-span-12 lg:col-span-12 2xl:col-span-12">
+                   
+                    <div class="box p-3 rounded-md mt-3">
+                        <div id="isi_inv">
+                            
+                            
+                        </div>
+                        
+                        
+
+                        <div class="flex items-center border-t border-slate-200/60 dark:border-darkmode-400 pt-3 mt-3 font-medium">
+                            &nbsp;  Total Payment: 
+                            <div class="ml-auto">Rp <c id="totalpay">-</c></div>
+                            <input type="hidden" name="totalpay" id="totalpay_data">
+                        </div>
+                    </div>
+                   
+                </div>
+                
+         
+        </div>
+        <div class="col-span-12">
+            <hr>
+        </div>
+        <div class="col-span-6">
+             <div class="mt-1 mb-2"> <label>Paymet Method</label>
+                 <div class="flex flex-col sm:flex-row mt-3">
+                     <div class="form-check mr-3"> <input id="radio-cash" class="form-check-input" type="radio" name="payment_method" value="CASH" checked> 
+                        <label class="form-check-label" for="radio-cash"> CASH</label> </div>
+
+                     <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-transfer" class="form-check-input" type="radio" name="payment_method" value="TRANSFER"> 
+                        <label class="form-check-label" for="radio-transfer"> TRANSFER</label> </div>
+
+                 </div>
+             </div>
+        </div>
+        <div class="col-span-6">
+             <div class="mt-1 mb-2"> <label>Status Taken</label>
+                 <div class="flex flex-col sm:flex-row mt-3">
+                     <div class="form-check mr-3"> <input id="radio-taken" class="form-check-input" type="radio" name="status_taken" value="TAKEN" checked> 
+                        <label class="form-check-label" for="radio-taken"> TAKEN</label> </div>
+
+                     <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-untaken" class="form-check-input" type="radio" name="status_taken" value="UNTAKEN"> 
+                        <label class="form-check-label" for="radio-untaken"> UNTAKEN</label> </div>
+
+                 </div>
+             </div>
+        </div>
+        <div class="col-span-12">
+            <input type="text" name="payer_name" id="payer_name" class="form-control" placeholder="Payer Name">
+        </div>
+        <div class="col-span-12">
+            <input type="text" name="note" id="note" class="form-control" placeholder="Note">
+        </div>
+       
+        
+    </div>
+    <div class="modal-footer text-right">
+        <button type="button" id="closemodalpayment" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
+        <button type="submit" class="btn btn-primary w-32">Apply</button>
+    </div>
+<?php } ?>
