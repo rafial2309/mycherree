@@ -65,16 +65,26 @@ if ($_GET['menu'] == 'cari' ) {
                 <a class="flex items-center text-primary whitespace-nowrap mr-5" href="app?p=transactions_detail&invoice=<?php echo $data['Inv_Number'] ?>"> <img src="plugin/lucide/check-square.svg" class="w-4 h-4 mr-1 text-primary" style="box-shadow: none;filter: invert(15%) sepia(89%) saturate(1755%) hue-rotate(215deg) brightness(102%) contrast(96%);"> View Details </a>
                 
                 <div class="dropdown"> 
-                    <button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown"><img src="plugin/lucide/send.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(100%) sepia(0%) saturate(7500%) hue-rotate(70deg) brightness(99%) contrast(107%);"> Process Invoice</button> 
+                    <button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown"><img src="plugin/lucide/send.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(100%) sepia(0%) saturate(7500%) hue-rotate(70deg) brightness(99%) contrast(107%);"> Process</button> 
                     <div class="dropdown-menu w-40"> 
                         <ul class="dropdown-content"> 
                             <li> <div class="dropdown-header">Process</div> </li> 
                             <li> <hr class="dropdown-divider"> </li> 
-                            <li> <a href="" class="dropdown-item"> <i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice </a> </li> 
-                            <li> <a href="" class="dropdown-item"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Payment </a> 
+                            <li> <a href="" class="dropdown-item"> <img src="plugin/lucide/printer.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Print Invoice </a> </li> 
+                            <?php if ($data['Status_Payment']=='N') { ?>
+                            <li> <a href="javascript:;" onclick="gopayment('<?php echo $data['Inv_Number']  ?>###<?php echo $data['Payment_Amount']  ?>')" data-tw-toggle="modal" data-tw-target="#payment-modal" class="dropdown-item" class="dropdown-item"> <img src="plugin/lucide/credit-card.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Payment </a> 
                             </li> 
-                            <li> <a href="" class="dropdown-item"> <i data-lucide="x-circle" class="w-4 h-4 mr-2"></i> Cancel </a> </li> 
-                            <li> <a href="" class="dropdown-item"> <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Rewash </a> </li> 
+                            <?php } ?>
+                            <?php if ($data['Status_Taken']=='N') { ?>
+                            <li> <a href="javascript:;" onclick="gotaken('<?php echo $data['Inv_Number']  ?>###<?php echo $data['Payment_Amount']  ?>')" data-tw-toggle="modal" data-tw-target="#payment-modal" class="dropdown-item" class="dropdown-item" class="dropdown-item"> <img src="plugin/lucide/box.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Taken </a> 
+                            </li> 
+                            <?php } ?>
+
+                            <?php if ($data['Status_Taken']=='N') { ?>
+                            <li> <a href="" class="dropdown-item"> <img src="plugin/lucide/x-circle.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Cancel </a> </li> 
+                            <?php } ?>
+
+                            <li> <a href="" class="dropdown-item"> <img src="plugin/lucide/refresh-cw.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Rewash </a> </li> 
                             
                         </ul> 
                     </div> 

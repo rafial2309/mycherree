@@ -46,67 +46,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="hasilcari">
-                                    <?php
-                                        $query = mysqli_query($conn,"SELECT * from Invoice order by Inv_No DESC LIMIT 20");
-                                        while($data=mysqli_fetch_assoc($query)){
-                                    ?>
-                                    <tr class="intro-x">
-                                        
-                                        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;">#INV-<?php echo $data['Inv_Number'] ?></a> </td>
-                                        <td class="w-40">
-                                            <a href="" class="font-medium whitespace-nowrap"><?php echo $data['Cust_Nama'] ?></a> 
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Telp'] ?></div>
-                                        </td>
-                                        <td>
-                                            <div class="pr-16"><?php echo date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])); ?></div>
-                                            <div class="pr-16"><?php echo date('D, d M Y', strtotime($data['Inv_Tg_Selesai'])); ?></div>
-                                        </td>
-                                        <td>
-                                            <?php if ($data['Status_Payment']=='N') { ?>
-                                                <div class="flex items-center whitespace-nowrap text-warning"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> UNPAID </div>
-                                                
-                                            <?php }else{ 
-                                                $cekpay = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Payment where Inv_Number='$data[Inv_Number]'"));
-                                                ?>
-                                                <div class="flex items-center whitespace-nowrap text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> PAID </div>
-                                                <div class="whitespace-nowrap"><?php echo $cekpay['Payment_Type'] ?></div>
-                                                <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo date('d M Y H:i:s', strtotime($cekpay['Payment_Tgl'])); ?>
-                                                    <br>
-                                                    <?php if ($data['Status_Taken']=='N') {
-                                                        echo "<b class='text-danger'>UNTAKEN</b>";
-                                                    }else{
-                                                        echo "<b class='text-success'>".$data['Status_Taken']."</b>"; 
-                                                    }?>
-                                                </div>
-                                            <?php } ?>
-                                        </td>
-                                        <td class="w-40 text-right">
-                                            <div class="pr-16">Rp <?php echo number_format($data['Payment_Amount'] ,0,",",".")?></div>
-                                        </td>
-                                        <td class="table-report__action">
-                                            <div class="flex justify-center items-center">
-                                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="app?p=transactions_detail&invoice=<?php echo $data['Inv_Number'] ?>"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> View Details </a>
-                                                
-                                                <div class="dropdown"> 
-                                                    <button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown"><i data-lucide="send" class="w-4 h-4 mr-2"></i> Process</button> 
-                                                    <div class="dropdown-menu w-40"> 
-                                                        <ul class="dropdown-content"> 
-                                                            <li> <div class="dropdown-header">Process</div> </li> 
-                                                            <li> <hr class="dropdown-divider"> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice </a> </li> 
-                                                            <li> <a href="javascript:;" onclick="gopayment('<?php echo $data['Inv_Number']  ?>###<?php echo $data['Payment_Amount']  ?>')" data-tw-toggle="modal" data-tw-target="#payment-modal" class="dropdown-item"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Payment </a> 
-                                                            </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="x-circle" class="w-4 h-4 mr-2"></i> Cancel </a> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Rewash </a> </li> 
-                                                            
-                                                        </ul> 
-                                                    </div> 
-                                                </div> 
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php } ?>
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -192,6 +132,8 @@
             <?php include 'appjs.php'; ?>
             <script type="text/javascript">
                 $(document).ready(function(e) {
+
+                    setTimeout(function(){ myFunction(); }, 300);
                     var timeout;
                     var delay = 600;   // 2 seconds
 
@@ -223,6 +165,8 @@
                         })
                     }
                 });
+
+                
 
                 function gantistatus(){
                     var keyword     = document.getElementById('inputcari').value;
@@ -349,4 +293,36 @@
                     }
                   });
                 });
+
+
+
+                ////taken
+
+                function gotaken(data){
+                    $.ajax({
+                        url:'function/transaksi_payment?menu=takeninvoice',
+                        type:'POST',
+                        data:{
+                          data: data,
+                        },
+                        dataType:'html',
+                        success:function (response) {
+                            $('#hasilpaymentpop').html(response);
+                        },
+
+                    })
+                }
+                function ganticustpaytaken(data){
+                    var customer_data     = document.getElementById('customer_datax').value;
+                    var cust              = customer_data.split("###");
+                    var inv               = data.split("###");
+                    document.getElementById('cust_nama').innerHTML      = cust[1];
+                    document.getElementById('cust_alamat').innerHTML    = cust[2];
+                    document.getElementById('cust_telp').innerHTML      = cust[3];
+                    
+                    document.getElementById('invnum').innerHTML = inv[0]; 
+                    
+                }
+
+                
             </script>
