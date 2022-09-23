@@ -782,17 +782,12 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="top-menu">
+                            <a href="app?p=payment" class="top-menu">
                                 <div class="top-menu__icon"> <i data-lucide="credit-card"></i> </div>
                                 <div class="top-menu__title"> Payment / Pembayaran</div>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" class="top-menu">
-                                <div class="top-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
-                                <div class="top-menu__title"> Pickup / Pengambilan</div>
-                            </a>
-                        </li>
+                        
                         <li>
                             <a href="app?p=cancel" class="top-menu">
                                 <div class="top-menu__icon"> <i data-lucide="x-circle"></i> </div>
