@@ -154,6 +154,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
     $payer_name             = $_POST['payer_name'];
     $note                   = $_POST['note'];
     $pay_tgl                = date('Y-m-d H:i:s');
+    $pay_tgl_taken          = date('d M Y H:i:s');
 
     foreach ($_POST['invoice'] as $invoice) {
         if ($invoice=='') {
@@ -167,7 +168,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
         mysqli_query($conn,"UPDATE Invoice SET Status_Payment='Y' where Inv_Number='$invoicedata[0]'");
 
         if ($status_taken=='TAKEN') {
-            $isitaken = "TAKEN#BY ". $payer_name. " #".$pay_tgl;
+            $isitaken = "TAKEN#BY ". $payer_name. " #".$pay_tgl_taken;
             mysqli_query($conn,"UPDATE Invoice SET Status_Taken='$isitaken' where Inv_Number='$invoicedata[0]'");
         }
     }
@@ -259,10 +260,10 @@ $Staff_Name         = $_SESSION['Staff_Name'];
     $status_taken           = $_POST['status_taken'];
     $invoicedata            = $_POST['invoicedata'];
     $payer_name             = $_POST['payer_name'];
-    $pay_tgl                = date('Y-m-d H:i:s');
+    $pay_tgl_taken          = date('d M Y H:i:s');
 
     if ($status_taken=='TAKEN') {
-        $isitaken = "TAKEN#BY ". $payer_name . " #".$pay_tgl;
+        $isitaken = "TAKEN#BY ". $payer_name . " #".$pay_tgl_taken;
         mysqli_query($conn,"UPDATE Invoice SET Status_Taken='$isitaken' where Inv_Number='$invoicedata'");
     }
 
