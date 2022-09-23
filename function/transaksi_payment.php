@@ -117,7 +117,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
              </div>
         </div>
         <div class="col-span-12">
-            <input type="text" name="payer_name" id="payer_name" class="form-control" placeholder="Payer Name">
+            <input type="text" name="payer_name" id="payer_name" class="form-control" placeholder="Payer Name" required>
         </div>
         <div class="col-span-12">
             <input type="text" name="note" id="note" class="form-control" placeholder="Note">
@@ -125,7 +125,8 @@ $Staff_Name         = $_SESSION['Staff_Name'];
        
         
     </div>
-    <div class="modal-footer text-right">
+    <div class="modal-footer text-right"> 
+        <input type="hidden" id="jenismod" name="jenismod" value="PAYMENT">
         <button type="button" id="closemodalpayment" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
         <button type="submit" class="btn btn-primary w-32">Apply</button>
     </div>
@@ -166,7 +167,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
         mysqli_query($conn,"UPDATE Invoice SET Status_Payment='Y' where Inv_Number='$invoicedata[0]'");
 
         if ($status_taken=='TAKEN') {
-            $isitaken = "TAKEN#BY ". $payer_name;
+            $isitaken = "TAKEN#BY ". $payer_name. " #".$pay_tgl;
             mysqli_query($conn,"UPDATE Invoice SET Status_Taken='$isitaken' where Inv_Number='$invoicedata[0]'");
         }
     }
@@ -224,6 +225,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
        
         <div class="col-span-12">
             <center> <strong style="font-size: 25px;">INV-<c id="invnum"></c></strong> </center>
+            <input type="hidden" name="invoicedata" value="<?php echo $datainv['Inv_Number']; ?>">
         </div>
         
         <div class="col-span-6">
@@ -232,21 +234,39 @@ $Staff_Name         = $_SESSION['Staff_Name'];
                      <div class="form-check mr-3"> <input id="radio-taken" class="form-check-input" type="radio" name="status_taken" value="TAKEN" checked> 
                         <label class="form-check-label" for="radio-taken"> TAKEN</label> </div>
 
-                     <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-untaken" class="form-check-input" type="radio" name="status_taken" value="UNTAKEN"> 
+                     <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-untaken" class="form-check-input" type="radio" name="status_taken" value="UNTAKEN" disabled> 
                         <label class="form-check-label" for="radio-untaken"> UNTAKEN</label> </div>
 
                  </div>
              </div>
         </div>
         <div class="col-span-12">
-            <input type="text" name="payer_name" id="payer_name" class="form-control" placeholder="Taken Name">
+            <input type="text" name="payer_name" id="payer_name" class="form-control" placeholder="Taken Name" required>
         </div>
         
        
         
     </div>
     <div class="modal-footer text-right">
-        <button type="button" id="closemodalpaymenttaken" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
+        <input type="hidden" id="jenismod" name="jenismod" value="TAKEN">
+        <button type="button" id="closemodalpayment" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
         <button type="submit" class="btn btn-primary w-32">Apply</button>
     </div>
-<?php } ?>
+<?php } elseif($_GET['menu'] == 'savetaken'){ 
+
+
+    $customer               = explode("###",$_POST['customer']);
+    $status_taken           = $_POST['status_taken'];
+    $invoicedata            = $_POST['invoicedata'];
+    $payer_name             = $_POST['payer_name'];
+    $pay_tgl                = date('Y-m-d H:i:s');
+
+    if ($status_taken=='TAKEN') {
+        $isitaken = "TAKEN#BY ". $payer_name . " #".$pay_tgl;
+        mysqli_query($conn,"UPDATE Invoice SET Status_Taken='$isitaken' where Inv_Number='$invoicedata'");
+    }
+
+    exit();
+    
+    
+} ?>

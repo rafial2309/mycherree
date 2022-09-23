@@ -79,7 +79,7 @@
                     <div id="payment-modal" class="modal" tabindex="-1" aria-hidden="true">
                         
                         <div class="modal-dialog" style="width:50%">
-                            <form method="POST" id="savepayment" action="function/transaksi_payment?menu=savepayment">
+                            <form method="POST" id="savepayment" action="#">
                             <div class="modal-content" id="hasilpaymentpop">
                                 
                             </div>
@@ -273,10 +273,20 @@
 
                   var formData = new FormData(this);
 
+                  var dd = JSON.stringify(Object.fromEntries(formData));
+                  obj = JSON.parse(dd);
+                  var jenismod = obj.jenismod;
+
+                  if (jenismod=='PAYMENT') {
+                    var url = 'function/transaksi_payment?menu=savepayment';
+                  }else{
+                    var url = 'function/transaksi_payment?menu=savetaken';
+                  }
+
                   $.ajax({
                     async: true,
                     type: frm.attr('method'),
-                    url: frm.attr('action'),
+                    url: url,
                     data: formData,
                     cache: false,
                     processData: false,
