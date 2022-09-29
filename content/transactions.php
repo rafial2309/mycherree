@@ -334,5 +334,25 @@
                     
                 }
 
+                function cancelinvoice(data){
+                    let text = "Are you sure? (CANCEL INVOICE)";
+                    if (confirm(text) == true) {
+                        $.ajax({
+                            type:'POST',
+                            url:'function/transaksi?menu=cancelinvoice',
+                            data:'id='+data,
+                            success: function(data) { // Jika berhasil
+                           
+                                if (data=='Y') {
+                                    document.getElementById('success-additem').click();
+                                    setTimeout(function() { window.location.reload(); }, 1500);
+                                }
+                            }
+                        });
+                    } else {
+                        
+                    }
+                }
+
                 
             </script>

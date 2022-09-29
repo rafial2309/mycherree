@@ -43,10 +43,10 @@ if ($_GET['menu'] == 'create' ) {
     $totalFiltered = $totalData;
 
     //----------------------------------------------------------------------------------
-    $sql = "SELECT Payment_ID,Invoice_Payment.Inv_Number,Invoice.Cust_Nama,Invoice_Payment.Payment_Name,Invoice_Payment.Payment_Total, Invoice_Payment.Payment_Tgl, Invoice_Payment.Payment_Type, Invoice_Payment.Payment_Note, Invoice_Payment.Staff_Name from Invoice_Payment join Invoice on Invoice.Inv_Number=Invoice_Payment.Inv_Number  WHERE";
+    $sql = "SELECT Payment_ID,Invoice_Payment.Inv_Number,Invoice.Cust_Nama,Invoice_Payment.Payment_Name,Invoice_Payment.Payment_Total, Invoice_Payment.Payment_Tgl, Invoice_Payment.Payment_Type, Invoice_Payment.Payment_Note, Invoice_Payment.Staff_Name from Invoice_Payment join Invoice on Invoice.Inv_Number=Invoice_Payment.Inv_Number WHERE Invoice_Payment.Inv_Number!=''";
     if( !empty($requestData['search']['value']) ) {
         //----------------------------------------------------------------------------------
-        $sql.=" ( Invoice_Payment.Inv_Number LIKE '%".$requestData['search']['value']."%' ";    
+        $sql.=" AND (Invoice_Payment.Inv_Number LIKE '%".$requestData['search']['value']."%' ";    
         $sql.=" OR Invoice.Cust_Nama LIKE '".$requestData['search']['value']."%' ";
         $sql.=" OR Invoice_Payment.Payment_Name LIKE '".$requestData['search']['value']."%' ";
         $sql.=" OR Invoice_Payment.Payment_Total LIKE '%".$requestData['search']['value']."%' ";
@@ -57,17 +57,18 @@ if ($_GET['menu'] == 'create' ) {
     }
     //----------------------------------------------------------------------------------
     $query=mysqli_query($conn, $sql) or die("payment?menu=data: get dataku");
+   
     $totalFiltered = mysqli_num_rows($query);
-    $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
+    $sql.=" ORDER BY Payment_ID  ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
     $query=mysqli_query($conn, $sql) or die("payment?menu=data: get dataku");
     //----------------------------------------------------------------------------------
     $data = array();
-    $no = 1;
+
     while( $row=mysqli_fetch_array($query) ) {
         
 
         $nestedData=array(); 
-        $nestedData[] = "<p style='font-size:15px'>".$no++."</p>";
+        $nestedData[] = $row["Payment_ID"];
         $nestedData[] = "<p style='font-size:15px'>".$row["Inv_Number"]."</p>";
         $nestedData[] = "<p style='font-size:15px'>".$row["Cust_Nama"] ."</p>";
         $nestedData[] = "<p style='font-size:15px'>".$row["Payment_Name"] ."</p>";
@@ -115,5 +116,5 @@ if ($_GET['menu'] == 'create' ) {
 	//mysqli_query($conn, "UPDATE Customer SET Cust_Status='N' WHERE Cust_No='$id'");
 }
 // REDIRECT KEMBALI KE HALAMAN USER
-echo "<script>location.href='../app?p=customers';</script>";
+
 ?>

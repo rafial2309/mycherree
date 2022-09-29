@@ -1,29 +1,24 @@
+            
             <div class="wrapper-box">
                 <!-- BEGIN: Content -->
                 <div class="content">
                     <h2 class="intro-y text-lg font-medium mt-5">
-                        Cancel History
+                        Cancel
                     </h2>
                     <div class="grid grid-cols-12 gap-6 mt-5">
                         <div class="intro-y col-span-12 flex flex-wrap xl:flex-nowrap items-center mt-2">
                             <div class="flex w-full sm:w-auto">
                                 <div class="w-48 relative text-slate-500">
-                                    <input type="text" class="form-control w-48 box pr-10" placeholder="Search by invoice...">
+                                    <input type="text" id="inputcari" class="form-control w-48 box pr-10" placeholder="Search by invoice...">
                                     <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i> 
                                 </div>
-                                <select class="form-select box ml-2">
-                                    <option>Status</option>
-                                    <option>Unpaid</option>
-                                    <option>Paid</option>
-                                    <option>Taken</option>
+                                <select class="form-select box ml-2" id="status" onchange="gantistatus()">
+                                    <option value="ALL">All</option>
+                                
                                 </select>
                             </div>
                             <div class="hidden xl:block mx-auto text-slate-500">&nbsp;</div>
-                            <div class="w-full xl:w-auto flex items-center mt-3 xl:mt-0">
-                                
-                                <button class="btn btn-primary shadow-md mr-2"> <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> NEW TRANSACTION </button>
-                               
-                            </div>
+       
                         </div>
                         <!-- BEGIN: Data List -->
                         <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
@@ -33,97 +28,16 @@
                                         
                                         <th class="whitespace-nowrap">INVOICE</th>
                                         <th class="whitespace-nowrap">BUYER NAME</th>
-                                        <th class="whitespace-nowrap">FINISH</th>
-                                        <th class="whitespace-nowrap">PAYMENT</th>
-                                        <th class="text-right whitespace-nowrap">
-                                            <div class="pr-16">TOTAL TRANSACTION</div>
+                                        <th class="whitespace-nowrap" style="width: 220px;">FINISH</th>
+                                        <th class="whitespace-nowrap">STATUS</th>
+                                        <th class="text-right whitespace-nowrap" style="width: 190px;">
+                                            <div class="pr-16">PAYMENT</div>
                                         </th>
                                         <th class="text-center whitespace-nowrap">ACTIONS</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr class="intro-x">
-                                        
-                                        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;">#INV-2200001</a> </td>
-                                        <td class="w-40">
-                                            <a href="" class="font-medium whitespace-nowrap">Mustafa Amien</a> 
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">Jl. Merdeka Indah Jaya Sentosa, Jakarta</div>
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">081263723</div>
-                                        </td>
-                                        <td>
-                                            <div class="pr-16">Mon, 23 Sep 2022</div>
-                                        </td>
-                                        <td>
-                                            <div class="flex items-center whitespace-nowrap text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Completed </div>
-                                            <div class="whitespace-nowrap">Direct bank transfer</div>
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">25 March, 12:55</div>
-                                        </td>
-                                        <td class="w-40 text-right">
-                                            <div class="pr-16">Rp 370.000</div>
-                                        </td>
-                                        <td class="table-report__action">
-                                            <div class="flex justify-center items-center">
-                                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> View Details </a>
-                                                
-                                                <div class="dropdown"> 
-                                                    <button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown"><i data-lucide="send" class="w-4 h-4 mr-2"></i> Process Invoice</button> 
-                                                    <div class="dropdown-menu w-40"> 
-                                                        <ul class="dropdown-content"> 
-                                                            <li> <div class="dropdown-header">Process</div> </li> 
-                                                            <li> <hr class="dropdown-divider"> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice </a> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Payment </a> 
-                                                            </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="x-circle" class="w-4 h-4 mr-2"></i> Cancel </a> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Rewash </a> </li> 
-                                                            
-                                                        </ul> 
-                                                    </div> 
-                                                </div> 
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="intro-x">
-                                        
-                                        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;">#INV-2200002</a> </td>
-                                        <td class="w-40">
-                                            <a href="" class="font-medium whitespace-nowrap">Aldiansyah A</a> 
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">Jl. PIK Indah, Jakarta</div>
-                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">01237823</div>
-                                        </td>
-                                        <td>
-                                            <div class="pr-16">Tue, 24 Sep 2022</div>
-                                        </td>
-                                        <td>
-                                            <div class="flex items-center whitespace-nowrap text-warning"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Unpaid </div>
-                                            <button class="btn btn-sm btn-warning shadow-md mr-2 mt-2"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> MAKE A PAYMENT </button>
-
-                                        </td>
-                                        <td class="w-40 text-right">
-                                            <div class="pr-16">Rp 370.000</div>
-                                        </td>
-                                        <td class="table-report__action">
-                                            <div class="flex justify-center items-center">
-                                                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="javascript:;"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> View Details </a>
-                                                
-                                                <div class="dropdown"> 
-                                                    <button class="dropdown-toggle btn btn-primary" aria-expanded="false" data-tw-toggle="dropdown"><i data-lucide="send" class="w-4 h-4 mr-2"></i> Process Invoice</button> 
-                                                    <div class="dropdown-menu w-40"> 
-                                                        <ul class="dropdown-content"> 
-                                                            <li> <div class="dropdown-header">Process</div> </li> 
-                                                            <li> <hr class="dropdown-divider"> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice </a> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Payment </a> 
-                                                            </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="x-circle" class="w-4 h-4 mr-2"></i> Cancel </a> </li> 
-                                                            <li> <a href="" class="dropdown-item"> <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Rewash </a> </li> 
-                                                            
-                                                        </ul> 
-                                                    </div> 
-                                                </div> 
-                                            </div>
-                                        </td>
-                                    </tr>
+                                <tbody id="hasilcari">
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -153,7 +67,284 @@
                         </div>
                     </div>
                     <!-- END: Delete Confirmation Modal -->
+                    <div id="payment-modal" class="modal" tabindex="-1" aria-hidden="true">
+                        
+                        <div class="modal-dialog" style="width:50%">
+                            <form method="POST" id="savepayment" action="#">
+                            <div class="modal-content" id="hasilpaymentpop">
+                                
+                            </div>
+                            </form>
+                        </div>
+                        
+                    </div>
                 </div>
                 <!-- END: Content -->
+                <!-- END: Add Item Modal -->
+                     <div class="text-center"> 
+                        <a id="success-additem" href="javascript:;" style="opacity:0" data-tw-toggle="modal" data-tw-target="#success-modal-preview" class="btn btn-primary">-</a> 
+                        <a id="danger-additem" href="javascript:;" style="opacity:0" data-tw-toggle="modal" data-tw-target="#danger-modal-preview" class="btn btn-danger">-</a> 
+                     </div> <!-- END: Modal Toggle --> 
+                     <!-- BEGIN: Modal Content --> 
+                     <div id="success-modal-preview" class="modal" tabindex="-1" aria-hidden="true"> 
+                        <div class="modal-dialog"> 
+                            <div class="modal-content"> 
+                                <div class="modal-body p-0"> 
+                                    <div class="p-5 text-center"> 
+                                        <i data-lucide="check-circle" class="w-16 h-16 text-success mx-auto mt-3"></i> 
+                                        <div class="text-3xl mt-5">Save Success!</div> 
+                                        <div class="text-slate-500 mt-2">Data saved</div> 
+                                    </div> 
+                                    <div class="px-5 pb-8 text-center"> 
+                                        <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div> 
+                     </div> 
+                     <div id="danger-modal-preview" class="modal" tabindex="-1" aria-hidden="true"> 
+                        <div class="modal-dialog"> 
+                            <div class="modal-content"> 
+                                <div class="modal-body p-0"> 
+                                    <div class="p-5 text-center"> 
+                                        <i data-lucide="check-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i> 
+                                        <div class="text-3xl mt-5">Delete Success!</div> 
+                                        <div class="text-slate-500 mt-2">Item deleted.</div> 
+                                    </div> 
+                                    <div class="px-5 pb-8 text-center"> 
+                                        <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div> 
+                     </div> 
+                     <!-- END: Modal Content --> 
             </div>
             <?php include 'appjs.php'; ?>
+            <script type="text/javascript">
+                $(document).ready(function(e) {
+
+                    setTimeout(function(){ myFunction(); }, 300);
+                    var timeout;
+                    var delay = 600;   // 2 seconds
+
+                    $('#inputcari').keyup(function(e) {
+                        //$('#status').html("User started typing!");
+                        if(timeout) {
+                            clearTimeout(timeout);
+                        }
+                        timeout = setTimeout(function() {
+                            myFunction();
+                        }, delay);
+                    });
+
+                    function myFunction() {
+
+                        var keyword     = document.getElementById('inputcari').value;
+                        var status      = document.getElementById('status').value;
+                        $.ajax({
+                            url:'function/transaksi?menu=caricancel',
+                            type:'POST',
+                            dataType:'html',
+                            data:{
+                              keyword: keyword,
+                              status: status,
+                            },
+                            success:function (response) {
+                                $('#hasilcari').html(response);
+                            },
+
+                        })
+                    }
+                });
+
+                
+
+                function gantistatus(){
+                    var keyword     = document.getElementById('inputcari').value;
+                    var status      = document.getElementById('status').value;
+                    $.ajax({
+                        url:'function/transaksi?menu=cari',
+                        type:'POST',
+                        dataType:'html',
+                        data:{
+                          keyword: keyword,
+                          status: status,
+                        },
+                        success:function (response) {
+                            $('#hasilcari').html(response);
+                        },
+
+                    })
+                }
+                function gopayment(data){
+                    $.ajax({
+                        url:'function/transaksi_payment?menu=tampilcust',
+                        type:'POST',
+                        data:{
+                          data: data,
+                        },
+                        dataType:'html',
+                        success:function (response) {
+                            $('#hasilpaymentpop').html(response);
+                        },
+
+                    })
+                }
+                function ganticustpay(data){
+                    var customer_data     = document.getElementById('customer_data').value;
+                    var cust              = customer_data.split("###");
+                    document.getElementById('cust_nama').innerHTML      = cust[1];
+                    document.getElementById('cust_alamat').innerHTML    = cust[2];
+                    document.getElementById('cust_telp').innerHTML      = cust[3];
+                    if(data!='MULTI'){
+                       pilihinv(data);
+                    }else{
+                        
+                        $.ajax({
+                            url:'function/transaksi_payment?menu=cari_invoice',
+                            type:'POST',
+                            dataType:'html',
+                            data:{
+                              customer_data: cust[0],
+                            },
+                            success:function (response) {
+                                $('#hasilinvoice').html(response);
+                                $('#isi_inv').html('');
+                                document.getElementById("totalpay_data").value = '0';
+                                document.getElementById("totalpay").innerHTML = '0';
+                                jQuery('.datainv').remove();
+                            },
+
+                        })
+                    }
+                    
+                }
+
+                function pilihinv(data){
+                    if (data=='MULTI') {
+                        var invoice_data     = document.getElementById('invoice_data').value;
+                    }else{
+                        var invoice_data     = data;
+                    }
+                    
+                    var inv              = invoice_data.split("###");
+                    var payment          = inv[1].toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                    var sudahada         = 'N';
+
+                    $("input[name='invoice[]']").each(function() {
+                        var valsiki = $(this).val().substring(0, 7);
+                        if (valsiki==inv[0]) {
+                            sudahada = 'Y';
+                        }
+                    });
+
+                    if (sudahada=='Y') {
+                        alert('INVOICE LISTED!')
+                    }else{
+                        if (inv[0]!='') {
+                            document.getElementById("isi_inv").insertAdjacentHTML("beforeend",
+                            "<div class='flex items-center mb-1 datainv'>&nbsp; INV-"+inv[0]+"<div class='ml-auto'>Rp "+payment+"</div><input type='hidden' name='invoice[]' value='"+inv[0]+"--"+inv[1]+"'></div>");
+                        }
+                        
+                    }
+
+                    var tot              = 0;
+                    $("input[name='invoice[]']").each(function() {
+                        var invdat = $(this).val().split("--");
+                        tot = parseInt(tot) + parseInt(invdat[1]);
+                    });
+                    
+                    document.getElementById("totalpay_data").value = tot;
+                    document.getElementById("totalpay").innerHTML = tot.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                }
+
+                var frm = $('#savepayment');
+                frm.submit(function (e) {
+                  e.preventDefault(e);
+
+                  var formData = new FormData(this);
+
+                  var dd = JSON.stringify(Object.fromEntries(formData));
+                  obj = JSON.parse(dd);
+                  var jenismod = obj.jenismod;
+
+                  if (jenismod=='PAYMENT') {
+                    var url = 'function/transaksi_payment?menu=savepayment';
+                  }else{
+                    var url = 'function/transaksi_payment?menu=savetaken';
+                  }
+
+                  $.ajax({
+                    async: true,
+                    type: frm.attr('method'),
+                    url: url,
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+
+                    success: function (data) {
+                      console.log("success");
+                      document.getElementById('closemodalpayment').click();
+                      document.getElementById('success-additem').click();
+                      setTimeout(function() { window.location.reload(); }, 1500);
+                    },
+                    error: function(request, status, error) {
+                      console.log("error")
+                    }
+                  });
+                });
+
+
+
+                ////taken
+
+                function gotaken(data){
+                    $.ajax({
+                        url:'function/transaksi_payment?menu=takeninvoice',
+                        type:'POST',
+                        data:{
+                          data: data,
+                        },
+                        dataType:'html',
+                        success:function (response) {
+                            $('#hasilpaymentpop').html(response);
+                        },
+
+                    })
+                }
+                function ganticustpaytaken(data){
+                    var customer_data     = document.getElementById('customer_datax').value;
+                    var cust              = customer_data.split("###");
+                    var inv               = data.split("###");
+                    document.getElementById('cust_nama').innerHTML      = cust[1];
+                    document.getElementById('cust_alamat').innerHTML    = cust[2];
+                    document.getElementById('cust_telp').innerHTML      = cust[3];
+                    
+                    document.getElementById('invnum').innerHTML = inv[0]; 
+                    
+                }
+
+                function cancelinvoice(data){
+                    let text = "Are you sure? (CANCEL INVOICE)";
+                    if (confirm(text) == true) {
+                        $.ajax({
+                            type:'POST',
+                            url:'function/transaksi?menu=cancelinvoice',
+                            data:'id='+data,
+                            success: function(data) { // Jika berhasil
+                           
+                                if (data=='Y') {
+                                    document.getElementById('success-additem').click();
+                                    setTimeout(function() { window.location.reload(); }, 1500);
+                                }
+                            }
+                        });
+                    } else {
+                        
+                    }
+                }
+
+                
+            </script>
