@@ -346,4 +346,35 @@ if ($_GET['menu'] == 'getitem' ) {
 	unset($_SESSION["Discount_No"]);
 
 	exit();
+}elseif ($_GET['menu'] == 'savetransaksirewash') { 
+
+	$Inv_Number 	= $_POST['Inv_Number'];
+	$Inv_Number_R 	= $_POST['Inv_Number']."R";
+	$Inv_Tg_Selesai = $_POST['Inv_Tg_Selesai'];
+	$Note 			= $_POST['Note'];
+	$Inv_Item_No 	= $_POST['Inv_Item_No'];
+	$QTY 			= $_POST['QTY'];
+	$Inv_Tgl_Masuk	= date('Y-m-d');
+	$Total_PCS 		= count($Inv_Item_No);
+
+
+	$datainv = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice WHERE Inv_Number='$Inv_Number'"));
+
+	mysqli_query($conn,"INSERT into Invoice_Rewash VALUES(0,'$Inv_Number_R','$Inv_Tgl_Masuk','$Inv_Tg_Selesai','$datainv[Cust_ID]','$datainv[Cust_Nama]','$datainv[Cust_Alamat]','$datainv[Cust_Telp]','$datainv[Discount_No]','$Total_PCS','0','0','0','0','0','$datainv[Status_Payment]','N','$datainv[Status_Inv]','$Note','$Staff_Name','$Staff_ID','0')");
+
+	$non = 1;$ar = 0;
+	foreach($Inv_Item_No as $datanya) {
+		$dataitem = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Item WHERE Inv_Item_No='$datanya'"));
+
+	   	mysqli_query($conn,"INSERT into Invoice_Rewash_Item VALUES(0,'$Inv_Number_R','$non','$dataitem[Deskripsi]','$dataitem[Item_ID]','$dataitem[Colour_ID]','$dataitem[Brand_ID]','$dataitem[Size]','$dataitem[Item_Note]','$dataitem[Item_Price]','$dataitem[Item_Pcs]','$dataitem[Adjustment]','$dataitem[Adjustment_Note]','$QTY[$ar]','$dataitem[Total_Price]','$dataitem[Marking_Note]','$dataitem[Marking_Note_Revisi]','$Staff_ID','$Staff_Name','$dataitem[Inv_Tgl_Masuk]')");
+	   	$non++;
+	   	$ar++;
+	}
+
+	$totalpcsdata = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Qty * Item_Pcs) as total from Invoice_Rewash_Item WHERE Inv_Number='$Inv_Number_R'"));
+	mysqli_query($conn,"UPDATE Invoice_Rewash SET Total_PCS='$totalpcsdata[total]' where Inv_Number='$Inv_Number_R'");
+	
+	exit();
+
+	
 }

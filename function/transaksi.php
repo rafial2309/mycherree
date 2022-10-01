@@ -103,7 +103,7 @@ if ($_GET['menu'] == 'cari' ) {
                             <li> <a href="javascript:;" onclick="cancelinvoice('<?php echo $data['Inv_Number'] ?>')" class="dropdown-item"> <img src="plugin/lucide/x-circle.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Cancel </a> </li> 
                             <?php } ?>
 
-                            <li> <a href="" class="dropdown-item"> <img src="plugin/lucide/refresh-cw.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Rewash </a> </li> 
+                            <li> <a href="app?p=rewash-start&invoice=<?php echo $data['Inv_Number'] ?>" class="dropdown-item"> <img src="plugin/lucide/refresh-cw.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Rewash </a> </li> 
                             
                         </ul> 
                     </div> 
@@ -204,4 +204,62 @@ if ($_GET['menu'] == 'cari' ) {
     </tr>
     <?php
     }
+}else if ($_GET['menu'] == 'carirewash' ) {
+    $keyword    = $_POST['keyword'];
+    $status     = $_POST['status'];
+    $query      = mysqli_query($conn,"SELECT * from Invoice_Rewash where (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
+
+    while($data = mysqli_fetch_assoc($query)){
+    ?>
+
+    <tr class="intro-x">
+                                        
+        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;">#INV-<?php echo $data['Inv_Number'] ?></a> </td>
+        <td class="w-40">
+            <a href="" class="font-medium whitespace-nowrap"><?php echo $data['Cust_Nama'] ?></a> 
+            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
+            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Telp'] ?></div>
+        </td>
+        <td>
+            <div class="pr-16"><?php echo date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])); ?></div>
+            <div class="pr-16"><?php echo date('D, d M Y', strtotime($data['Inv_Tg_Selesai'])); ?></div>
+        </td>
+        <td>
+            <?php if ($data['Status_Taken']=='N') { ?>
+                <div onclick="taken('<?php echo $data['Inv_Number'] ?>')" class="flex items-center whitespace-nowrap text-warning"> <img src="plugin/lucide/check-square.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(78%) sepia(61%) saturate(588%) hue-rotate(331deg) brightness(99%) contrast(96%);"> UNTAKEN </div>
+                
+            <?php }else{ 
+                $cekpay = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Payment where Inv_Number='$data[Inv_Number]'"));
+                ?>
+                <div class="flex items-center whitespace-nowrap text-success"> <img src="plugin/lucide/check-square.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(28%) sepia(73%) saturate(3769%) hue-rotate(160deg) brightness(102%) contrast(90%);"> <?php echo $data['Status_Taken'] ?> </div>
+               
+            <?php } ?>
+        </td>
+        <td class="w-40 text-right">
+            <div class="pr-16">Rp <?php echo number_format($data['Payment_Amount'] ,0,",",".")?></div>
+        </td>
+        <td class="table-report__action">
+            <div class="flex justify-center items-center">
+                <a class="flex items-center text-primary whitespace-nowrap mr-5" href="app?p=transactions_rewash_detail&invoice=<?php echo $data['Inv_Number'] ?>"> <img src="plugin/lucide/check-square.svg" class="w-4 h-4 mr-1 text-primary" style="box-shadow: none;filter: invert(15%) sepia(89%) saturate(1755%) hue-rotate(215deg) brightness(102%) contrast(96%);"> View Details </a>
+                
+                <button onclick="window.location='#'" class="btn btn-primary shadow-md mr-2"> <img src="plugin/lucide/printer.svg" class="w-4 h-4 mr-1 text-primary" style="box-shadow: none;filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);"> PRINT </button>
+            </div>
+        </td>
+    </tr>
+    <?php
+    }
+}else if ($_GET['menu'] == 'simpantaken' ) {
+    $nama       = $_POST['doc'];
+    $Inv_Number = $_POST['data'];
+    
+    $payer_name             = $nama;
+    $pay_tgl_taken          = date('d M Y H:i:s');
+
+    $isitaken = "TAKEN#BY ". $payer_name . " #".$pay_tgl_taken;
+    mysqli_query($conn,"UPDATE Invoice_Rewash SET Status_Taken='$isitaken' where Inv_Number='$Inv_Number'");
+
+
+    
+    echo 'Y';
+    exit();
 }
