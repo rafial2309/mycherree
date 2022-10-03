@@ -329,13 +329,14 @@ if ($_GET['menu'] == 'getitem' ) {
 	$Status_Payment		= 'N';
 	$Status_Taken		= 'N';
 	$Status_Inv			= 'Y';
+	$Status_Marking		= 'N';
 	$Note 				= $_POST['Note'];
 	$Staff_Name			= $Staff_Name;
 	$Staff_ID			= $Staff_ID;
 	$Point_Transaksi	= 0;
 
 
-	mysqli_query($conn,"INSERT into Invoice VALUES(0,'$Inv_Number','$Inv_Tgl_Masuk','$Inv_Tg_Selesai','$Cust_ID','$Cust_Nama','$Cust_Alamat','$Cust_Telp','$Discount_No','$Total_PCS','$Total_Diskon','$Total_Voucher','$Payment_Before','$Payment_Rounding','$Payment_Amount','$Status_Payment','$Status_Taken','$Status_Inv','$Note','$Staff_Name','$Staff_ID','$Point_Transaksi')");
+	mysqli_query($conn,"INSERT into Invoice VALUES(0,'$Inv_Number','$Inv_Tgl_Masuk','$Inv_Tg_Selesai','$Cust_ID','$Cust_Nama','$Cust_Alamat','$Cust_Telp','$Discount_No','$Total_PCS','$Total_Diskon','$Total_Voucher','$Payment_Before','$Payment_Rounding','$Payment_Amount','$Status_Payment','$Status_Taken','$Status_Inv','$Status_Marking','$Note','$Staff_Name','$Staff_ID','$Point_Transaksi')");
 
 	mysqli_query($conn,"UPDATE Invoice_Item SET Inv_Number='$Inv_Number' WHERE Inv_Number='' AND Staff_ID='$Staff_ID'");
 

@@ -804,7 +804,7 @@
                 </li>
                 
                 <li>
-                    <a href="#" class="top-menu">
+                    <a href="app?p=marking_process" class="top-menu">
                         <div class="top-menu__icon"> <i data-lucide="edit-3"></i> </div>
                         <div class="top-menu__title"> Marking Process  </div>
                     </a>
