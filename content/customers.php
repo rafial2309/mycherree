@@ -11,6 +11,7 @@
                     </div>
                     <div class="grid grid-cols-12 gap-6 mt-5">
                         <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
+                            <button class="btn btn-primary mr-1 mb-2" onclick="btnExcel()">Export Data - Excel</button>
                             <table id="example" class="display" style="width:100%">
                                 <thead>
                                     <tr>
@@ -133,11 +134,13 @@
                         dom: 'Bfrtip',
                         "processing": true,
                         "serverSide": true,
-                        buttons: [
-                            'excel',
-                        ],   
+                        buttons: [],   
                     } );     
                 } );
+
+                function btnExcel () {
+                    location.href='function/report?type=customer';
+                }
 
                 function btnDelete(id){
                     let text = "Are you sure?";
@@ -165,20 +168,6 @@
                     });
                 }
 
-                setTimeout(function(){ 
-
-                    var buttons = document.getElementsByClassName("buttons-excel"),
-                        len = buttons !== null ? buttons.length : 0,
-                        i = 0;
-                    for(i; i < len; i++) {
-                        buttons[i].className += " btn btn-primary mr-1 mb-2"; 
-                    }
-
-                    $('.buttons-excel span').text('Export Data - Excel');
-
-                }, 500);
-
-                
             </script>
 
             
