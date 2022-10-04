@@ -29,15 +29,16 @@ if ($_GET['menu'] == 'create' ) {
 	$Staff_No 		 	    = $_POST['Staff_No'];
 	$Staff_Name 		 	= $_POST['Staff_Name'];
 	$Staff_ID 		 	    = $_POST['Staff_ID'];
-	$Staff_PIN 		 	    = md5($_POST['Staff_PIN']);
 	$Staff_Tempat_Lahir 	= $_POST['Staff_Tempat_Lahir'];
 	$Staff_Tgl_Lahir 	    = $_POST['Staff_Tgl_Lahir'];
 	$Staff_Alamat 		 	= $_POST['Staff_Alamat'];
 	$Staff_Telp 		 	= $_POST['Staff_Telp'];
 	$Staff_Access 		 	= $_POST['Staff_Access'];
 	
+    $additionalQuery = ($_POST['Staff_PIN'] <> '') ? ', Staff_PIN="'.md5($_POST['Staff_PIN']).'"' : '';
 
-    mysqli_query($conn, "UPDATE Staff SET Staff_Name='$Staff_Name', Staff_PIN='$Staff_PIN', Staff_Tempat_Lahir='$Staff_Tempat_Lahir', Staff_Tgl_Lahir='$Staff_Tgl_Lahir', Staff_Alamat='$Staff_Alamat', Staff_Telp='$Staff_Telp', Staff_Access='$Staff_Access'WHERE Staff_No='$Staff_No'");
+    mysqli_query($conn, "UPDATE Staff SET Staff_Name='$Staff_Name', Staff_Tempat_Lahir='$Staff_Tempat_Lahir', Staff_Tgl_Lahir='$Staff_Tgl_Lahir', Staff_Alamat='$Staff_Alamat', Staff_Telp='$Staff_Telp', Staff_Access='$Staff_Access' $additionalQuery WHERE Staff_No='$Staff_No'");
+
 } elseif ($_GET['menu'] == 'data') {
     $requestData= $_REQUEST;
     $columns = array( 

@@ -176,7 +176,6 @@
                                 obj = JSON.parse(json);
                                 $('#edit-id').val(obj.Staff_No);
                                 $('#edit-name').val(obj.Staff_Name);
-                                $('#edit-pin').val(obj.Staff_PIN);
                                 $('#edit-staff-id').val(obj.Staff_ID);
                                 $('#edit-tempat-lahir').val(obj.Staff_Tempat_Lahir);
                                 $('#edit-tanggal-lahir').val(obj.Staff_Tgl_Lahir);
