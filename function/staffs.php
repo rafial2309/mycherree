@@ -7,21 +7,29 @@ if ($_GET['menu'] == 'create' ) {
 	// ADD NEW STAFF
 	$Staff_ID 		 	    = $_POST['Staff_ID'];
 	$Staff_Name 		 	= $_POST['Staff_Name'];
-	$Staff_PIN 		 	    = $_POST['Staff_PIN'];
+	$Staff_PIN 		 	    = md5($_POST['Staff_PIN']);
 	$Staff_Tempat_Lahir 	= $_POST['Staff_Tempat_Lahir'];
 	$Staff_Tgl_Lahir 	    = $_POST['Staff_Tgl_Lahir'];
 	$Staff_Alamat 		 	= $_POST['Staff_Alamat'];
 	$Staff_Telp 		 	= $_POST['Staff_Telp'];
 	$Staff_Access 		 	= $_POST['Staff_Access'];
 	
-	mysqli_query($conn, "INSERT INTO Staff (Staff_Name, Staff_ID, Staff_PIN, Staff_Tempat_Lahir, Staff_Tgl_Lahir, Staff_Alamat, Staff_Telp, Staff_Access, Staff_Status) VALUES ('$Staff_Name','$Staff_ID','$Staff_PIN','$Staff_Tempat_Lahir','$Staff_Tgl_Lahir','$Staff_Alamat','$Staff_Telp','$Staff_Access','Y')");
+    $cek = mysqli_query($conn,"SELECT Staff_ID from Staff where Staff_ID='$Staff_ID'");
+
+    if (mysqli_num_rows($cek)>0) {
+        echo "<script>alert('Staff ID sudah terpakai!'); location.href='../app?p=staff';</script>";
+    }else{
+        mysqli_query($conn, "INSERT INTO Staff (Staff_Name, Staff_ID, Staff_PIN, Staff_Tempat_Lahir, Staff_Tgl_Lahir, Staff_Alamat, Staff_Telp, Staff_Access, Staff_Status) VALUES ('$Staff_Name','$Staff_ID','$Staff_PIN','$Staff_Tempat_Lahir','$Staff_Tgl_Lahir','$Staff_Alamat','$Staff_Telp','$Staff_Access','Y')");
+    }
+
+	
 
 } elseif ($_GET['menu'] == 'edit') {
     // UPDATE EXISTING STAFF
 	$Staff_No 		 	    = $_POST['Staff_No'];
 	$Staff_Name 		 	= $_POST['Staff_Name'];
 	$Staff_ID 		 	    = $_POST['Staff_ID'];
-	$Staff_PIN 		 	    = $_POST['Staff_PIN'];
+	$Staff_PIN 		 	    = md5($_POST['Staff_PIN']);
 	$Staff_Tempat_Lahir 	= $_POST['Staff_Tempat_Lahir'];
 	$Staff_Tgl_Lahir 	    = $_POST['Staff_Tgl_Lahir'];
 	$Staff_Alamat 		 	= $_POST['Staff_Alamat'];
