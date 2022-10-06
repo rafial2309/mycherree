@@ -722,7 +722,7 @@
                             </li>
                            
                             <li>
-                                <a href="" class="dropdown-item hover:bg-white/5"> <i data-lucide="lock" class="w-4 h-4 mr-2"></i> Reset Password </a>
+                                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#reset-password-modal" class="dropdown-item hover:bg-white/5"> <i data-lucide="lock" class="w-4 h-4 mr-2"></i> Reset Password </a>
                             </li>
                     
                             <li>
@@ -817,7 +817,7 @@
                     </a>
                     <ul class="" id="menucustom">
                         <li>
-                            <a href="#" class="top-menu">
+                            <a href="app?p=daily-invoice" class="top-menu">
                                 <div class="top-menu__icon"> <i data-lucide="file-text"></i> </div>
                                 <div class="top-menu__title"> Daily Invoice </div>
                             </a>
@@ -888,3 +888,35 @@
             </ul>
         </nav>
         <!-- END: Top Menu -->
+        <!-- RESET PASSWORD -->
+        <div id="reset-password-modal" class="modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="create" action="function/staffs?menu=reset" method="post">
+                    <div class="modal-header">
+                        <h2 class="font-medium text-base mr-auto">
+                            New Customer
+                        </h2>
+                    </div>
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                        <div class="col-span-12">
+                            <label for="pos-form-1" class="form-label">PIN Lama</label>
+                            <input id="pos-form-1" name="PIN" type="password" class="form-control flex-1" placeholder="PIN Lama">
+                        </div>
+                        <div class="col-span-12">
+                            <label for="pos-form-2" class="form-label">PIN Baru</label>
+                            <input id="pos-form-2" name="PIN2" type="password" class="form-control flex-1" placeholder="PIN Baru ">
+                        </div>
+                        <div class="col-span-12">
+                            <label for="pos-form-3" class="form-label">Konfirmasi Password</label>
+                            <input id="pos-form-3" name="PIN3" type="password" class="form-control flex-1" placeholder="Konfirmasi PIN Baru">
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
+                        <button type="button" onclick="document.getElementById('create').submit()" class="btn btn-primary w-32">Save</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>

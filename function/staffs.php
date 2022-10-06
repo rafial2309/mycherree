@@ -118,6 +118,38 @@ if ($_GET['menu'] == 'create' ) {
     // MERUBAH VARIABEL ARRAY KE FORMAT JSON
     echo json_encode($json);
     exit();
+} elseif ($_GET['menu'] == 'reset') {
+    $Staff_ID       = $_SESSION['Staff_ID'];
+    $PIN            = md5($_POST['PIN']);
+    $PIN_Baru       = $_POST['PIN2'];
+    $PIN_Konfirmasi = $_POST['PIN3'];
+    
+    $sql = mysqli_query($conn, "SELECT * FROM Staff WHERE Staff_ID='$Staff_ID' AND Staff_PIN='$PIN'");
+
+    if (mysqli_num_rows($sql) > 0) {
+        if ($PIN_Baru == $PIN_Konfirmasi) {
+            $PIN = md5($PIN_Baru);
+            mysqli_query($conn, "UPDATE Staff SET Staff_PIN='$PIN' WHERE Staff_ID='$Staff_ID'");
+            echo "
+            <script>
+                alert('PIN Berhasil diubah');
+                location.href='../app';    
+            </script>";
+        } else {
+            echo "
+            <script>
+                alert('PIN Baru dan PIN Konfirmasi harus sama');
+                location.href='../app';    
+            </script>";
+        }
+    } else {
+        echo "
+        <script>
+            alert('PIN Lama Salah');
+            location.href='../app';    
+        </script>";
+    }
+
 } else {
 	// DELETE STAFF
 	$Staff_No = $_GET['id'];
