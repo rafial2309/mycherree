@@ -248,6 +248,153 @@ if ($_GET['type'] == 'customer') {
     }
     $akhir = $baris - 1; 
     $sheet->getStyle('A4:G' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+
+} elseif ($_GET['type'] == 'daily-invoice') {
+    $start  = date('Y-m-d', strtotime($_POST['start']));
+    $end    = date('Y-m-d', strtotime($_POST['end']));
+    $judul  = 'Daily Invoice';
+
+    $sheet->setCellValue('A3', 'Report ' . date('D, d M Y', strtotime($start)).' - '.date('D, d M Y', strtotime($end)));
+    $sheet->setCellValue('A4', 'No');
+    $sheet->setCellValue('B4', 'ID Invoice');
+    $sheet->setCellValue('C4', 'Tanggal Masuk');
+    $sheet->setCellValue('D4', 'Tanggal Selesai');
+    $sheet->setCellValue('E4', 'Nama Customer');
+    $sheet->setCellValue('F4', 'Alamat');
+    $sheet->setCellValue('G4', 'Total PCS');
+    $sheet->setCellValue('H4', 'Total Pembayaran');
+    $sheet->setCellValue('I4', 'Dikerjakan oleh');
+    
+    $sheet->getStyle('A4:I4')->getAlignment()->setVertical('center')->setHorizontal('center');
+    $sheet->getStyle('A4:I4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A4:I4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
+    
+    $sheet->freezePane('A5');
+    
+    $baris = 5;
+    $no = 1;
+    
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice WHERE Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
+    while ($data = mysqli_fetch_assoc($sql)) {
+        $sheet->setCellValue('A' . $baris, $no);
+        $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
+        $sheet->setCellValue('C' . $baris, date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])));
+        $sheet->setCellValue('D' . $baris, date('D, d M Y', strtotime($data['Inv_Tg_Selesai'])));
+        $sheet->setCellValue('E' . $baris, $data['Cust_Nama']);
+        $sheet->setCellValue('F' . $baris, $data['Cust_Alamat']);
+        $sheet->setCellValue('G' . $baris, $data['Total_PCS']);
+        $sheet->setCellValue('H' . $baris, $data['Payment_Amount']);
+        $sheet->setCellValue('I' . $baris, $data['Staff_Name']);
+        $baris++;
+        $no++;
+    }
+    foreach ($sheet->getColumnIterator() as $column) {
+        $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+    }
+    $akhir = $baris - 1; 
+    $sheet->getStyle('B5:B' . $akhir)->getAlignment()->setHorizontal('right');
+    $sheet->getStyle('A5:I' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('G5:H' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->getColumnDimension('A')->setAutoSize(false)->setWidth(8);
+
+} elseif ($_GET['type'] == 'monthly-invoice') {
+    $month  = date('Y-m-d', strtotime($_POST['month']));
+    $judul  = 'Monthly Invoice';
+    
+    $sheet->setCellValue('A3', 'Report ' . date('M Y', strtotime($month)));
+    $sheet->setCellValue('A4', 'No');
+    $sheet->setCellValue('B4', 'ID Invoice');
+    $sheet->setCellValue('C4', 'Tanggal Masuk');
+    $sheet->setCellValue('D4', 'Tanggal Selesai');
+    $sheet->setCellValue('E4', 'Nama Customer');
+    $sheet->setCellValue('F4', 'Alamat');
+    $sheet->setCellValue('G4', 'Total PCS');
+    $sheet->setCellValue('H4', 'Total Pembayaran');
+    $sheet->setCellValue('I4', 'Dikerjakan oleh');
+    
+    $sheet->getStyle('A4:I4')->getAlignment()->setVertical('center')->setHorizontal('center');
+    $sheet->getStyle('A4:I4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A4:I4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
+    
+    $sheet->freezePane('A5');
+    
+    $baris = 5;
+    $no = 1;
+
+    $bulan = substr($month, 5, 2);
+    $tahun = substr($month, 0, 4);
+    
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice WHERE MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
+    while ($data = mysqli_fetch_assoc($sql)) {
+        $sheet->setCellValue('A' . $baris, $no);
+        $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
+        $sheet->setCellValue('C' . $baris, date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])));
+        $sheet->setCellValue('D' . $baris, date('D, d M Y', strtotime($data['Inv_Tg_Selesai'])));
+        $sheet->setCellValue('E' . $baris, $data['Cust_Nama']);
+        $sheet->setCellValue('F' . $baris, $data['Cust_Alamat']);
+        $sheet->setCellValue('G' . $baris, $data['Total_PCS']);
+        $sheet->setCellValue('H' . $baris, $data['Payment_Amount']);
+        $sheet->setCellValue('I' . $baris, $data['Staff_Name']);
+        $baris++;
+        $no++;
+    }
+    foreach ($sheet->getColumnIterator() as $column) {
+        $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+    }
+    $akhir = $baris - 1; 
+    $sheet->getStyle('B5:B' . $akhir)->getAlignment()->setHorizontal('right');
+    $sheet->getStyle('A5:I' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('G5:H' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->getColumnDimension('A')->setAutoSize(false)->setWidth(8);
+
+} elseif ($_GET['type'] == 'yearly-invoice') {
+    $year   = date('Y-m-d', strtotime($_POST['year']));
+    $judul  = 'Yearly Invoice';
+
+    $sheet->setCellValue('A3', 'Report' . date('Y', strtotime($year)));
+    $sheet->setCellValue('A4', 'No');
+    $sheet->setCellValue('B4', 'ID Invoice');
+    $sheet->setCellValue('C4', 'Tanggal Masuk');
+    $sheet->setCellValue('D4', 'Tanggal Selesai');
+    $sheet->setCellValue('E4', 'Nama Customer');
+    $sheet->setCellValue('F4', 'Alamat');
+    $sheet->setCellValue('G4', 'Total PCS');
+    $sheet->setCellValue('H4', 'Total Pembayaran');
+    $sheet->setCellValue('I4', 'Dikerjakan oleh');
+    
+    $sheet->getStyle('A4:I4')->getAlignment()->setVertical('center')->setHorizontal('center');
+    $sheet->getStyle('A4:I4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A4:I4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
+    
+    $sheet->freezePane('A5');
+    
+    $baris = 5;
+    $no = 1;
+
+    $tahun = substr($year, 0, 4);
+    
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice WHERE YEAR(Inv_Tgl_Masuk)='$tahun'");
+    while ($data = mysqli_fetch_assoc($sql)) {
+        $sheet->setCellValue('A' . $baris, $no);
+        $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
+        $sheet->setCellValue('C' . $baris, date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])));
+        $sheet->setCellValue('D' . $baris, date('D, d M Y', strtotime($data['Inv_Tg_Selesai'])));
+        $sheet->setCellValue('E' . $baris, $data['Cust_Nama']);
+        $sheet->setCellValue('F' . $baris, $data['Cust_Alamat']);
+        $sheet->setCellValue('G' . $baris, $data['Total_PCS']);
+        $sheet->setCellValue('H' . $baris, $data['Payment_Amount']);
+        $sheet->setCellValue('I' . $baris, $data['Staff_Name']);
+        $baris++;
+        $no++;
+    }
+    foreach ($sheet->getColumnIterator() as $column) {
+        $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+    }
+    $akhir = $baris - 1; 
+    $sheet->getStyle('B5:B' . $akhir)->getAlignment()->setHorizontal('right');
+    $sheet->getStyle('A5:I' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('G5:H' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->getColumnDimension('A')->setAutoSize(false)->setWidth(8);
 }
 
 
