@@ -823,7 +823,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="top-menu">
+                            <a href="app?p=daily-payment" class="top-menu">
                                 <div class="top-menu__icon"> <i data-lucide="credit-card"></i> </div>
                                 <div class="top-menu__title"> Daily Payment</div>
                             </a>

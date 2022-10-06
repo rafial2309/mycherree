@@ -8,11 +8,11 @@
                     <div class="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-4 row-start-4 lg:row-start-4 xl:row-start-auto mt-6 xl:mt-8">
                         <div class="intro-y flex items-center h-10">
                             <h2 class="text-lg font-medium truncate mr-5">
-                                Daily Invoice Report
+                                Daily Payment Report
                             </h2>
                         </div>
                         <div class="report-box-2 before:hidden xl:before:block intro-y mt-5">
-                            <form action="function/report?type=daily-invoice" method="POST">
+                            <form action="function/report?type=daily-payment" method="POST">
                             <div class="box p-5">
                                     <div class="grid grid-cols-12 gap-4 gap-y-3">
                                     <div class="col-span-12 sm:col-span-4">
@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                             </form>
-                            <form action="function/report?type=monthly-invoice" method="POST">
+                            <form action="function/report?type=monthly-payment" method="POST">
                             <div class="box p-5">
                                     <div class="grid grid-cols-12 gap-4 gap-y-3">
                                     <div class="col-span-12 xl:col-span-8">
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                             </form>
-                            <form action="function/report?type=yearly-invoice" method="POST">
+                            <form action="function/report?type=yearly-payment" method="POST">
                             <div class="box p-5">
                                     <div class="grid grid-cols-12 gap-4 gap-y-3">
                                         <div class="col-span-12 xl:col-span-8">
