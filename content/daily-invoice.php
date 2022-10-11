@@ -70,6 +70,13 @@
                                         <div class="box grid grid-cols-12">
                                             <div class="col-span-12 lg:col-span-12 p-8 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-darkmode-300 border-dashed">
                                                 <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
+                                                    <div class="intro-y flex items-center h-10 mb-5" id="div-button">
+                                                        <h2 class="intro-y text-lg font-medium" id="header-invoice" hidden>
+                                                            Daily Invoice
+                                                        </h2>
+                                                        <input type="hidden" id="type-value">
+                                                        <button id="btn-download" class="ml-auto btn btn-primary shadow-md mr-2 hidden" onclick="btnDownload()">Download</button>
+                                                    </div>
                                                     <table id="example" class="display" style="width:100%" hidden>
                                                         <thead>
                                                             <tr>
@@ -142,15 +149,31 @@
                             "emptyTable" : "Data Tidak Ditemukan"
                         },
                         "initComplete": function() {
-                            if (type == 'daily') {
-                                $('#form-daily').submit();
-                            } else if (type == 'monthly') {
-                                $('#form-monthly').submit();
-                            } else {
-                                $('#form-yearly').submit();
-                            } 
+                            $('#header-invoice').show();
+                            $('#btn-download').removeClass('hidden');
+                        
+                            if (type == 'daily') 
+                                $('#header-invoice').text('Daily Invoice')
+                            else if (type == 'monthly') 
+                                $('#header-invoice').text('Monthly Invoice')
+                            else 
+                                $('#header-invoice').text('Yearly Invoice')
+                            
+                            $('#type-value').val(type);
                         }
                     });
+                }
+
+                function btnDownload() {
+                    let type = $('#type-value').val();
+                    
+                    if (type == 'daily') {
+                        $('#form-daily').submit();
+                    } else if (type == 'monthly') {
+                        $('#form-monthly').submit();
+                    } else {
+                        $('#form-yearly').submit();
+                    } 
                 }
 
                 function destroyTable (tableId) {
