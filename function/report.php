@@ -14,8 +14,9 @@ $sheet->setCellValue('A1', 'My Cherree Laundry');
 $sheet->setCellValue('A2', 'Bukit Golf Mediterania RT.7/RW.2, Kamal Muara, Kec. Penjaringan, Kota Jkt Utara, DKI Jakarta 14470');
 
 if ($_GET['type'] == 'customer') {
-    $judul = 'Customer';
-
+    $judul  = 'Customer';
+    $search = $_GET['search'];
+    
     $sheet->setCellValue('A3', 'N');
     $sheet->setCellValue('B3', 'Nama');
     $sheet->setCellValue('C3', 'Telepon');
@@ -32,7 +33,9 @@ if ($_GET['type'] == 'customer') {
     $baris  = 4;
     $no     = 1;
     
-    $sql = mysqli_query($conn, "SELECT *FROM Customer WHERE Cust_Status ='Y'");
+    $additionalQuery = ($search <> '') ? "AND (Cust_Nama like '%$search%' OR Cust_Alamat like '%$search%' OR Cust_Telp like '%$search%' OR Cust_Member_Name like '%$search%')" : '';
+    
+    $sql = mysqli_query($conn, "SELECT *FROM Customer WHERE Cust_Status ='Y' $additionalQuery");
     
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
@@ -40,7 +43,7 @@ if ($_GET['type'] == 'customer') {
         $sheet->setCellValue('C' . $baris, $data['Cust_Telp']);
         $sheet->setCellValue('D' . $baris, $data['Cust_Alamat']);
         $sheet->setCellValue('E' . $baris, $data['Cust_Member_Name']);
-        $sheet->setCellValue('F' . $baris, $data['Cust_Tgl_Join']);
+        $sheet->setCellValue('F' . $baris, date('D, d M Y', strtotime($data['Cust_Tgl_Join'])));
         $baris++;
         $no++;
     }
@@ -53,32 +56,37 @@ if ($_GET['type'] == 'customer') {
     $sheet->getStyle('A4:F' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
 } elseif ($_GET['type'] == 'membership') {
-    $judul = 'Membership';
+    $judul  = 'Membership';
+    $search = $_GET['search'];
 
     $sheet->setCellValue('A3', 'No');
     $sheet->setCellValue('B3', 'Tanggal');
     $sheet->setCellValue('C3', 'Nama');
     $sheet->setCellValue('D3', 'Status');
-    $sheet->setCellValue('E3', 'Jumlah');
-    $sheet->setCellValue('F3', 'Join - Expired');
+    $sheet->setCellValue('E3', 'Tipe Pembayaran');
+    $sheet->setCellValue('F3', 'Jumlah');
+    $sheet->setCellValue('G3', 'Join - Expired');
     
-    $sheet->getStyle('A3:F3')->getAlignment()->setVertical('center')->setHorizontal('center');
-    $sheet->getStyle('A3:F3')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('A3:F3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
+    $sheet->getStyle('A3:G3')->getAlignment()->setVertical('center')->setHorizontal('center');
+    $sheet->getStyle('A3:G3')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A3:G3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
     
     $sheet->freezePane('A4');
     
     $baris  = 4;
     $no     = 1;
     
-    $sql = mysqli_query($conn, "SELECT *FROM Registrasi_Member");
+    $additionalQuery = ($search <> '') ? "WHERE Cust_Nama like '%$search%' OR Payment_Type like '%$search%'" : '';
+    
+    $sql = mysqli_query($conn, "SELECT *FROM Registrasi_Member $additionalQuery");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
-        $sheet->setCellValue('B' . $baris, date('d/m/Y', strtotime($data['Registrasi_Tgl'])));
+        $sheet->setCellValue('B' . $baris, date('D, d M Y', strtotime($data['Registrasi_Tgl'])));
         $sheet->setCellValue('C' . $baris, $data['Cust_Nama']);
-        $sheet->setCellValue('D' . $baris, 'LUNAS');
-        $sheet->setCellValue('E' . $baris, $data['Registrasi_Payment']);
-        $sheet->setCellValue('F' . $baris, date('d/m/Y', strtotime($data['Cust_Member_Join'])).' - '.date('d/m/Y', strtotime($data['Cust_Member_Join'])));
+        $sheet->setCellValue('D' . $baris, ($data['Status_Payment'] == 'Y') ? 'LUNAS' : 'BELUM BAYAR');
+        $sheet->setCellValue('E' . $baris, $data['Payment_Type']);
+        $sheet->setCellValue('F' . $baris, $data['Registrasi_Payment']);
+        $sheet->setCellValue('G' . $baris, date('D, d M Y', strtotime($data['Cust_Member_Join'])).' - '.date('D, d M Y', strtotime($data['Cust_Member_Join'])));
         $baris++;
         $no++;
     }
@@ -86,11 +94,12 @@ if ($_GET['type'] == 'customer') {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
     }
     $akhir = $baris - 1; 
-    $sheet->getStyle('A4:F' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('E4:E' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->getStyle('A4:G' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('F4:F' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
 
 }  elseif ($_GET['type'] == 'item') {
-    $judul = 'Master Item';
+    $judul  = 'Master Item';
+    $search = $_GET['search'];
 
     $sheet->setCellValue('A3', 'No');
     $sheet->setCellValue('B3', 'Nama Item');
@@ -106,8 +115,10 @@ if ($_GET['type'] == 'customer') {
     
     $baris  = 4;
     $no     = 1;
-    
-    $sql = mysqli_query($conn, "SELECT *FROM Master_Item WHERE Item_Status='Y'");
+   
+    $additionalQuery = ($search <> '') ? "AND (Item_Name like '%$search%' OR Item_Category like '%$search%' OR Item_Price like '%$search%' OR Item_Pcs like '%$search%')" : ''; 
+   
+    $sql = mysqli_query($conn, "SELECT *FROM Master_Item WHERE Item_Status='Y' $additionalQuery");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Item_Name']);
@@ -124,7 +135,8 @@ if ($_GET['type'] == 'customer') {
     $sheet->getStyle('D4:E' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
 
 }  elseif ($_GET['type'] == 'colour') {
-    $judul = 'Master Colour';
+    $judul  = 'Master Colour';
+    $search = $_GET['search'];
 
     $sheet->setCellValue('A3', 'No');
     $sheet->setCellValue('B3', 'Colour Name');
@@ -137,8 +149,10 @@ if ($_GET['type'] == 'customer') {
     
     $baris  = 4;
     $no     = 1;
+
+    $additionalQuery = ($search <> '') ? "AND Colour_Name like '%$search%'" : ''; 
     
-    $sql = mysqli_query($conn, "SELECT *FROM Master_Colour WHERE Colour_Status='Y'");
+    $sql = mysqli_query($conn, "SELECT *FROM Master_Colour WHERE Colour_Status='Y' $additionalQuery");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Colour_Name']);
@@ -152,7 +166,8 @@ if ($_GET['type'] == 'customer') {
     $sheet->getStyle('A4:B' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
 }   elseif ($_GET['type'] == 'brand') {
-    $judul = 'Master Brand';
+    $judul  = 'Master Brand';
+    $search = $_GET['search'];
 
     $sheet->setCellValue('A3', 'No');
     $sheet->setCellValue('B3', 'Brand Name');
@@ -165,8 +180,10 @@ if ($_GET['type'] == 'customer') {
     
     $baris  = 4;
     $no     = 1;
+
+    $additionalQuery = ($search <> '') ? "AND Brand_Name like '%$search%'" : ''; 
     
-    $sql = mysqli_query($conn, "SELECT *FROM Master_Brand WHERE Brand_Status='Y'");
+    $sql = mysqli_query($conn, "SELECT *FROM Master_Brand WHERE Brand_Status='Y' $additionalQuery");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Brand_Name']);
@@ -180,7 +197,8 @@ if ($_GET['type'] == 'customer') {
     $sheet->getStyle('A4:B' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
 } elseif ($_GET['type'] == 'discount') {
-    $judul = 'Promo & Discount';
+    $judul  = 'Promo & Discount';
+    $search = $_GET['search'];
 
     $sheet->setCellValue('A3', 'No');
     $sheet->setCellValue('B3', 'Discount Name');
@@ -196,7 +214,9 @@ if ($_GET['type'] == 'customer') {
     $baris  = 4;
     $no     = 1;
     
-    $sql = mysqli_query($conn, "SELECT *FROM Discount WHERE Discount_Status='Y'");
+    $additionalQuery = ($search <> '') ? "AND (Discount_Nama like '%$search%' OR Discount_Type like '%$search%' OR Persentase like '%$search%')" : '';
+    
+    $sql = mysqli_query($conn, "SELECT *FROM Discount WHERE Discount_Status='Y' $additionalQuery");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Discount_Nama']);
@@ -212,7 +232,8 @@ if ($_GET['type'] == 'customer') {
     $sheet->getStyle('A4:D' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
 } elseif ($_GET['type'] == 'staff') {
-    $judul = 'Staff & Karyawan';
+    $judul  = 'Staff & Karyawan';
+    $search = $_GET['search'];
 
     $sheet->setCellValue('A3', 'No');
     $sheet->setCellValue('B3', 'Staff ID');
@@ -230,8 +251,10 @@ if ($_GET['type'] == 'customer') {
     
     $baris = 4;
     $no = 1;
+
+    $additionalQuery = ($search <> '') ? "AND (Staff_ID like '%$search%' OR Staff_Name like '%$search%' OR Staff_Tempat_Lahir like '%$search%' OR Staff_Alamat like '%$search%' OR Staff_Access like '%$search%')" : ''; 
     
-    $sql = mysqli_query($conn, "SELECT *FROM Staff WHERE Staff_Status='Y'");
+    $sql = mysqli_query($conn, "SELECT *FROM Staff WHERE Staff_Status='Y' $additionalQuery");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Staff_ID']);

@@ -182,7 +182,9 @@
                 });
 
                 function btnExcel () {
-                    location.href='function/report?type=membership';
+                    let search = $('#example_filter :input').val();
+
+                    location.href='function/report?type=membership&search='+search;
                 }
 
                 function btnEdit(id) {

@@ -163,7 +163,9 @@
                 });
 
                 function btnExcel () {
-                    location.href='function/report?type=staff';
+                    let search = $('#example_filter :input').val();
+
+                    location.href='function/report?type=staff&search='+search;
                 }
 
                 function btnEdit(id) {

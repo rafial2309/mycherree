@@ -139,7 +139,9 @@
                 } );
 
                 function btnExcel () {
-                    location.href='function/report?type=customer';
+                    let search = $('#example_filter :input').val();
+
+                    location.href='function/report?type=customer&search='+search;
                 }
 
                 function btnDelete(id){

@@ -119,8 +119,10 @@
                     } );     
                 } );
 
-                function btnExcel () {
-                    location.href='function/report?type=discount';   
+               function btnExcel () {
+                    let search = $('#example_filter :input').val();
+
+                    location.href='function/report?type=discount&search='+search;
                 }
 
                 function btnEdit(id) {

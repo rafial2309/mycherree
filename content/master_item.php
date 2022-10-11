@@ -123,7 +123,9 @@
                 } );
 
                 function btnExcel () {
-                    location.href='function/report?type=item';
+                    let search = $('#example_filter :input').val();
+
+                    location.href='function/report?type=item&search='+search;
                 }
 
                 function btnEdit(id) {

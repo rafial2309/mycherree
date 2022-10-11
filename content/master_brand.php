@@ -96,8 +96,11 @@
                 });
 
                 function btnExcel () {
-                    location.href='function/report?type=brand'
+                    let search = $('#example_filter :input').val();
+
+                    location.href='function/report?type=brand&search='+search;
                 }
+
                 function btnEdit(id) {
                     $.ajax({
                         url : "function/brands?menu=ajax",
