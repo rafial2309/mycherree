@@ -19,6 +19,7 @@
                                         <th>Category</th>
                                         <th>Price</th>
                                         <th>Pcs</th>
+                                        <th>Image</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -152,6 +153,10 @@
                     // Format mata uang.
                     $( '.uang' ).mask('000.000.000', {reverse: true});
                 })  
+
+                function uploadpic(st) {
+                    document.getElementById(st).submit();
+                }
             </script>
 
             

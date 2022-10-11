@@ -56,7 +56,9 @@
                                 </div>
                                 <div class="flex items-center mt-3">
                                     <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i> Date 
-                                    <div class="ml-auto"><?php echo date('d M Y H:i:s', strtotime($cekpay['Payment_Tgl'])); ?></div>
+                                    <div class="ml-auto"><?php if (isset($cekpay['Payment_Tgl'])) {
+                                        echo date('d M Y H:i:s', strtotime($cekpay['Payment_Tgl']));
+                                    } ?></div>
                                 </div>
                                 <div class="flex items-center mt-3">
                                     <i data-lucide="box" class="w-4 h-4 text-slate-500 mr-2"></i> Total Pcs: 

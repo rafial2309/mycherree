@@ -43,7 +43,9 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="shopping-cart" class="report-box__icon text-primary"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php echo number_format($todaysales['total'] ,0,",",".")?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($todaysales['total'])) {
+                                                        echo number_format($todaysales['total'] ,0,",",".");
+                                                    } ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Today Sales</div>
                                                 </div>
                                             </div>
@@ -54,7 +56,9 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="credit-card" class="report-box__icon text-pending"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php echo number_format($todaypayment['total'] ,0,",",".")?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($todaypayment['total'])) {
+                                                        echo number_format($todaypayment['total'] ,0,",",".");
+                                                    } ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Today Payment</div>
                                                 </div>
                                             </div>
@@ -65,7 +69,9 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="monitor" class="report-box__icon text-warning"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php echo number_format($todaypcs['total'] ,0,",",".")?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($todaypcs['total'])) {
+                                                        echo number_format($todaypcs['total'] ,0,",",".");
+                                                    } ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Today Pcs</div>
                                                 </div>
                                             </div>
@@ -76,7 +82,9 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="user" class="report-box__icon text-success"></i> 
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php echo number_format($todaycust['total'] ,0,",",".")?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($todaycust['total'])) {
+                                                        echo number_format($todaycust['total'] ,0,",",".");
+                                                    } ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Today Customers</div>
                                                 </div>
                                             </div>
@@ -95,7 +103,9 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="shopping-cart" class="report-box__icon text-primary"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php echo number_format($totalsales['total'] ,0,",",".")?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($totalsales['total'])) {
+                                                        echo number_format($totalsales['total'] ,0,",",".");
+                                                    } ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Total Sales</div>
                                                 </div>
                                             </div>
@@ -106,7 +116,9 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="credit-card" class="report-box__icon text-pending"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php echo number_format($totalpayment['total'] ,0,",",".")?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($totalpayment['total'])) {
+                                                        echo number_format($totalpayment['total'] ,0,",",".");
+                                                    } ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Total Payment</div>
                                                 </div>
                                             </div>
@@ -117,7 +129,9 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="monitor" class="report-box__icon text-warning"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php echo number_format($totalpcs['total'] ,0,",",".")?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($totalpcs['total'])) {
+                                                        echo number_format($totalpcs['total'] ,0,",",".");
+                                                    } ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Total Pcs</div>
                                                 </div>
                                             </div>
@@ -128,7 +142,9 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="user" class="report-box__icon text-success"></i> 
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php echo number_format($totalcust['total'] ,0,",",".")?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($totalcust['total'])) {
+                                                        echo number_format($totalcust['total'] ,0,",",".");
+                                                    } ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Total Customers</div>
                                                 </div>
                                             </div>

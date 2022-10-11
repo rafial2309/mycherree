@@ -62,7 +62,9 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData[] = $row["Item_Category"];
         $nestedData[] = number_format($row["Item_Price"],0,',','.');
         $nestedData[] = $row["Item_Pcs"];
+        $nestedData[] = "<img class='rounded-md' style='height: 40px;' src='src/images/item/".$row['Item_ID'].".webp'> <form method='post' id='".$row['Item_ID']."' action='function/items?menu=uploadimage' enctype='multipart/form-data'><input type='hidden' name='idnya' value='".$row['Item_ID']."'><input type='file' name='imageitem' id='' onchange='uploadpic(".$row['Item_ID'].")'></form>";
         $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-item-modal' onclick='btnEdit(".$row['Item_ID'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Item_ID'].")'>DELETE</button>";
+
         
         $data[] = $nestedData;
     }
@@ -120,6 +122,30 @@ if ($_GET['menu'] == 'create' ) {
 
     <?php
     }
+    exit();
+} elseif ($_GET['menu'] == 'uploadimage'){
+
+
+    $image = $_FILES['imageitem']['name'];
+    $file_tmp =$_FILES['imageitem']['tmp_name'];
+
+    $dir="../src/images/item/";
+
+    $id = $_POST['idnya'];
+    $newName=$id.".webp";
+
+    if(move_uploaded_file($file_tmp,$dir.$image)){
+
+        $img = imagecreatefrompng($dir . $image);
+        $quality = 100;
+        imagewebp($img, $dir . $newName, $quality);
+        imagedestroy($img);
+        unlink($dir.$image);
+
+    }
+   
+    echo "<script>location.href='../app?p=master_item';</script>";
+
     exit();
 } else {
 	// SOFT DELETE ITEM
