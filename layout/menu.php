@@ -892,7 +892,7 @@
         <div id="reset-password-modal" class="modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="create" action="function/staffs?menu=reset" method="post">
+                    <form id="pin-reset" action="function/staffs?menu=reset" method="post">
                     <div class="modal-header">
                         <h2 class="font-medium text-base mr-auto">
                             New Customer
@@ -914,7 +914,7 @@
                     </div>
                     <div class="modal-footer text-right">
                         <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
-                        <button type="button" onclick="document.getElementById('create').submit()" class="btn btn-primary w-32">Save</button>
+                        <button type="button" onclick="document.getElementById('pin-reset').submit()" class="btn btn-primary w-32">Save</button>
                     </div>
                     </form>
                 </div>
