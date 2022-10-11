@@ -537,6 +537,87 @@ if ($_GET['type'] == 'customer') {
     $sheet->getStyle('E5:E' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
     $sheet->getColumnDimension('A')->setAutoSize(false)->setWidth(8);
 
+} elseif ($_GET['type'] == 'data' && $_GET['data'] == 'daily-invoice') {
+    $start  = date('Y-m-d', strtotime($_POST['start']));
+    $end    = date('Y-m-d', strtotime($_POST['end']));
+
+    $month  = date('Y-m-d', strtotime($_POST['month']));
+    $year   = date('Y-m-d', strtotime($_POST['year']));
+
+    $bulan  = substr($month, 5, 2);
+    $tahun  = substr($month, 0, 4);
+
+    $yearly = substr($year, 0, 4);
+
+    $type   = $_POST['type'];
+
+    if ($type == 'daily')
+        $sql = mysqli_query($conn, "SELECT * from Invoice WHERE Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
+    elseif ($type == 'monthly')
+        $sql = mysqli_query($conn, "SELECT * from Invoice WHERE MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
+    else  
+        $sql = mysqli_query($conn, "SELECT * from Invoice WHERE YEAR(Inv_Tgl_Masuk)='$yearly'");
+
+    $data = array();
+    $json = array();
+    $i = 1;
+    while( $row=mysqli_fetch_array($sql) ) {
+
+        $nestedData=array(); 
+        $nestedData['Inv_Number']       = $row["Inv_Number"];
+        $nestedData['Inv_Tgl_Masuk']    = date('D, d M Y', strtotime($row['Inv_Tgl_Masuk']));
+        $nestedData['Inv_Tg_Selesai']   = date('D, d M Y', strtotime($row['Inv_Tg_Selesai']));
+        $nestedData['Cust_Nama']        = $row["Cust_Nama"];
+        $nestedData['Cust_Alamat']      = $row["Cust_Alamat"];
+        $nestedData['Total_PCS']        = number_format($row["Total_PCS"],0,',','.');
+        $nestedData['Payment_Amount']   = number_format($row["Payment_Amount"],0,',','.');
+        $nestedData['Staff_Name']       = $row["Staff_Name"];
+        
+        $data[] = $nestedData;
+    }
+    $json['data'] = $data;
+    echo json_encode($json);
+    exit();
+}  elseif ($_GET['type'] == 'data' && $_GET['data'] == 'daily-payment') {
+    $start  = date('Y-m-d', strtotime($_POST['start']));
+    $end    = date('Y-m-d', strtotime($_POST['end']));
+
+    $month  = date('Y-m-d', strtotime($_POST['month']));
+    $year   = date('Y-m-d', strtotime($_POST['year']));
+
+    $bulan  = substr($month, 5, 2);
+    $tahun  = substr($month, 0, 4);
+
+    $yearly = substr($year, 0, 4);
+
+    $type   = $_POST['type'];
+
+    if ($type == 'daily')
+        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Payment_Tgl BETWEEN '$start' AND '$end'");
+    elseif ($type == 'monthly')
+        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE MONTH(Payment_Tgl)='$bulan' AND YEAR(Payment_Tgl)='$tahun'");
+    else  
+        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE YEAR(Payment_Tgl)='$yearly'");
+
+    $data = array();
+    $json = array();
+    $i = 1;
+    while( $row=mysqli_fetch_array($sql) ) {
+
+        $nestedData=array(); 
+        $nestedData['Inv_Number']       = $row["Inv_Number"];
+        $nestedData['Payment_Tgl']      = date('D, d M Y', strtotime($row['Payment_Tgl']));
+        $nestedData['Payment_Name']     = $row["Payment_Name"];
+        $nestedData['Payment_Type']     = $row["Payment_Type"];
+        $nestedData['Payment_Total']    = number_format($row["Payment_Total"],0,',','.');
+        $nestedData['Staff_Name']       = $row["Staff_Name"];
+        $nestedData['Payment_Note']     = $row["Payment_Note"];
+        
+        $data[] = $nestedData;
+    }
+    $json['data'] = $data;
+    echo json_encode($json);
+    exit();
 }
 
 
