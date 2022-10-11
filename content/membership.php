@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="col-span-12">
                                     <label for="pos-form-3" class="form-label">Jumlah Pembayaran</label>
-                                    <input id="pos-form-3" type="text" name="Registrasi_Payment" class="form-control flex-1" placeholder="Jumlah Pembayaran">
+                                    <input id="pos-form-3" type="text" name="Registrasi_Payment" class="form-control flex-1 uang" placeholder="Jumlah Pembayaran">
                                 </div>
                                 <div class="col-span-6">
                                     <label for="pos-form-4" class="form-label">Start Date</label>
@@ -145,6 +145,7 @@
                                 <div class="col-span-12">
                                     <label for="payment-type" class="form-label">Payment Type</label>
                                     <select id="payment-type" name="Payment_Type" class="form-control flex-1">
+                                        <option value="">--- SELECT PAYMENT TYPE ---</option>
                                         <option value="CASH">CASH</option>
                                         <option value="TRANSFER">TRANSFER</option>
                                     </select>
@@ -227,6 +228,11 @@
                             }
                     });
                 }    
+
+                $(document).ready(function(){
+                    // Format mata uang.
+                    $( '.uang' ).mask('000.000.000', {reverse: true});
+                })  
             </script>
             </script>
 

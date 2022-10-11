@@ -10,25 +10,18 @@ if ($_GET['menu'] == 'create' ) {
 	$Cust_Nama 		 	= $Customer[1];
 	$Registrasi_Tgl 	= date('Y-m-d');
     $Discount_No 		= $_POST['Discount_No'];
-	$Registrasi_Payment = $_POST['Registrasi_Payment'];
+	$Registrasi_Payment = str_replace('.', '', $_POST['Registrasi_Payment']);
     $Cust_Member_Join 	= $_POST['Cust_Member_Join'];
 	$Cust_Member_Exp 	= $_POST['Cust_Member_Exp'];
     $Staff_Name 		= ($_SESSION <> null) ? $_SESSION['Staff_Name'] : 'Admin';
 	$Staff_ID 		    = ($_SESSION <> null) ? $_SESSION['Staff_ID'] : 'Admin';
 
-	mysqli_query($conn, "INSERT INTO Registrasi_Member (Cust_No, Cust_Nama, Registrasi_Tgl, Discount_No, Registrasi_Payment, Cust_Member_Join, Cust_Member_Exp, Staff_ID) VALUES ('$Cust_No', '$Cust_Nama', '$Registrasi_Tgl', '$Discount_No', '$Registrasi_Payment', '$Cust_Member_Join', '$Cust_Member_Exp', '$Staff_ID')");
+	mysqli_query($conn, "INSERT INTO Registrasi_Member (Cust_No, Cust_Nama, Registrasi_Tgl, Discount_No, Registrasi_Payment, Cust_Member_Join, Cust_Member_Exp, Staff_ID, Status_Payment) VALUES ('$Cust_No', '$Cust_Nama', '$Registrasi_Tgl', '$Discount_No', '$Registrasi_Payment', '$Cust_Member_Join', '$Cust_Member_Exp', '$Staff_ID', 'N')");
     
     $disc       = mysqli_fetch_assoc(mysqli_query($conn, "SELECT *FROM Discount WHERE Discount_No='$Discount_No'"));
     $disc_name  = $disc['Discount_Nama'];
     
     mysqli_query($conn, "UPDATE Customer SET Discount_No='$Discount_No', Cust_Member_Name='$disc_name', Cust_Member_Join='$Cust_Member_Join', Cust_Member_Exp='$Cust_Member_Exp' WHERE Cust_No='$Cust_No'");
-} elseif ($_GET['menu'] == 'edit') {
-    // UPDATE EXISTING CUSTOMER
-	$id 		 	= $_POST['id'];
-	$name 		 	= $_POST['name'];
-	$discount 		= $_POST['discount'];
-	
-    mysqli_query($conn, "UPDATE membership SET name='$name', discount='$discount' WHERE id='$id'");
 } elseif ($_GET['menu'] == 'data') {
     $requestData= $_REQUEST;
     $columns = array( 
