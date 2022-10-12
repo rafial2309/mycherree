@@ -227,7 +227,7 @@
                                     <div class="col-span-6">
                                         <label for="regular-form-1" class="form-label">Size</label> 
                                         <div class="mt-1">
-                                            <input type="text" name="size" id="item_size" class="form-control" placeholder="Input Size">
+                                            <input type="text" name="size" id="item_size" autocomplete="off" class="form-control" placeholder="Input Size">
                                         </div>
                                     </div>
                                     <div class="col-span-12">
@@ -293,7 +293,7 @@
                                     <div class="p-5 text-center"> 
                                         <i data-lucide="check-circle" class="w-16 h-16 text-success mx-auto mt-3"></i> 
                                         <div class="text-3xl mt-5">Save Success!</div> 
-                                        <div class="text-slate-500 mt-2">New item saved.</div> 
+                                        <div class="text-slate-500 mt-2">New item saved. Please wait a moment...</div> 
                                     </div> 
                                     <div class="px-5 pb-8 text-center"> 
                                         <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button> 

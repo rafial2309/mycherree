@@ -39,7 +39,7 @@ if ($_GET['menu'] == 'cari' ) {
 	}elseif($status=='UNTAKEN'){
 		$query 		= mysqli_query($conn,"SELECT * from Invoice where Status_Inv!='C' AND Status_Taken='N' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 	}elseif($status=='TAKEN'){
-		$query 		= mysqli_query($conn,"SELECT * from Invoice where Status_Inv!='C' AND Status_Taken='Y' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
+		$query 		= mysqli_query($conn,"SELECT * from Invoice where Status_Inv!='C' AND Status_Taken!='N' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 	}
 	
 
@@ -60,7 +60,14 @@ if ($_GET['menu'] == 'cari' ) {
         <td>
             <?php if ($data['Status_Payment']=='N') { ?>
                 <div class="flex items-center whitespace-nowrap text-warning"> <img src="plugin/lucide/check-square.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(78%) sepia(61%) saturate(588%) hue-rotate(331deg) brightness(99%) contrast(96%);"> UNPAID </div>
+                <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
                 
+                    <?php if ($data['Status_Taken']=='N') {
+                       
+                    }else{
+                        echo "<b class='text-success'>".$data['Status_Taken']."</b>"; 
+                    }?>
+                </div>
             <?php }else{ 
                 $cekpay = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Payment where Inv_Number='$data[Inv_Number]'"));
                 ?>

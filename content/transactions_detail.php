@@ -109,12 +109,15 @@
                                                 <td class="text-right">Rp <?php echo number_format($dataitem['Total_Price'] ,0,",",".")?></td>
                                                 <td class="text-right">
                                                     <?php
+
+                                                    if ($data['Status_Payment']=='N' || $data['Status_Taken']=='N') {
                                                         if (strpos($dataitem['Deskripsi'], '(CANCEL)') !== false) {
                                                            
                                                         }else{
                                                     ?>
                                                     <button class="btn btn-danger shadow-md mr-2" onclick="cancelitem('<?php echo $dataitem['Inv_Item_No'] ?>')"><i data-lucide="x-circle" class="w-4 h-4 mr-2"></i> CANCEL</button>
-                                                    <?php } ?>
+                                                    <?php }
+                                                    } ?>
                                                 </td>
                                             </tr>
                                             <tr>

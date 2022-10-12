@@ -55,11 +55,11 @@
                                 </div>
                                 <div class="col-span-12">
                                     <label for="pos-form-4" class="form-label">Alamat</label>
-                                    <textarea id="pos-form-4" name="Cust_Alamat" class="form-control flex-1" placeholder="Jl Mayjend Sungkono"></textarea>
+                                    <textarea id="pos-form-4" name="Cust_Alamat" class="form-control flex-1" placeholder="Jl Merdeka"></textarea>
                                 </div>
                                 <div class="col-span-12">
                                     <label for="pos-form-5" class="form-label">Notes</label>
-                                    <textarea id="pos-form-5" name="Cust_Note" class="form-control flex-1" placeholder="notes : Jangan dijemur terik matahari"></textarea>
+                                    <textarea id="pos-form-5" name="Cust_Note" class="form-control flex-1" placeholder="notes : Wangi ekstra"></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer text-right">
@@ -95,11 +95,11 @@
                                 </div>
                                 <div class="col-span-12">
                                     <label for="edit-alamat" class="form-label">Alamat</label>
-                                    <textarea id="edit-alamat" name="Cust_Alamat" class="form-control flex-1" placeholder="Jl Mayjend Sungkono"></textarea>
+                                    <textarea id="edit-alamat" name="Cust_Alamat" class="form-control flex-1" placeholder="Jl Merdeka"></textarea>
                                 </div>
                                 <div class="col-span-12">
                                     <label for="edit-note" class="form-label">Notes</label>
-                                    <textarea id="edit-note" name="Cust_Note" class="form-control flex-1" placeholder="notes : Jangan dijemur terik matahari"></textarea>
+                                    <textarea id="edit-note" name="Cust_Note" class="form-control flex-1" placeholder="notes : Wangi ekstra"></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer text-right">
