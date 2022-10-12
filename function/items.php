@@ -3,6 +3,30 @@ session_start();
 date_default_timezone_set("Asia/Jakarta");
 include "../config/configuration.php";
 
+function imagecreatefromfile( $filename ) {
+    if (!file_exists($filename)) {
+        throw new InvalidArgumentException('File "'.$filename.'" not found.');
+    }
+    switch ( strtolower( pathinfo( $filename, PATHINFO_EXTENSION ))) {
+        case 'jpeg':
+        case 'jpg':
+            return imagecreatefromjpeg($filename);
+        break;
+
+        case 'png':
+            return imagecreatefrompng($filename);
+        break;
+
+        case 'gif':
+            return imagecreatefromgif($filename);
+        break;
+
+        default:
+            throw new InvalidArgumentException('File "'.$filename.'" is not valid jpg, png or gif image.');
+        break;
+    }
+}
+
 if ($_GET['menu'] == 'create' ) {
 	// ADD NEW ITEM
 	$Item_Name 		 	= $_POST['Item_Name'];
@@ -136,7 +160,7 @@ if ($_GET['menu'] == 'create' ) {
 
     if(move_uploaded_file($file_tmp,$dir.$image)){
 
-        $img = imagecreatefrompng($dir . $image);
+        $img = imagecreatefromfile($dir . $image);
         $quality = 100;
         imagewebp($img, $dir . $newName, $quality);
         imagedestroy($img);
