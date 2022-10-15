@@ -2,7 +2,7 @@
         <div class="mobile-menu md:hidden">
             <div class="mobile-menu-bar">
                 <a href="" class="flex mr-auto">
-                    <img alt="Midone - HTML Admin Template" class="w-6" src="dist/images/logo.svg">
+                    <img alt="Midone - HTML Admin Template" class="h-6" src="dist/images/logo.png">
                 </a>
                 <a href="javascript:;" class="mobile-menu-toggler"> <i data-lucide="bar-chart-2" class="w-8 h-8 text-white transform -rotate-90"></i> </a>
             </div>
@@ -644,8 +644,8 @@
             <div class="h-full flex items-center">
                 <!-- BEGIN: Logo -->
                 <a href="" class="-intro-x hidden md:flex">
-                    <img alt="Midone - HTML Admin Template" class="w-6" src="dist/images/logo.svg">
-                    <span class="text-white text-lg ml-3"> Icewall </span> 
+                    <img alt="Midone - HTML Admin Template" class="h-6" src="dist/images/logo.png">
+                    <span class="text-white text-lg ml-3"> MyCherree Laundry </span> 
                 </a>
                 <!-- END: Logo -->
                 <!-- BEGIN: Breadcrumb -->
