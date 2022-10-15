@@ -23,7 +23,6 @@
                                         <th>Type</th>
                                         <th>Note</th>
                                         <th>Staff</th>
-                                        <th width="125px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="hasil">

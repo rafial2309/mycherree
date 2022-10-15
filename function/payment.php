@@ -78,7 +78,7 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData[] = "<p style='font-size:15px'>".$row["Payment_Note"] ."</p>";
         $nestedData[] = "<p style='font-size:15px'>".$row["Staff_Name"] ."</p>";
         
-        $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-customer-modal' onclick='btnEdit(".$row['Payment_ID'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Payment_ID'].")'>DELETE</button>";
+        $nestedData[] = "";
         
         $data[] = $nestedData;
     }

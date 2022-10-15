@@ -31,7 +31,7 @@ if ($_GET['menu'] == 'create' ) {
 	// ADD NEW ITEM
 	$Item_Name 		 	= $_POST['Item_Name'];
 	$Item_Category 		= $_POST['Item_Category'];
-	$Item_Price         = $_POST['Item_Price'];
+	$Item_Price         = str_replace(".","",$_POST['Item_Price']);
 	$Item_Pcs           = $_POST['Item_Pcs'];
 	
 	mysqli_query($conn, "INSERT INTO Master_Item (Item_Name, Item_Category, Item_Price, Item_Pcs, Item_Pic, Item_Status) VALUES ('$Item_Name','$Item_Category','$Item_Price','$Item_Pcs','','Y')");
@@ -41,7 +41,7 @@ if ($_GET['menu'] == 'create' ) {
 	$Item_ID 		 	= $_POST['Item_ID'];
 	$Item_Name 		 	= $_POST['Item_Name'];
 	$Item_Category 		= $_POST['Item_Category'];
-	$Item_Price         = $_POST['Item_Price'];
+	$Item_Price         = str_replace(".","",$_POST['Item_Price']);
 	$Item_Pcs           = $_POST['Item_Pcs'];
 	
     mysqli_query($conn, "UPDATE Master_Item SET Item_Name='$Item_Name', Item_Category='$Item_Category', Item_Price='$Item_Price', Item_Pcs='$Item_Pcs' WHERE Item_ID='$Item_ID'");
