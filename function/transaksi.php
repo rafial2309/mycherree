@@ -269,4 +269,69 @@ if ($_GET['menu'] == 'cari' ) {
     
     echo 'Y';
     exit();
+}else if ($_GET['menu'] == 'updatecust') { 
+    $id     = explode('+',$_POST['id']);
+    $Invnya = $_POST['invoice'];
+    $data   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Cust_No,Cust_Nama,Discount_No from Customer WHERE Cust_No='$id[0]'"));
+
+    $Cust_No        = $data['Cust_No'];
+    $Cust_Nama      = $data['Cust_Nama'];
+    $Cust_Telp      = $_POST['Cust_Telp'];
+    $Cust_Alamat    = $_POST['Cust_Alamat'];
+    $Discount_No    = $data['Discount_No'];
+
+    mysqli_query($conn,"UPDATE Invoice SET Cust_ID='$Cust_No',Cust_Nama='$Cust_Nama',Cust_Alamat='$Cust_Alamat',Cust_Telp='$Cust_Telp',Discount_No='$Discount_No' WHERE Inv_Number='$Invnya'");
+
+
+    $data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price from Invoice_Item WHERE Inv_Number='$Invnya'"));
+
+    $subtotal   = $data['Total_Price'];
+
+    if (isset($Cust_No)) {
+        $datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$Cust_No'"));
+        if (isset($datadisc['Persentase'])) {
+            $persentase = $datadisc['Persentase'];
+            $namadiskon = $datadisc['Cust_Member_Name'];
+            $diskon     = round(($datadisc['Persentase']/100)*$subtotal);
+        }else{
+            $diskon     = 0;
+        }    
+    }else{
+        $diskon     = 0;
+    }
+    
+    $total      = $subtotal - $diskon;
+
+    $Total_Diskon       = $diskon;
+    $Payment_Before     = round($total);
+    $Payment_Amount     = angka_pembulatan($Payment_Before,2,100);
+    $Payment_Rounding   = $Payment_Amount-$Payment_Before;
+
+    mysqli_query($conn,"UPDATE Invoice SET Total_Diskon='$Total_Diskon',Payment_Before='$Payment_Before',Payment_Rounding='$Payment_Rounding',Payment_Amount='$Payment_Amount' WHERE Inv_Number='$Invnya'");
+
+    echo 'Y';
+    exit();
+
+}else if ($_GET['menu'] == 'updatestatus') { 
+    $status     = $_POST['status'];
+    $invoice    = $_POST['invoice'];
+
+    if ($status=='pay') {
+        $paid    = $_POST['paid'];
+        if ($paid=='N') {
+            mysqli_query($conn,"UPDATE Invoice SET Status_Payment='N' WHERE Inv_Number='$invoice'");
+            mysqli_query($conn,"DELETE FROM Invoice_Payment WHERE Inv_Number='$invoice'");
+        }
+        
+    }else{
+        $taken    = $_POST['taken'];
+        if ($taken=='N') {
+            mysqli_query($conn,"UPDATE Invoice SET Status_Taken='N' WHERE Inv_Number='$invoice'");
+        }else{
+            $name    = $_POST['name'];
+            mysqli_query($conn,"UPDATE Invoice SET Status_Taken='$name' WHERE Inv_Number='$invoice'");
+        }
+    }
+    echo 'Y';
+    exit();
 }

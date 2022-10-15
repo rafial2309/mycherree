@@ -1,6 +1,7 @@
-            <?php 
-            $data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice WHERE Inv_Number='$_GET[invoice]'")); 
-            ?>
+    <?php 
+    $data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice WHERE Inv_Number='$_GET[invoice]'")); 
+        if (isset($data['Inv_Number'])) {
+    ?>
             <div class="wrapper-box">
                
                 <!-- BEGIN: Content -->
@@ -20,7 +21,7 @@
                             <div class="box p-5 rounded-md">
                                 <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                                     <div class="font-medium text-base truncate">Transaction Details</div>
-                                    <a href="" class="flex items-center ml-auto text-primary"> <i data-lucide="edit" class="w-4 h-4 mr-2"></i> Change Status </a>
+                                    <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#change-stat-modal" onclick="changestat()" class="flex items-center ml-auto text-primary"> <i data-lucide="edit" class="w-4 h-4 mr-2"></i> Change Status </a>
                                 </div>
                                 <?php if ($data['Status_Inv']=='C') { ?>
                                     <button class="btn btn-outline-danger w-full inline-block mr-1 mb-4">STATUS CANCELED</button>
@@ -37,7 +38,7 @@
                             <div class="box p-5 rounded-md mt-5">
                                 <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                                     <div class="font-medium text-base truncate">Customer Details</div>
-                                    <a href="" class="flex items-center ml-auto text-primary"> <i data-lucide="edit" class="w-4 h-4 mr-2"></i> Change Customer </a>
+                                    <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#change-cust-modal" class="flex items-center ml-auto text-primary"> <i data-lucide="edit" class="w-4 h-4 mr-2"></i> Change Customer </a>
                                 </div>
                                 <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Name: <a href="" class="underline decoration-dotted ml-1"><?php echo $data['Cust_Nama'] ?></a> </div>
                                 <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Phone Number: <?php echo $data['Cust_Telp'] ?> </div>
@@ -173,8 +174,161 @@
                             </div> 
                         </div> 
                      </div> 
+
+
+                    <div id="change-cust-modal" class="modal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="font-medium text-base mr-auto">
+                                        Change Customer
+                                    </h2>
+                                </div>
+                                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                                    <div class="col-span-12">
+                                         <label class="form-label">Customers</label>
+                                         <div class="mt-1">
+                                             <select name="customer" id="customer" data-placeholder="Select Customers" class="tom-select w-full" onchange="cekcust()">
+                                                <option>-- SELECT CUSTOMER --</option>
+                                                <?php 
+                                                    $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
+                                                    while($datacust = mysqli_fetch_assoc($querycust)){
+                                                ?>
+                                                    <option value="<?php echo $datacust['Cust_No'] ?>+<?php echo $datacust['Cust_Nama'] ?>"><?php echo $datacust['Cust_Nama'] ?></option>
+                                                <?php } ?>
+                                             </select> 
+                                         </div>
+                                    </div>
+                                    <div class="col-span-12">
+                                        <input type="text" name="telp" id="telp" class="form-control" placeholder="Input Phone">
+                                    </div>
+                                    <div class="col-span-12">
+                                        <input type="text" name="alamat" id="alamat" class="form-control" placeholder="Input Address">
+                                    </div>
+                                    <div class="col-span-12">
+                                        <button class="btn btn-outline-primary w-full inline-block mr-1 mb-2" id="hasilcekmember">-</button>
+                                    </div>
+                                    
+                                </div>
+                                <div class="modal-footer text-right">
+                                    <button type="button" id="closemodalcustomer" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
+                                    <button type="button" onclick="updatechangecust()" class="btn btn-primary w-32">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="change-stat-modal" class="modal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="font-medium text-base mr-auto">
+                                        Change Status Invoice
+                                    </h2>
+                                </div>
+                                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                                    
+                                    <div class="col-span-12">
+                                        <center> <strong style="font-size: 25px;">INV-<c id="invnum"></c></strong> </center>
+                                        <input type="hidden" name="invoicedata" value="<?php echo $datainv['Inv_Number']; ?>">
+                                    </div>
+
+                                    <div class="col-span-12">
+                                         <ul class="nav nav-boxed-tabs" role="tablist"> 
+                                            <li id="example-3-tab" class="nav-item flex-1" role="presentation"> 
+                                                <button class="nav-link w-full py-2 active" data-tw-toggle="pill" data-tw-target="#example-tab-3" type="button" role="tab" aria-controls="example-tab-3" aria-selected="true" > Status Payment </button> 
+                                            </li> 
+                                            <li id="example-4-tab" class="nav-item flex-1" role="presentation"> 
+                                                <button class="nav-link w-full py-2" data-tw-toggle="pill" data-tw-target="#example-tab-4" type="button" role="tab" aria-controls="example-tab-4" aria-selected="false" > Status Taken </button> 
+                                            </li> 
+                                        </ul> 
+                                        <div class="tab-content mt-5"> 
+                                            <div id="example-tab-3" class="tab-pane leading-relaxed active" role="tabpanel" aria-labelledby="example-3-tab"> 
+                                                <div class="col-span-12">
+                                                     <div class="mt-7 mb-7"> 
+                                                         <div class="flex flex-col sm:flex-row mt-3">
+
+                                                            <?php 
+                                                            if ($data['Status_Payment']=='N') { 
+                                                                $disablepay = 'disabled';
+                                                                $checkedpay = '';
+                                                            }else{
+                                                                $disablepay = '';
+                                                                $checkedpay = 'checked';
+                                                            }
+
+                                                            ?>
+
+                                                             <div class="form-check mr-3"> <input id="radio-paid" class="form-check-input" type="radio" name="status_pay" value="PAID" <?php echo $disablepay; ?> <?php echo $checkedpay; ?>> 
+                                                                <label class="form-check-label" for="radio-taken"> PAID</label> </div>
+
+                                                             <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-unpaid" class="form-check-input" type="radio" name="status_pay" value="UNPAID"> 
+                                                                <label class="form-check-label" for="radio-untaken"> UNPAID</label> </div>
+
+                                                         </div>
+                                                     </div>
+                                                </div>
+                                                <div class="modal-footer text-right mt-5">
+                                                    <button type="button" id="closemodalcustomer" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
+                                                    <button type="button" onclick="updatechangestatpay()" class="btn btn-primary w-32">Update</button>
+                                                </div>
+
+                                            </div> 
+
+                                            <div id="example-tab-4" class="tab-pane leading-relaxed" role="tabpanel" aria-labelledby="example-4-tab"> 
+
+                                                <div class="col-span-6">
+                                                     <div class="mt-7 mb-7">
+                                                         <div class="flex flex-col sm:flex-row mt-3">
+
+                                                            <?php 
+                                                            if ($data['Status_Taken']=='N') { 
+                                                                $disabletaken = 'disabled';
+                                                                $checkedtaken = '';
+                                                            }else{
+                                                                $disabletaken = '';
+                                                                $checkedtaken = 'checked';
+                                                            }
+
+                                                            ?>
+
+                                                             <div class="form-check mr-3"> <input id="radio-taken" class="form-check-input" type="radio" name="status_taken" value="TAKEN" <?php echo $disabletaken; ?> <?php echo $checkedtaken; ?>> 
+                                                                <label class="form-check-label" for="radio-taken"> TAKEN</label> </div>
+
+                                                             <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-untaken" class="form-check-input" type="radio" name="status_taken" value="UNTAKEN"> 
+                                                                <label class="form-check-label" for="radio-untaken"> UNTAKEN</label> </div>
+
+                                                         </div>
+                                                     </div>
+                                                </div>
+                                                <div class="col-span-6">
+                                                    &nbsp;
+                                                </div>
+                                                <div class="col-span-12">
+                                                    <input type="text" name="payer_name" id="payer_name" class="form-control" placeholder="Taken Name" value="<?php if ($data['Status_Taken']!='N') { echo $data['Status_Taken']; }  ?>" required>
+                                                </div>
+                                                <div class="modal-footer text-right mt-5">
+                                                    <button type="button" id="closemodalcustomer" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
+                                                    <button type="button" onclick="updatechangestattaken()" class="btn btn-primary w-32">Update</button>
+                                                </div>
+
+                                            </div> 
+                                        </div> 
+                                    </div>
+                                    
+                                    
+
+
+                                    
+                                    
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
                      <!-- END: Modal Content --> 
             </div>
+    <?php } ?>
             <?php include 'appjs.php'; ?>
             <script type="text/javascript">
                 
@@ -197,4 +351,119 @@
                     }
                 }
 
+                function cekcust(){
+                    var id = document.getElementById('customer').value;
+                    $.ajax({
+                        url:'function/transaksi_item?menu=cekcust',
+                        type:'POST',
+                        data:'id='+id,
+                        dataType:'html',
+                        success:function (response) {
+                            var json = response,
+                            obj = JSON.parse(json);
+                            $('#telp').val(obj.Cust_Telp);
+                            $('#alamat').val(obj.Cust_Alamat);
+                            document.getElementById('hasilcekmember').innerHTML = obj.member;
+                        },
+
+                    })
+                }
+
+                function updatechangecust(){
+                    var id           = document.getElementById('customer').value;
+                    var Cust_Telp    = document.getElementById('telp').value;
+                    var Cust_Alamat  = document.getElementById('alamat').value;
+                    var Cust_No_Data = id.split("+");
+                    var invoice      = '<?php echo $_GET['invoice']; ?>';
+                    $.ajax({
+                        url:'function/transaksi?menu=updatecust',
+                        type:'POST',
+                        data:{
+                          id: id,
+                          Cust_Telp: Cust_Telp,
+                          Cust_Alamat: Cust_Alamat,
+                          invoice: invoice,
+                        },
+                        success:function (response) {
+                            if (response=='Y') {
+                                document.getElementById('success-additem').click();
+                                setTimeout(function() { window.location.reload(); }, 1500);
+                            }
+                        },
+
+                    })
+                }
+
+                function changestat(){
+                    document.getElementById('invnum').innerHTML = '<?php echo $_GET['invoice']; ?>';
+                }
+
+                function updatechangestatpay(){
+                    var unpaid = document.getElementById('radio-unpaid').value;
+                    var invoice = '<?php echo $_GET['invoice']; ?>';
+                    if (unpaid=='UNPAID') {
+                        $.ajax({
+                            url:'function/transaksi?menu=updatestatus',
+                            type:'POST',
+                            data:{
+                              status: 'pay',
+                              paid: 'N',
+                              invoice: invoice,
+                            },
+                            success:function (response) {
+                                if (response=='Y') {
+                                    document.getElementById('success-additem').click();
+                                    setTimeout(function() { window.location.reload(); }, 1500);
+                                }
+                            },
+
+                        })
+                    }
+                }
+                function updatechangestattaken(){
+                    var name    = document.getElementById('payer_name').value;
+                    var invoice = '<?php echo $_GET['invoice']; ?>';
+
+                    if (document.getElementById('radio-taken').checked) {
+
+                        $.ajax({
+                            url:'function/transaksi?menu=updatestatus',
+                            type:'POST',
+                            data:{
+                              status: 'taken',
+                              taken: 'Y',
+                              name: name,
+                              invoice: invoice,
+                            },
+                            success:function (response) {
+                                if (response=='Y') {
+                                    document.getElementById('success-additem').click();
+                                    setTimeout(function() { window.location.reload(); }, 1500);
+                                }
+                            },
+
+                        })
+
+                    }else{
+                        $.ajax({
+                            url:'function/transaksi?menu=updatestatus',
+                            type:'POST',
+                            data:{
+                              status: 'taken',
+                              taken: 'N',
+                              name: name,
+                              invoice: invoice,
+                            },
+                            success:function (response) {
+                                if (response=='Y') {
+                                    document.getElementById('success-additem').click();
+                                    setTimeout(function() { window.location.reload(); }, 1500);
+                                }
+                            },
+
+                        })
+                    }
+
+                    
+                }
             </script>
