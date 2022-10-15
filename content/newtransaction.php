@@ -25,7 +25,7 @@
                            
                             <div class="grid grid-cols-12 gap-5 mt-5 pt-5 border-t" id="hasilcari">
                                 <?php
-                                    $query = mysqli_query($conn,"SELECT * from Master_Item order by Item_Name ASC LIMIT 8");
+                                    $query = mysqli_query($conn,"SELECT * from Master_Item WHERE Item_Status='Y' order by Item_Name ASC LIMIT 8");
                                     while ($dataitem = mysqli_fetch_array($query)) {
                                     
                                 ?>

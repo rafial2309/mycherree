@@ -133,7 +133,7 @@ if ($_GET['menu'] == 'create' ) {
     // KEYWORD DIKIRIM DENGAN METHOD POST
     $keyword    = $_POST['keyword'];
 
-    $query = mysqli_query($conn,"SELECT * from Master_Item WHERE Item_Name LIKE '%$keyword%' order by Item_Name ASC LIMIT 8");
+    $query = mysqli_query($conn,"SELECT * from Master_Item WHERE Item_Name LIKE '%$keyword%' AND Item_Status='Y' order by Item_Name ASC LIMIT 8");
     while ($dataitem = mysqli_fetch_array($query)) { ?>
 
     <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#add-item-modal" class="intro-y block col-span-12 sm:col-span-4 2xl:col-span-3" onclick="tambahitem('<?php echo $dataitem['Item_ID'] ?>','<?php echo $dataitem['Item_Name'] ?>','<?php echo $dataitem['Item_Price'] ?>','<?php echo $dataitem['Item_Pcs'] ?>')">
