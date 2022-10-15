@@ -24,7 +24,19 @@
                                     </tr>
                                 </thead>
                                 <tbody id="hasil">
-                                    
+                                    <?php  
+                                    $query = mysqli_query($conn,"SELECT * from Master_Item WHERE Item_Status='Y'");
+                                    while($row = mysqli_fetch_assoc($query)){
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $row["Item_Name"]; ?></td>
+                                        <td><?php echo $row["Item_Category"]; ?></td>
+                                        <td><?php echo number_format($row["Item_Price"],0,',','.'); ?></td>
+                                        <td><?php echo $row["Item_Pcs"]; ?></td>
+                                        <td><?php echo "<img class='rounded-md' style='height: 40px;' src='src/images/item/".$row['Item_ID'].".webp'> <form method='post' id='".$row['Item_ID']."' action='function/items?menu=uploadimage' enctype='multipart/form-data'><input type='hidden' name='idnya' value='".$row['Item_ID']."'><input type='file' name='imageitem' id='' onchange='uploadpic(".$row['Item_ID'].")'></form>"; ?></td>
+                                        <td><?php echo "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-item-modal' onclick='btnEdit(".$row['Item_ID'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Item_ID'].")'>DELETE</button>"; ?></td>
+                                    </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>  
@@ -107,18 +119,18 @@
             <script type="text/javascript">
                 $(document).ready(function() {
                     $('#example').DataTable( {
-                        "ajax":{
-                            url :"function/items?menu=data",
-                            type: "post",
-                            error: function(){
-                                $(".dataku-error").html("");
-                                $("#dataku").append('<tbody class="dataku-error"><tr><th colspan="3">Tidak ada data untuk ditampilkan</th></tr></tbody>');
-                                $("#dataku-error-proses").css("display","none");
-                            }
-                        },
+                        // "ajax":{
+                        //     url :"function/items?menu=data",
+                        //     type: "post",
+                        //     error: function(){
+                        //         $(".dataku-error").html("");
+                        //         $("#dataku").append('<tbody class="dataku-error"><tr><th colspan="3">Tidak ada data untuk ditampilkan</th></tr></tbody>');
+                        //         $("#dataku-error-proses").css("display","none");
+                        //     }
+                        // },
                         dom: 'Bfrtip',
-                        "processing": true,
-                        "serverSide": true,
+                        // "processing": true,
+                        // "serverSide": true,
                         buttons: [],   
                     } );     
                 } );

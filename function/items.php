@@ -78,7 +78,7 @@ if ($_GET['menu'] == 'create' ) {
     $query=mysqli_query($conn, $sql) or die("items?menu=data: get dataku");
     //----------------------------------------------------------------------------------
     $data = array();
-    $i = 1;
+
     while( $row=mysqli_fetch_array($query) ) {
 
         $nestedData=array(); 
@@ -92,6 +92,7 @@ if ($_GET['menu'] == 'create' ) {
         
         $data[] = $nestedData;
     }
+
     //----------------------------------------------------------------------------------
     $json_data = array(
                 "draw"            => intval( $requestData['draw'] ),  
@@ -99,7 +100,10 @@ if ($_GET['menu'] == 'create' ) {
                 "recordsFiltered" => intval( $totalFiltered ), 
                 "data"            => $data );
     //----------------------------------------------------------------------------------
+    // var_dump($sql);
+    // var_dump($json_data);
     echo json_encode($json_data);
+
     exit();
 } elseif ($_GET['menu'] == 'ajax') { 
     // KEYWORD DIKIRIM DENGAN METHOD POST
