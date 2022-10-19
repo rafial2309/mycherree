@@ -277,7 +277,7 @@ if ($_GET['type'] == 'customer') {
     $end    = date('Y-m-d', strtotime($_POST['end']));
     $judul  = 'Daily Invoice';
 
-    $sheet->setCellValue('A3', 'Report ' . date('D, d M Y', strtotime($start)).' - '.date('D, d M Y', strtotime($end)));
+    $sheet->setCellValue('A3', 'Report Invoice ' . date('D, d M Y', strtotime($start)).' - '.date('D, d M Y', strtotime($end)));
     $sheet->setCellValue('A4', 'No');
     $sheet->setCellValue('B4', 'ID Invoice');
     $sheet->setCellValue('C4', 'Tanggal Masuk');
@@ -324,7 +324,7 @@ if ($_GET['type'] == 'customer') {
     $month  = date('Y-m-d', strtotime($_POST['month']));
     $judul  = 'Monthly Invoice';
     
-    $sheet->setCellValue('A3', 'Report ' . date('M Y', strtotime($month)));
+    $sheet->setCellValue('A3', 'Report Invoice ' . date('M Y', strtotime($month)));
     $sheet->setCellValue('A4', 'No');
     $sheet->setCellValue('B4', 'ID Invoice');
     $sheet->setCellValue('C4', 'Tanggal Masuk');
@@ -374,7 +374,7 @@ if ($_GET['type'] == 'customer') {
     $year   = date('Y-m-d', strtotime($_POST['year']));
     $judul  = 'Yearly Invoice';
 
-    $sheet->setCellValue('A3', 'Report' . date('Y', strtotime($year)));
+    $sheet->setCellValue('A3', 'Report Invoice ' . date('Y', strtotime($year)));
     $sheet->setCellValue('A4', 'No');
     $sheet->setCellValue('B4', 'ID Invoice');
     $sheet->setCellValue('C4', 'Tanggal Masuk');
@@ -424,7 +424,7 @@ if ($_GET['type'] == 'customer') {
     $end    = date('Y-m-d', strtotime($_POST['end']));
     $judul  = 'Daily Payment';
 
-    $sheet->setCellValue('A3', 'Report ' . date('D, d M Y', strtotime($start)).' - '.date('D, d M Y', strtotime($end)));
+    $sheet->setCellValue('A3', 'Report Payment ' . date('D, d M Y', strtotime($start)).' - '.date('D, d M Y', strtotime($end)));
     $sheet->setCellValue('A4', 'No');
     $sheet->setCellValue('B4', 'ID Invoice');
     $sheet->setCellValue('C4', 'Tanggal Payment');
@@ -469,7 +469,7 @@ if ($_GET['type'] == 'customer') {
     $month  = date('Y-m-d', strtotime($_POST['month']));
     $judul  = 'Monthly Payment';
 
-    $sheet->setCellValue('A3', 'Report ' . date('M Y', strtotime($month)));
+    $sheet->setCellValue('A3', 'Report Payment ' . date('M Y', strtotime($month)));
     $sheet->setCellValue('A4', 'No');
     $sheet->setCellValue('B4', 'ID Invoice');
     $sheet->setCellValue('C4', 'Tanggal Payment');
@@ -515,9 +515,9 @@ if ($_GET['type'] == 'customer') {
 
 } elseif ($_GET['type'] == 'yearly-payment') {
     $year   = date('Y-m-d', strtotime($_POST['year']));
-    $judul  = 'Yearly Invoice';
+    $judul  = 'Yearly Payment';
 
-    $sheet->setCellValue('A3', 'Report ' . date('Y', strtotime($year)));
+    $sheet->setCellValue('A3', 'Report Payment ' . date('Y', strtotime($year)));
     $sheet->setCellValue('A4', 'No');
     $sheet->setCellValue('B4', 'ID Invoice');
     $sheet->setCellValue('C4', 'Tanggal Payment');
