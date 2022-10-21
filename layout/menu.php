@@ -829,7 +829,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="top-menu">
+                            <a href="app?p=marking-report" class="top-menu">
                                 <div class="top-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
                                 <div class="top-menu__title"> Marking Report</div>
                             </a>

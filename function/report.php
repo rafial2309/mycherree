@@ -641,6 +641,130 @@ if ($_GET['type'] == 'customer') {
     $json['data'] = $data;
     echo json_encode($json);
     exit();
+} elseif ($_GET['type'] == 'data' && $_GET['data'] == 'daily-marking') {
+    $start  = date('Y-m-d', strtotime($_POST['start']));
+    $end    = date('Y-m-d', strtotime($_POST['end']));
+
+    $month  = date('Y-m-d', strtotime($_POST['month']));
+    $year   = date('Y-m-d', strtotime($_POST['year']));
+
+    $bulan  = substr($month, 5, 2);
+    $tahun  = substr($month, 0, 4);
+
+    $yearly = substr($year, 0, 4);
+
+    $type   = $_POST['type'];
+
+    if ($type == 'daily')
+        $sql = mysqli_query($conn, "SELECT i.*, sum(it.Item_Pcs * it.Qty) as Marking_Done 
+                                    FROM Invoice i JOIN Invoice_Item it ON i.Inv_Number = it.Inv_Number 
+                                    WHERE it.Item_Note != '' AND i.Inv_Tgl_Masuk BETWEEN '$start' AND '$end' GROUP BY i.Inv_Number");
+    elseif ($type == 'monthly')
+        $sql = mysqli_query($conn, "SELECT i.*, sum(it.Item_Pcs * it.Qty) as Marking_Done 
+                                    FROM Invoice i JOIN Invoice_Item it ON i.Inv_Number = it.Inv_Number 
+                                    WHERE it.Item_Note != '' AND MONTH(i.Inv_Tgl_Masuk)='$bulan' AND YEAR(i.Inv_Tgl_Masuk)='$tahun' 
+                                    GROUP BY Inv_Number");
+    else  
+        $sql = mysqli_query($conn, "SELECT i.*, sum(it.Item_Pcs * it.Qty) as Marking_Done 
+                                    FROM Invoice i JOIN Invoice_Item it ON i.Inv_Number = it.Inv_Number 
+                                    WHERE it.Item_Note != '' AND YEAR(i.Inv_Tgl_Masuk)='$yearly' 
+                                    GROUP BY Inv_Number");
+
+    $data = array();
+    $json = array();
+    $i = 1;
+    while( $row=mysqli_fetch_array($sql) ) {
+
+        $nestedData=array(); 
+        $nestedData['Inv_Number']       = $row["Inv_Number"];
+        $nestedData['Total_PCS']        = $row["Total_PCS"].' pcs';
+        $nestedData['Marking_Done']     = $row["Marking_Done"].' pcs';
+        $nestedData['Cust_Nama']        = $row["Cust_Nama"];
+        $nestedData['Cust_Alamat']      = $row["Cust_Alamat"];
+        $nestedData['Staff_Name']       = $row["Staff_Name"];
+        
+        $data[] = $nestedData;
+    }
+    $json['data'] = $data;
+    echo json_encode($json);
+    exit();
+} elseif ($_GET['type'] == 'download-marking') {
+    $start  = date('Y-m-d', strtotime($_POST['start']));
+    $end    = date('Y-m-d', strtotime($_POST['end']));
+
+    $month  = date('Y-m-d', strtotime($_POST['month']));
+    $year   = date('Y-m-d', strtotime($_POST['year']));
+
+    $bulan  = substr($month, 5, 2);
+    $tahun  = substr($month, 0, 4);
+
+    $yearly = substr($year, 0, 4);
+
+    $type   = $_POST['type'];
+
+    if ($type == 'daily') {
+        $judul = 'Daily Marking';
+        $header = 'Report Marking ' . date('D, d M Y', strtotime($start)) . ' s/d '.date('D, d M Y', strtotime($end));
+        $sql = mysqli_query($conn, "SELECT i.*, sum(it.Item_Pcs * it.Qty) as Marking_Done 
+                                    FROM Invoice i JOIN Invoice_Item it ON i.Inv_Number = it.Inv_Number 
+                                    WHERE it.Item_Note != '' AND i.Inv_Tgl_Masuk BETWEEN '$start' AND '$end' GROUP BY i.Inv_Number");
+    } elseif ($type == 'monthly') {
+        $judul = 'Monthly Marking';
+        $header = 'Report Marking ' . date('M Y', strtotime($month));
+        $sql = mysqli_query($conn, "SELECT i.*, sum(it.Item_Pcs * it.Qty) as Marking_Done 
+                                    FROM Invoice i JOIN Invoice_Item it ON i.Inv_Number = it.Inv_Number 
+                                    WHERE it.Item_Note != '' AND MONTH(i.Inv_Tgl_Masuk)='$bulan' AND YEAR(i.Inv_Tgl_Masuk)='$tahun' 
+                                    GROUP BY Inv_Number");
+    } else {  
+        $judul = 'Yearly Marking';
+        $header = 'Report Marking ' . date('Y', strtotime($year));
+        $sql = mysqli_query($conn, "SELECT i.*, sum(it.Item_Pcs * it.Qty) as Marking_Done 
+                                    FROM Invoice i JOIN Invoice_Item it ON i.Inv_Number = it.Inv_Number 
+                                    WHERE it.Item_Note != '' AND YEAR(i.Inv_Tgl_Masuk)='$yearly' 
+                                    GROUP BY Inv_Number");
+    }
+
+    $sheet->setCellValue('A3', $header);
+    $sheet->setCellValue('A4', 'No');
+    $sheet->setCellValue('B4', 'Invoice');
+    $sheet->setCellValue('C4', 'Nama');
+    $sheet->setCellValue('D4', 'Alamat');
+    $sheet->setCellValue('E4', 'Marking Done');
+    $sheet->setCellValue('F4', 'Total PCS');
+    $sheet->setCellValue('G4', 'Staff');
+    
+    $sheet->getStyle('A4:G4')->getAlignment()->setVertical('center')->setHorizontal('center');
+    $sheet->getStyle('A4:G4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A4:G4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
+    
+    $sheet->freezePane('A5');
+    
+    $baris = 5;
+    $no = 1;
+    
+    $bulan = substr($month, 5, 2);
+    $tahun = substr($month, 0, 4);
+    
+    while ($data = mysqli_fetch_assoc($sql)) {
+        $sheet->setCellValue('A' . $baris, $no);
+        $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
+        $sheet->setCellValue('C' . $baris, $data['Cust_Nama']);
+        $sheet->setCellValue('D' . $baris, $data['Cust_Alamat']);
+        $sheet->setCellValue('E' . $baris, $data['Marking_Done']);
+        $sheet->setCellValue('F' . $baris, $data['Total_PCS']);
+        $sheet->setCellValue('G' . $baris, $data['Staff_Name']);
+        $baris++;
+        $no++;
+    }
+    foreach ($sheet->getColumnIterator() as $column) {
+        $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+    }
+    $akhir = $baris - 1; 
+    $sheet->getStyle('E5:F' . $akhir)->getAlignment()->setHorizontal('right');
+    $sheet->getStyle('A5:G' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('E5:F' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->getColumnDimension('A')->setAutoSize(false)->setWidth(8);
+
 }
 
 
