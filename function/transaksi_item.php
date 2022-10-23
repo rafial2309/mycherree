@@ -28,8 +28,12 @@ function angka_pembulatan($angka,$digit,$minimal)
 
 if ($_GET['menu'] == 'getitem' ) {
 	
-
-	$query = mysqli_query($conn,"SELECT * from Invoice_Item where Inv_Number='' AND Staff_ID='$Staff_ID'");
+	if (isset($_POST['id'])) {
+		$id = $_POST['id'];
+		$query = mysqli_query($conn,"SELECT * from Invoice_Item where Inv_Number='$id' AND Total_Price!='0'");
+	} else {
+		$query = mysqli_query($conn,"SELECT * from Invoice_Item where Inv_Number='' AND Staff_ID='$Staff_ID'");
+	}
 	while($data = mysqli_fetch_assoc($query)){
 	?>
 	<a href="javascript:;" data-tw-toggle="modal" data-tw-target="#add-item-modal-edit" class="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-darkmode-600 hover:bg-slate-100 dark:hover:bg-darkmode-400 rounded-md" onclick="edititem('<?php echo $data['Inv_Item_No'] ?>')">
@@ -77,12 +81,19 @@ if ($_GET['menu'] == 'getitem' ) {
     exit();
 
 } elseif ($_GET['menu'] == 'totalan') { 
-	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price from Invoice_Item WHERE Inv_Number='' AND Staff_ID='$Staff_ID'"));
 
-	$datapcs = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Item_Pcs*Qty) as Total_Pcs from Invoice_Item WHERE Inv_Number='' AND Staff_ID='$Staff_ID'"));
-
+	if (isset($_POST['id'])) {
+		$id = $_POST['id'];
+		$invoice = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice WHERE Inv_Number='$id'"));
+		$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price from Invoice_Item WHERE Inv_Number='$id'"));
+		$datapcs = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Item_Pcs*Qty) as Total_Pcs from Invoice_Item WHERE Inv_Number='$id'"));
+	} else {
+		$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price from Invoice_Item WHERE Inv_Number='' AND Staff_ID='$Staff_ID'"));
+		$datapcs = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Item_Pcs*Qty) as Total_Pcs from Invoice_Item WHERE Inv_Number='' AND Staff_ID='$Staff_ID'"));
+	}
+	
 	$subtotal 	= $data['Total_Price'];
-
+	
 	if (isset($_SESSION['Cust_No'])) {
 		$datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$_SESSION[Cust_No]'"));
 		if (isset($datadisc['Persentase'])) {
@@ -99,6 +110,20 @@ if ($_GET['menu'] == 'getitem' ) {
 		$persentase = '';
 		$namadiskon = '';
 		$diskon		= 0;
+	}
+
+	if (isset($invoice)) {
+		$customer = $invoice['Cust_ID'];
+		$datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$customer'"));
+		if (isset($datadisc['Persentase'])) {
+			$persentase = $datadisc['Persentase'];
+			$namadiskon = $datadisc['Cust_Member_Name'];
+			$diskon 	= round(($datadisc['Persentase']/100)*$subtotal);
+		}else{
+			$persentase = '';
+			$namadiskon = '';
+			$diskon		= 0;
+		}
 	}
 	
 	$total 		= $subtotal - $diskon;
@@ -124,8 +149,12 @@ if ($_GET['menu'] == 'getitem' ) {
 
 <?php } elseif ($_GET['menu'] == 'savenew') {
 	
-
-	$cekitemno = mysqli_num_rows(mysqli_query($conn,"SELECT * from Invoice_Item where Inv_Number='' AND Staff_ID='$Staff_ID'"));
+	if (isset($_POST['invoice'])) {
+		$invoice = $_POST['invoice'];
+		$cekitemno = mysqli_num_rows(mysqli_query($conn,"SELECT * from Invoice_Item where Inv_Number='$invoice'"));		
+	} else {
+		$cekitemno = mysqli_num_rows(mysqli_query($conn,"SELECT * from Invoice_Item where Inv_Number='' AND Staff_ID='$Staff_ID'"));
+	}
 
 	$colour 			= explode('+',$_POST['colour']);
 	$brand 				= explode('+',$_POST['brand']);
@@ -145,7 +174,11 @@ if ($_GET['menu'] == 'getitem' ) {
 	$Item_Pcs 			= $_POST['Item_Pcs'];
 	$Total_Price 		= $_POST['Total_Price'];
 
-	mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','')");
+	if (isset($_POST['invoice'])) {
+		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'$invoice','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','')");	
+	} else {
+		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','')");	
+	}
 }elseif ($_GET['menu'] == 'edititem') { 
 	$id = $_POST['id'];
 	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Item WHERE Inv_Item_No='$id'"));
@@ -199,10 +232,7 @@ if ($_GET['menu'] == 'getitem' ) {
                         ?>
                             <option value="<?php echo $databrand['Brand_ID'] ?>+<?php echo $databrand['Brand_Name'] ?>"><?php echo $databrand['Brand_Name'] ?></option>
                         <?php } ?>
-                     </select> 
-                     <script type="text/javascript">
-                     	$('#brand_edit').selectize();
-                     </script>
+                     </select> 					
                  </div>
             </div>
             <div class="col-span-6">
@@ -248,14 +278,28 @@ if ($_GET['menu'] == 'getitem' ) {
             <button type="button" onclick="hapusitem('<?php echo $data['Inv_Item_No']; ?>')" class="btn btn-danger w-24">Delete</button>
             <button type="submit" class="btn btn-primary w-24">Update</button>
         </div>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				// Format mata uang.
+				$( '.uang' ).mask('000.000.000', {reverse: true});
+			});
+			$('#brand_edit').selectize();
+		</script>
 <?php 
 	exit();
 } elseif ($_GET['menu'] == 'hapusitem') { 
 	$id = $_POST['id'];
 
 	mysqli_query($conn,"DELETE from Invoice_Item WHERE Inv_Item_No='$id'");
-
-	$query = mysqli_query($conn,"SELECT * from Invoice_Item where Inv_Number='' AND Staff_ID='$Staff_ID'");
+	
+	if (isset($_POST['invoice'])) {
+		$invoice 	= $_POST['invoice'];	
+		$query 		= mysqli_query($conn,"SELECT * from Invoice_Item where Inv_Number='$invoice'");
+	} else {
+		$query = mysqli_query($conn,"SELECT * from Invoice_Item where Inv_Number='' AND Staff_ID='$Staff_ID'");
+	}
+	
 	$no=1;
 	while($data=mysqli_fetch_assoc($query)){
 		mysqli_query($conn,"UPDATE Invoice_Item SET Item_No='$no' WHERE Inv_Item_No='$data[Inv_Item_No]'");
@@ -291,6 +335,27 @@ if ($_GET['menu'] == 'getitem' ) {
 
 	exit();
 } elseif ($_GET['menu'] == 'savetransaksi') { 
+
+	if (isset($_POST['invoice'])) {
+		$invoice 		= $_POST['invoice'];
+		$Inv_Tg_Selesai	= $_POST['Inv_Tg_Selesai'];
+		$Note			= $_POST['Note'];
+		$Cust_ID		= $_POST['Cust_No'];
+		$Cust_Nama		= $_POST['Cust_Nama'];
+		$Cust_Alamat	= $_POST['Cust_Alamat'];
+		$Cust_Telp		= $_POST['Cust_Telp'];
+		
+		$Discount_No		= $_POST['Discount_No'];
+		$Total_PCS			= $_POST['totalpcs'];
+		$Total_Diskon		= $_POST['diskon'];
+		$Total_Voucher		= 0;
+		$Payment_Before		= round($_POST['total']);
+		$Payment_Amount		= angka_pembulatan($Payment_Before,2,100);
+		$Payment_Rounding	= $Payment_Amount-$Payment_Before;
+
+		mysqli_query($conn, "UPDATE Invoice SET Cust_ID='$Cust_ID', Cust_Nama='$Cust_Nama', Cust_Alamat='$Cust_Alamat', Cust_Telp='$Cust_Telp', Note='$Note', Inv_Tg_Selesai='$Inv_Tg_Selesai', Discount_No='$Discount_No', Total_PCS='$Total_PCS', Total_Diskon='$Total_Diskon', Total_Voucher='$Total_Voucher', Payment_Before='$Payment_Before', Payment_Amount='$Payment_Amount', Payment_Rounding='$Payment_Rounding' WHERE Inv_Number='$invoice'");
+		exit();
+	}
 
 	if (!isset($_SESSION["Cust_No"])) {
 		echo "PILIHCUSTOMER";
