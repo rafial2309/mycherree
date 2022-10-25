@@ -334,6 +334,10 @@
                     
                 }
 
+                function printInvoice (invoice) {
+                    location.href = 'function/print?type=invoice&invoice='+invoice;
+                }
+
                 function cancelinvoice(data){
                     let text = "Are you sure? (CANCEL INVOICE)";
                     if (confirm(text) == true) {

@@ -96,7 +96,7 @@ if ($_GET['menu'] == 'cari' ) {
                         <ul class="dropdown-content"> 
                             <li> <div class="dropdown-header">Process</div> </li> 
                             <li> <hr class="dropdown-divider"> </li> 
-                            <li> <a href="" class="dropdown-item"> <img src="plugin/lucide/printer.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Print Invoice </a> </li> 
+                            <li> <a href="javascript:;" onclick="printInvoice(<?= $data['Inv_Number']?>)" class="dropdown-item"> <img src="plugin/lucide/printer.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Print Invoice </a> </li> 
                             <?php if ($data['Status_Payment']=='N') { ?>
                             <li> <a href="javascript:;" onclick="gopayment('<?php echo $data['Inv_Number']  ?>###<?php echo $data['Payment_Amount']  ?>')" data-tw-toggle="modal" data-tw-target="#payment-modal" class="dropdown-item" class="dropdown-item"> <img src="plugin/lucide/credit-card.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Payment </a> 
                             </li> 
