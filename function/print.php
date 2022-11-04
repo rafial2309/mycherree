@@ -4,10 +4,19 @@ include '../config/configuration.php';
 
 if ($_GET['type'] == 'invoice') {
 	$id 	 = $_GET['invoice'];
-	$sql 	 = mysqli_query($conn, "SELECT *FROM Invoice WHERE Inv_Number = '$id'");
+
+	if (isset($_GET['rewash'])) {
+		$sql 	 = mysqli_query($conn, "SELECT *FROM Invoice_Rewash WHERE Inv_Number = '$id'");	
+		$query 	 = mysqli_query($conn, "SELECT *FROM Invoice_Rewash_Item WHERE Inv_Number='$id'");
+		$link	 = 'transactions_rewash_detail';
+	} else {
+		$sql 	 = mysqli_query($conn, "SELECT *FROM Invoice WHERE Inv_Number = '$id'");
+		$query 	 = mysqli_query($conn, "SELECT *FROM Invoice_Item WHERE Inv_Number='$id'");
+		$link	 = 'transactions_detail';
+	}
+	
 	$invoice = mysqli_fetch_assoc($sql);
 
-	$query 	 = mysqli_query($conn, "SELECT *FROM Invoice_Item WHERE Inv_Number='$id'");
 	?>
 	<!DOCTYPE html>
 	<html moznomarginboxes mozdisallowselectionprint style="background-color: #fff">
@@ -43,7 +52,7 @@ if ($_GET['type'] == 'invoice') {
 				
 					<b style="font-size: 28px;line-height: 25px;">
 
-						<a href="../app?p=transactions_detail&invoice=<?= $invoice['Inv_Number']?>" style="text-decoration: none;color: black;">
+						<a href="../app?p=<?= $link ?>&invoice=<?= $invoice['Inv_Number']?>" style="text-decoration: none;color: black;">
 							<br>
 						[#<?= $invoice['Inv_Number']?>] 
 						</a><br>

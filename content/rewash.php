@@ -158,7 +158,9 @@
                     }
                 });
 
-                
+                function printInvoice (invoice) {
+                    location.href = 'function/print?type=invoice&rewash=true&invoice='+invoice;
+                }
 
                 function taken(data){
                     var doc = prompt("Please enter Taken Name",

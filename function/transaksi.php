@@ -165,6 +165,7 @@ if ($_GET['menu'] == 'cari' ) {
     $query      = mysqli_query($conn,"SELECT * from Invoice where Status_Inv='C' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 
     while($data = mysqli_fetch_assoc($query)){
+        $invoice = $data['Inv_Number'];
     ?>
 
     <tr class="intro-x">
@@ -205,7 +206,7 @@ if ($_GET['menu'] == 'cari' ) {
             <div class="flex justify-center items-center">
                 <a class="flex items-center text-primary whitespace-nowrap mr-5" href="app?p=transactions_detail&invoice=<?php echo $data['Inv_Number'] ?>"> <img src="plugin/lucide/check-square.svg" class="w-4 h-4 mr-1 text-primary" style="box-shadow: none;filter: invert(15%) sepia(89%) saturate(1755%) hue-rotate(215deg) brightness(102%) contrast(96%);"> View Details </a>
                 
-                <button onclick="window.location='#'" class="btn btn-primary shadow-md mr-2"> <img src="plugin/lucide/printer.svg" class="w-4 h-4 mr-1 text-primary" style="box-shadow: none;filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);"> PRINT </button>
+                <button onclick="printInvoice('<?= $invoice ?>')" class="btn btn-primary shadow-md mr-2"> <img src="plugin/lucide/printer.svg" class="w-4 h-4 mr-1 text-primary" style="box-shadow: none;filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);"> PRINT </button>
             </div>
         </td>
     </tr>
@@ -217,6 +218,7 @@ if ($_GET['menu'] == 'cari' ) {
     $query      = mysqli_query($conn,"SELECT * from Invoice_Rewash where (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 
     while($data = mysqli_fetch_assoc($query)){
+        $invoice = $data['Inv_Number'];
     ?>
 
     <tr class="intro-x">
@@ -249,7 +251,7 @@ if ($_GET['menu'] == 'cari' ) {
             <div class="flex justify-center items-center">
                 <a class="flex items-center text-primary whitespace-nowrap mr-5" href="app?p=transactions_rewash_detail&invoice=<?php echo $data['Inv_Number'] ?>"> <img src="plugin/lucide/check-square.svg" class="w-4 h-4 mr-1 text-primary" style="box-shadow: none;filter: invert(15%) sepia(89%) saturate(1755%) hue-rotate(215deg) brightness(102%) contrast(96%);"> View Details </a>
                 
-                <button onclick="window.location='#'" class="btn btn-primary shadow-md mr-2"> <img src="plugin/lucide/printer.svg" class="w-4 h-4 mr-1 text-primary" style="box-shadow: none;filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);"> PRINT </button>
+                <button onclick="printInvoice('<?= $invoice ?>')" class="btn btn-primary shadow-md mr-2"> <img src="plugin/lucide/printer.svg" class="w-4 h-4 mr-1 text-primary" style="box-shadow: none;filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);"> PRINT </button>
             </div>
         </td>
     </tr>

@@ -158,7 +158,9 @@
                     }
                 });
 
-                
+                function printInvoice (invoice) {
+                    location.href = 'function/print?type=invoice&cancel=true&invoice='+invoice;
+                }
 
                 function gantistatus(){
                     var keyword     = document.getElementById('inputcari').value;
