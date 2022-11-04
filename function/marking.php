@@ -27,7 +27,38 @@ if ($_GET['menu'] == 'data' ) {
         </div>
 
     <?php }
-}elseif ($_GET['menu'] == 'detail') {
+} elseif ($_GET['menu'] == 'data-print' ) {
+	$no         = 1;
+	$invoice    = $_POST['invoice'];
+
+	$queryinv = mysqli_query($conn,"SELECT * from Invoice_Item WHERE Inv_Number='$invoice'");
+
+    echo "
+    <table class='table table-bordered'>
+        <tr>
+            <th>No</th>
+            <th>Nama Item</th>
+            <th>Action</th>
+        </tr>
+    ";
+    while ($data = mysqli_fetch_assoc($queryinv)) { 
+        $invoice = $data['Inv_Number'];
+        $item_no = $data['Item_No'];
+        ?>
+
+        <tr>
+            <td><?= $no ?></td>
+            <td><?= $data['Deskripsi'] ?></td>
+            <td>
+                <button class="btn btn-primary shadow-md mr-2" onclick="printItem('<?= $invoice ?>','<?= $item_no?>')" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="printer" data-lucide="printer" class="lucide lucide-printer w-4 h-4 mr-2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg></button>
+            </td>
+        </tr>
+
+    <?php 
+        $no++;
+    }
+    echo "</table>";
+} elseif ($_GET['menu'] == 'detail') {
 	$data = $_POST['data'];
 
 	$queryitem = mysqli_query($conn,"SELECT * from Invoice_Item where Inv_Number='$data'");

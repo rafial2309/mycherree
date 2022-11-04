@@ -190,64 +190,92 @@ if ($_GET['type'] == 'invoice') {
 				</tr>
 			</table>
 		</div>
-		
+<?php 
+} elseif ($_GET['type'] == 'marker') {
+	$invoice = $_GET['invoice'];
+	$item_no = $_GET['item_no'];
 
-		<form method="POST" enctype="multipart/form-data" action="simpanz" id="myForm">
-			<input type="hidden" name="img_val" id="img_val" value="" />
-		</form>
-
-		<!-- <script src="../assets/js/signature_pad.umd.js"></script>
-		<script src="../assets/js/appsignature.js"></script>
-		<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script> -->
-		<script type="text/javascript">
-			function saveSignat(){
-				var element = document.getElementById("printarea");
-
-					html2canvas(element).then(function(canvas) {
-						// Export the canvas to its data URI representation
-						var base64image = canvas.toDataURL("image/png");
-
-						// Open the image in a new window
-						window.open(base64image , "_blank");
-					});
-			}
-		</script>
-
-
-
-
-
-		<script type="text/javascript">
-			
-			function printGO() {
-				//Android.printPage();
-				//window.print();
-			//    setTimeout(function () {
-				//       window.location.href = "transaction"; //will redirect to your blog page (an ex: blog.html)
-				// }, 3000); //will call the function after 2 secs.
-			}
-
-
-			document.onkeydown = function(e) {
-			if(event.keyCode == 123) {
-				return false;
-			}
-			if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-				return false;
-			}
-			if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-				return false;
-			}
-			if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-				return false;
-			}
-			if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-				return false;
-			}
-			}
-			
-		
-		</script>
+	$sql = mysqli_query($conn, "SELECT *FROM Invoice_Item WHERE Inv_Number='$invoice' AND Item_No='$item_no'");
+	$data = mysqli_fetch_assoc($sql);
+?>	
+	<!DOCTYPE html>
+	<html moznomarginboxes mozdisallowselectionprint style="background-color: #fff">
+	<head>
+		<title>Print Invoice</title>
+		<style type="text/css">
+			body.receipt .sheet { width: 80mm; height: auto; margin: 0 auto;padding-right: 20px;padding-left: 5px; } /* change height as you like */
+			@media print { body.receipt { width: 80mm } } /* this line is needed for fixing Chrome's bug */
+			@media print { #printarea { width: 80mm } }
+			.collapse { border: 1px solid black; border-collapse:collapse}
+		</style>
+	</head>
+	<body style="font-size: 22px;" class="receipt" onload="printGO()" oncontextmenu="return false">
+		<!-- <button onclick="saveSignat()">SAVE SIGNATURE</button>
+		<button onclick="window.print()">PRINT</button> -->
+		<div id="printarea" style="background-color: #fff;" class="sheet">
+			<h3>
+				<span style="font-size:18px; font-weight: normal">[#<?= $data['Inv_Number']?>][<?= $data['Item_No']?>]</span><br>
+				<hr>
+				<?= $data['Deskripsi']?><br>
+				<hr>
+				<span style="font-size:18px; font-weight: normal">Notes : <?= $data['Item_Note']?></span>
+			</h3>
+		</div>
 	</body>
 	</html>
 <?php } ?>
+
+<form method="POST" enctype="multipart/form-data" action="simpanz" id="myForm">
+	<input type="hidden" name="img_val" id="img_val" value="" />
+</form>
+
+<!-- <script src="../assets/js/signature_pad.umd.js"></script>
+<script src="../assets/js/appsignature.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script> -->
+<script type="text/javascript">
+	function saveSignat(){
+		var element = document.getElementById("printarea");
+
+			html2canvas(element).then(function(canvas) {
+				// Export the canvas to its data URI representation
+				var base64image = canvas.toDataURL("image/png");
+
+				// Open the image in a new window
+				window.open(base64image , "_blank");
+			});
+	}
+</script>
+
+<script type="text/javascript">
+	
+	function printGO() {
+		//Android.printPage();
+		//window.print();
+	//    setTimeout(function () {
+		//       window.location.href = "transaction"; //will redirect to your blog page (an ex: blog.html)
+		// }, 3000); //will call the function after 2 secs.
+	}
+
+
+	document.onkeydown = function(e) {
+	if(event.keyCode == 123) {
+		return false;
+	}
+	if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+		return false;
+	}
+	if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+		return false;
+	}
+	if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+		return false;
+	}
+	if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+		return false;
+	}
+	}
+	
+
+</script>
+</body>
+</html>

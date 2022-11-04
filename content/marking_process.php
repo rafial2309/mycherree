@@ -8,11 +8,12 @@
                             Marking Process
                         </h2>
                         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-                            <button class="btn btn-primary shadow-md mr-2"><i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Marking Tag</button>
+                            <button class="btn btn-primary shadow-md mr-2" onclick="getdataprint()" data-tw-toggle="modal" data-tw-target="#print-modal-preview"><i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Marking Tag</button>
                             
                         </div>
                     </div>
                     <!-- BEGIN: Transaction Details -->
+                    <input type="hidden" id="invoice">
                     <div class="intro-y grid grid-cols-11 gap-5 mt-5">
                         <div class="col-span-12 lg:col-span-4 2xl:col-span-3">
                             
@@ -156,6 +157,21 @@
                         </div>
                     </div>
                      <!-- BEGIN: Modal Content --> 
+                     <div id="print-modal-preview" class="modal" tabindex="-1" aria-hidden="true"> 
+                        <div class="modal-dialog"> 
+                            <div class="modal-content"> 
+                                <div class="modal-body p-0"> 
+                                    <div class="p-5 text-center"> 
+                                        <div id="data-print"></div> 
+                                    </div> 
+                                    <div class="px-5 pb-8 text-center"> 
+                                        <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div> 
+                     </div> 
+                    
                      <div id="success-modal-preview" class="modal" tabindex="-1" aria-hidden="true"> 
                         <div class="modal-dialog"> 
                             <div class="modal-content"> 
@@ -208,6 +224,27 @@
 
                     })
                 }
+                
+                function printItem(invoice, item_no) {
+                    window.open('function/print?type=marker&invoice='+invoice+'&item_no='+item_no, '_blank');
+                }
+
+                function getdataprint(){
+                    var invoice = document.getElementById('invoice').value;
+                    $.ajax({
+                        url:'function/marking?menu=data-print',
+                        type:'POST',
+                        dataType:'html',
+                        data:{
+                          invoice: invoice,
+                        },
+                        success:function (response) {
+                            $('#data-print').html(response);
+                        },
+
+                    })
+                }
+                
                 function isidetail(data){
                     $.ajax({
                         url:'function/marking?menu=detail',
@@ -217,6 +254,7 @@
                           data: data,
                         },
                         success:function (response) {
+                            $('#invoice').val(data);
                             $('#isidetail').html(response);
                         },
 
