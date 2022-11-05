@@ -195,7 +195,8 @@ if ($_GET['type'] == 'invoice') {
 	$invoice = $_GET['invoice'];
 	$item_no = $_GET['item_no'];
 
-	$sql = mysqli_query($conn, "SELECT *FROM Invoice_Item WHERE Inv_Number='$invoice' AND Item_No='$item_no'");
+	$sql = mysqli_query($conn, "SELECT *FROM Invoice_Item it JOIN Invoice i ON it.Inv_Number = i.Inv_Number 
+								WHERE i.Inv_Number='$invoice' AND it.Item_No='$item_no'");
 	$data = mysqli_fetch_assoc($sql);
 ?>	
 	<!DOCTYPE html>
@@ -213,13 +214,11 @@ if ($_GET['type'] == 'invoice') {
 		<!-- <button onclick="saveSignat()">SAVE SIGNATURE</button>
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
-			<h3>
-				<span style="font-size:18px; font-weight: normal">[#<?= $data['Inv_Number']?>][<?= $data['Item_No']?>]</span><br>
-				<hr>
-				<?= $data['Deskripsi']?><br>
-				<hr>
-				<span style="font-size:18px; font-weight: normal">Notes : <?= $data['Item_Note']?></span>
-			</h3>
+			<h6>
+				<span style="font-size:14px; font-weight: normal">[<?= date('d F Y', strtotime($data['Inv_Tg_Selesai']))?>]</span><br>
+					<?= $data['Deskripsi']?><br>
+				<span style="font-size:14px; font-weight: normal">[#<?= $data['Inv_Number'] ?>][<?= $data['Item_No']?> / <?= $data['Total_PCS']?>]</span>
+			</h6>
 		</div>
 	</body>
 	</html>
