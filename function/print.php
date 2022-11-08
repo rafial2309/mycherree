@@ -41,7 +41,7 @@ if ($_GET['type'] == 'invoice') {
 			WA : 0877 2410 9018<br>
 			Telp : (021) 22338540 
 			</p>
-			---------------------------------------------
+			============================
 			<div style="width: 100%">
 				<center>
 				<div style="width: 100%;margin-top: -10px;margin-bottom: -10px;" onclick="window.print();">
@@ -50,49 +50,36 @@ if ($_GET['type'] == 'invoice') {
 					</div>
 				</div>
 				<div style="width: 100%;">
-				
-					<b style="font-size: 28px;line-height: 25px;">
-
-						<a onclick="test()" style="text-decoration: none;color: black;">
-							<br>
-						[#<?= $invoice['Inv_Number']?>] 
-						</a><br>
-						<a style="font-size: 22px;">
-							<?= $invoice['Cust_Nama']?> <br/>	
-						</a>
-						<a style="font-size: 30px;display: none;" id="errorinv">
-							<hr>
-							INVOICE ERROR
-							<hr>
-						</a>
-						<a style="font-size: 30px;display: none;" id="errorconflic">
-							<hr>
-							INVOICE CONFLIC - REPAIRING
-							<hr>
-						</a>
-						<i style="font-size: 16px;line-height: 0.5;">
-							<?= $invoice['Cust_Alamat']?>  <br>	
-						</i>
-					</b>
+					<table style="font-size:16px; margin-top:10px">
+						<tr>
+							<td width="50%" align="left">Invoice</td>
+							<td width="50%">: [#<?= $invoice['Inv_Number']?>] </td>
+						</tr>
+						<tr>
+							<td width="40%" align="left">Customer</td>
+							<td width="60%">: <?= $invoice['Cust_Nama']?></td>
+						</tr>
+						<tr>
+							<td width="40%" align="left">Order</td>
+							<td width="60%">: <?= date('d/m/Y', strtotime($invoice['Inv_Tgl_Masuk']))?> </td>
+						</tr>
+						<tr>
+							<td width="40%" align="left">Selesai</td>
+							<td width="60%">: <?= date('d/m/Y', strtotime($invoice['Inv_Tg_Selesai']))?> </td>
+						</tr>
+						<tr>
+							<td width="40%" align="left">Serve By</td>
+							<td width="60%">: <?= $invoice['Staff_Name']?> </td>
+						</tr>
+					</table>
 					<!-- asd -->
 				</div>
 
-				<p style="text-align: center;font-size: 16px;">	
-				<?= date('d-m-Y', strtotime($invoice['Inv_Tgl_Masuk']))?> &middot;  
-				<i align="left"></i> Served by <?= $invoice['Staff_Name']?> 
-				</p>
 				</center>
 				<center>
 				
 				</center>
-				---------------------------------------------
-				<center>			
-
-				<b style="font-size:18px">
-				Available at store <br>
-				<?= date('D, d M Y', strtotime($invoice['Inv_Tg_Selesai']))?>
-				</b>
-				</center>
+			============================
 			</div>
 
 			<?php
@@ -138,7 +125,7 @@ if ($_GET['type'] == 'invoice') {
 				}
 				?>     	
 			</table>
-			---------------------------------------------
+			============================
 			<br>
 			<br>
 			<table width="100%" style="font-size:18px"> 	
@@ -159,7 +146,7 @@ if ($_GET['type'] == 'invoice') {
 				</tr>
 			</table>
 			<br>
-			---------------------------------------------
+			============================
 			<div style="font-size:18px">
 			Printed on: <br>
 			<?= date('d-m-Y H:i:s')?><br>
@@ -237,12 +224,14 @@ if ($_GET['type'] == 'invoice') {
 
 <script type="text/javascript">
 	
-	function printGO() {
-		//Android.printPage();
-		//window.print();
-	//    setTimeout(function () {
-		//       window.location.href = "transaction"; //will redirect to your blog page (an ex: blog.html)
-		// }, 3000); //will call the function after 2 secs.
+	function printGO() 
+	{	
+		let id = '<?= $id ?>';
+		let link = '<?= $link ?>';
+		window.print();
+	   	setTimeout(function () {
+		      window.location.href = "../app?p="+ link +"&invoice="+id; //will redirect to your blog page (an ex: blog.html)
+		}, 3000); //will call the function after 2 secs.
 	}
 
 
