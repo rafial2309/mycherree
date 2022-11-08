@@ -23,7 +23,7 @@ if ($_GET['type'] == 'invoice') {
 	<head>
 		<title>Print Invoice</title>
 		<style type="text/css">
-			body.receipt .sheet { width: 80mm; height: auto; margin: 0 auto;padding-right: 20px;padding-left: 5px; } /* change height as you like */
+			body.receipt .sheet { width: 80mm; font-family: 'Calibri'; height: auto; margin: 0 auto;padding-right: 20px;padding-left: 5px; } /* change height as you like */
 			@media print { body.receipt { width: 80mm } } /* this line is needed for fixing Chrome's bug */
 			@media print { #printarea { width: 80mm } }
 			.collapse { border: 1px solid black; border-collapse:collapse}
@@ -35,12 +35,13 @@ if ($_GET['type'] == 'invoice') {
 		<div id="printarea" style="background-color: #fff;" class="sheet">
 			<p style="text-align: center; font-size:14px">
 				<img src="../src/images/logo-mycherree.png" style="width:50%"><br>
-			My Cherre Laundry  <br/>
-			Bukit Golf Mediterania 7, RT.7/RW.2, Kamal Muara, Kec. Penjaringan<br/>
+			My Cherree Laundry  <br/>
+			BGM PIK Blog G No 77<br/>
 			Jakarta Utara, DKI Jakarta 14470<br/>
-			(021) 22338540 
+			WA : 0877 2410 9018<br>
+			Telp : (021) 22338540 
 			</p>
-			<hr>
+			---------------------------------------------
 			<div style="width: 100%">
 				<center>
 				<div style="width: 100%;margin-top: -10px;margin-bottom: -10px;" onclick="window.print();">
@@ -52,7 +53,7 @@ if ($_GET['type'] == 'invoice') {
 				
 					<b style="font-size: 28px;line-height: 25px;">
 
-						<a href="../app?p=<?= $link ?>&invoice=<?= $invoice['Inv_Number']?>" style="text-decoration: none;color: black;">
+						<a onclick="test()" style="text-decoration: none;color: black;">
 							<br>
 						[#<?= $invoice['Inv_Number']?>] 
 						</a><br>
@@ -69,7 +70,7 @@ if ($_GET['type'] == 'invoice') {
 							INVOICE CONFLIC - REPAIRING
 							<hr>
 						</a>
-						<i style="font-size: 12px;line-height: 0.5;">
+						<i style="font-size: 16px;line-height: 0.5;">
 							<?= $invoice['Cust_Alamat']?>  <br>	
 						</i>
 					</b>
@@ -84,7 +85,7 @@ if ($_GET['type'] == 'invoice') {
 				<center>
 				
 				</center>
-				<hr>	
+				---------------------------------------------
 				<center>			
 
 				<b style="font-size:18px">
@@ -94,27 +95,33 @@ if ($_GET['type'] == 'invoice') {
 				</center>
 			</div>
 
+			<?php
+			$discount 	= $invoice['Discount_No'];
+			$sql 		= mysqli_query($conn, "SELECT *FROM Discount WHERE Discount_No='$discount'");
+			$promo		= mysqli_fetch_assoc($sql);
+			?>
 
 			<table width="100%" style="font-size:18px">
 				<?php
 				$total = 0;
 				while ($item = mysqli_fetch_assoc($query)) {
+					if ($invoice['Total_Diskon'] <> 0) {
+						$afterDisc = number_format($item['Total_Price'] - ($item['Total_Price'] * ($promo['Persentase'] / 100)),0,',','.');
+						$price = '<strike>'.number_format($item['Total_Price'],0,',','.').'</strike> '. $afterDisc;
+					} else {
+						$price = number_format($item['Total_Price'],0,',','.');
+					}
 					echo '
 					<tr> 	
 						<td colspan="2">&nbsp;</td>
 					</tr>
 					<tr>
 						<td align="left">'.number_format($item['Qty'],0,',','.').'</td>
-						<td align="right">'.number_format($item['Total_Price'],0,',','.').'</td>
+						<td align="right">'.$price.'</td>
 					</tr>
 
 					<tr> 	
 						<td colspan="2">'.$item['Deskripsi'].'</td>
-					</tr>
-					<tr> 	
-						<td colspan="2">
-							DRY CLEAN
-						</td>
 					</tr>
 					<tr> 	
 						<td colspan="2"> 
@@ -131,19 +138,17 @@ if ($_GET['type'] == 'invoice') {
 				}
 				?>     	
 			</table>
-
-			<hr>
+			---------------------------------------------
+			<br>
+			<br>
 			<table width="100%" style="font-size:18px"> 	
 				<tr>
-					<td colspan="2" style="font-size: 20px"><center><?= number_format($invoice['Total_PCS'],0,',','.')?> PIECE(S)</center></td>
-				</tr>
-				<tr>
-					<td align="left"><?= number_format($invoice['Total_PCS'],0,',','.')?> Piece(s)</td>
+					<td align="left"><?= number_format($invoice['Total_PCS'],0,',','.')?> PIECE(S)</td>
 					<td align="right"><?= number_format($total,0,',','.')?></td>
 				</tr>
 				
 				<tr>
-					<td align="left">Discount(-) </td>
+					<td align="left">Discount(<?= (mysqli_num_rows($sql) > 0) ? $promo['Persentase'].'%' : '-'?>) </td>
 					<td align="right"><?= number_format($invoice['Total_Diskon'],0,',','.')?></td>
 				</tr>
 		
@@ -154,20 +159,7 @@ if ($_GET['type'] == 'invoice') {
 				</tr>
 			</table>
 			<br>
-			
-			<?php
-			$discount 	= $invoice['Discount_No'];
-			$sql 		= mysqli_query($conn, "SELECT *FROM Discount WHERE Discount_No='$discount'");
-			$promo		= mysqli_fetch_assoc($sql);
-			?>
-			<tr>
-				<td align="left"><b><small>PROMO : <?= (mysqli_num_rows($sql) > 0) ? $promo['Discount_Nama'].' ('.$promo['Persentase'].'%)' : '-'?> 
-			</small></b></td>
-				<td align="right"></td>
-			</tr>
-			
-			<hr>
-
+			---------------------------------------------
 			<div style="font-size:18px">
 			Printed on: <br>
 			<?= date('d-m-Y H:i:s')?><br>
@@ -204,8 +196,8 @@ if ($_GET['type'] == 'invoice') {
 	<head>
 		<title>Print Invoice</title>
 		<style type="text/css">
-			body.receipt .sheet { width: 80mm; height: auto; margin: 0 auto;padding-right: 20px;padding-left: 5px; } /* change height as you like */
-			@media print { body.receipt { width: 80mm } } /* this line is needed for fixing Chrome's bug */
+			body.receipt .sheet { width: 80mm;  font-family: 'Calibri'; height: auto; margin: 0 auto;padding-right: 20px;padding-left: 5px; } /* change height as you like */
+			@media print { body.receipt { width: 80mm; } } /* this line is needed for fixing Chrome's bug */
 			@media print { #printarea { width: 80mm } }
 			.collapse { border: 1px solid black; border-collapse:collapse}
 		</style>
@@ -215,9 +207,7 @@ if ($_GET['type'] == 'invoice') {
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
 			<h6>
-				<span style="font-size:14px; font-weight: normal">[<?= date('d F Y', strtotime($data['Inv_Tg_Selesai']))?>]</span><br>
-					<?= $data['Deskripsi']?><br>
-				<span style="font-size:14px; font-weight: normal">[#<?= $data['Inv_Number'] ?>][<?= $data['Item_No']?> / <?= $data['Total_PCS']?>]</span>
+				<span style="font-size:14px; font-weight: normal"><?= date('d F Y', strtotime($data['Inv_Tg_Selesai']))?>] <?= $data['Deskripsi']?>[#<?= $data['Inv_Number'] ?>][<?= $data['Item_No']?> / <?= $data['Total_PCS']?>]</span>
 			</h6>
 		</div>
 	</body>
@@ -278,3 +268,8 @@ if ($_GET['type'] == 'invoice') {
 </script>
 </body>
 </html>
+<script>
+	function test() {
+		window.print();
+	}
+</script>
