@@ -1,6 +1,6 @@
 /* Default colors */
 :root {
-    --color-primary: theme("colors.rgb.blue.900");
+    --color-primary: 255, 77, 109;
     --color-secondary: theme("colors.rgb.slate.200");
     --color-success: theme("colors.rgb.teal.600");
     --color-info: theme("colors.rgb.cyan.500");
@@ -23,7 +23,7 @@
 
 /* Default dark-mode colors */
 .dark {
-    --color-primary: theme("colors.rgb.blue.800");
+    --color-primary: 255, 77, 109;
     --color-slate-500: theme("colors.rgb.slate.400");
     --color-darkmode-50: 87 103 132;
     --color-darkmode-100: 74 90 121;
