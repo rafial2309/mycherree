@@ -43,30 +43,34 @@
                             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
                                 <div class="col-span-12">
                                     <label for="pos-form-1" class="form-label">Customer</label>
-                                    <select id="pos-form-1" name="Customer" class="form-control flex-1" require>
-                                        <option value="">--- SELECT CUSTOMER ---</option>
-                                        <?php
-                                        $sql = mysqli_query($conn, "SELECT *FROM Customer WHERE Cust_Status='Y'");
-                                        while ($data = mysqli_fetch_assoc($sql)) {
-                                            echo "<option value='".$data['Cust_No']." - ".$data['Cust_Nama']."'>".$data['Cust_No']." - ".$data['Cust_Nama']."</option>";
-                                        }
+                                    <select name="Customer" id="pos-form-1" data-placeholder="Select Customers" class="tom-select w-full">
+                                        <option>-- SELECT CUSTOMER --</option>
+                                        <?php 
+                                            $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
+                                            while($datacust = mysqli_fetch_assoc($querycust)){
                                         ?>
+                                            <option value="<?php echo $datacust['Cust_No'] ?> - <?php echo $datacust['Cust_Nama'] ?>"><?php echo $datacust['Cust_Nama'] ?> | <?php echo $datacust['Cust_Alamat'] ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                  <div class="col-span-12">
                                     <label for="pos-form-2" class="form-label">Discount</label>
-                                    <select id="pos-form-2" name="Discount_No" class="form-control flex-1">
-                                        <?php
-                                        $sql = mysqli_query($conn, "SELECT *FROM Discount WHERE Discount_Status='Y'");
-                                        while ($data = mysqli_fetch_assoc($sql)) {
-                                            echo "<option value=".$data['Discount_No'].">".$data['Discount_Nama']." - ".$data['Persentase']."%</option>";
-                                        }
+                                    <select name="Discount_No" id="pos-form-2" data-placeholder="Select Customers" class="tom-select w-full">
+                                        <option>-- SELECT DISCOUNT --</option>
+                                        <?php 
+                                            $query = mysqli_query($conn,"SELECT * from Discount WHERE Discount_Status='Y' order by Discount_Nama asc");
+                                            while($disc = mysqli_fetch_assoc($query)){
                                         ?>
+                                            <option value="<?php echo $disc['Discount_No'] ?>"><?php echo $disc['Discount_Nama'] ?> (<?php echo $disc['Persentase'] ?>%)</option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="col-span-12">
                                     <label for="pos-form-3" class="form-label">Jumlah Pembayaran</label>
-                                    <input id="pos-form-3" type="text" name="Registrasi_Payment" class="form-control flex-1 uang" placeholder="Jumlah Pembayaran">
+                                    <div class="input-group">    
+                                        <div id="input-group-uang" class="input-group-text">Rp</div> 
+                                        <input type="number" name="Registrasi_Payment" id="pos-form-3" class="form-control flex-1 uang" placeholder="50.000"  aria-describedby="input-group-uang">
+                                    </div>
                                 </div>
                                 <div class="col-span-6">
                                     <label for="pos-form-4" class="form-label">Start Date</label>

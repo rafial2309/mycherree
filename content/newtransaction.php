@@ -153,7 +153,7 @@
                                                     $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
                                                     while($datacust = mysqli_fetch_assoc($querycust)){
                                                 ?>
-                                                    <option value="<?php echo $datacust['Cust_No'] ?>+<?php echo $datacust['Cust_Nama'] ?>"><?php echo $datacust['Cust_Nama'] ?></option>
+                                                    <option value="<?php echo $datacust['Cust_No'] ?>+<?php echo $datacust['Cust_Nama'] ?>"><?php echo $datacust['Cust_Nama'] ?> | <?php echo $datacust['Cust_Alamat'] ?></option>
                                                 <?php } ?>
                                              </select> 
                                          </div>
