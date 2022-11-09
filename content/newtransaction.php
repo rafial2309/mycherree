@@ -248,7 +248,7 @@
                                         <label for="regular-form-1" class="form-label text-white">Discount</label>
                                         <div class="input-group">
                                              <div id="input-group-email" class="input-group-text">Rp</div> 
-                                             <input type="number" onkeyup="updateitemprice()" name="disc_rupiah" id="disc_rupiah" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email">                                             
+                                             <input type="text" onkeyup="updateitemprice()" name="disc_rupiah" id="disc_rupiah" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email">                                             
                                         </div>
                                     </div>
                                     
