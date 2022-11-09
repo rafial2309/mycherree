@@ -439,6 +439,9 @@
                     document.getElementById('item_note').value = '';
                     document.getElementById('adjustment').value = '';
                     document.getElementById('note_adjustment').value = '';
+                    document.getElementById('disc_persen').value = '';
+                    document.getElementById('disc_rupiah').value = '';
+
                     //RESET DATA
 
                     document.getElementById('Item_ID').value = Item_ID;

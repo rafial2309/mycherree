@@ -1,5 +1,5 @@
 <?php
 
-$conn = mysqli_connect('jeeves-indonesia.com','jeevesin_myceri','Pantaipik2022!','jeevesin_myceri');
+$conn = mysqli_connect('mycherreelaundry.com','u1738884_pos_user','Kosong31!','u1738884_pos_mycherree');
 
 ?>
