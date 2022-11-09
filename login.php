@@ -17,7 +17,7 @@
                         <span class="text-white text-lg ml-3"> My Cherree Laundry </span> 
                     </a>
                     <div class="my-auto">
-                        <img alt="Midone - HTML Admin Template" class="-intro-x w-1/2 -mt-16" src="dist/images/illustration.svg">
+                        <img alt="My Cherree Laundry" style="border-radius:8%" class="-intro-x w-1/2 -mt-16" src="dist/logowhite.png">
                         <div class="-intro-x text-white font-medium text-4xl leading-tight mt-10">
                             My Cherree Laundry
                             <br>
