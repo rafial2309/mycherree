@@ -41,6 +41,10 @@
                             <?php } ?>
                             <input type="text" name="id" class="intro-x login__input form-control py-3 px-4 block" placeholder="Staff ID">
                             <input type="password" name="pin" class="intro-x login__input form-control py-3 px-4 block mt-4" placeholder="PIN">
+                            <select class="form-select form-select-lg sm:mt-2 sm:mr-2" aria-label=".form-select-lg example" name="cabang">
+                                 <option value="MCL1">MCL1</option>
+                                 <option value="MCL2">MCL2</option>
+                             </select>
                         </div>
                         
                         <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">

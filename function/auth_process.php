@@ -11,6 +11,7 @@ include"../config/configuration.php";
 
 $id=anti_injection($_POST['id']);
 $pin=md5(anti_injection($_POST['pin']));
+$cabang=$_POST['cabang'];
 
 
 if (($_POST['id']=='') or ($_POST['pin']=='')) {
@@ -45,6 +46,7 @@ $r=mysqli_fetch_array($login);
 		$_SESSION['Staff_ID']=$r['Staff_ID'];
 		$_SESSION['Staff_Name']=$r['Staff_Name'];
 		$_SESSION['Staff_Access']=$r['Staff_Access'];
+		$_SESSION['cabang']=$cabang;
 
 		date_default_timezone_set('Asia/Jakarta'); 
 		$waktu = date('d F Y H:i:s');

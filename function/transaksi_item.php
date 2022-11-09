@@ -362,7 +362,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		exit();
 	}
 	
-	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Inv_Number from Invoice order by Inv_No DESC LIMIT 1"));
+	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT SUBSTRING(Inv_Number, 6, 8) as Inv_Number from Invoice order by Inv_No DESC LIMIT 1"));
 
 	if (!isset($data['Inv_Number'])) {
 		$inv_terakhir 	= 1;
@@ -376,8 +376,8 @@ if ($_GET['menu'] == 'getitem' ) {
 	}
 	
 
-
-	$Inv_Number			= $inv_baru;
+	$cabang				= $_SESSION['cabang'];
+	$Inv_Number			= $cabang . "-".$inv_baru;
 	$Inv_Tgl_Masuk		= date('Y-m-d');
 	$Inv_Tg_Selesai		= $_POST['Inv_Tg_Selesai'];
 	$Cust_ID			= $_POST['Cust_No'];

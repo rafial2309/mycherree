@@ -17,7 +17,7 @@ if ($_GET['menu'] == 'data' ) {
                     <img alt="Midone - HTML Admin Template" src="dist/images/receipt.png">
                 </div>
                 <div class="ml-4 mr-auto">
-                    <div class="font-medium">#INV-<?php echo $datainv['Inv_Number'] ?></div>
+                    <div class="font-medium">#<?php echo $datainv['Inv_Number'] ?></div>
                     <div class="text-slate-500 text-xs mt-0.5"><?php echo $datainv['Cust_Nama'] ?></div>
                 </div>
                 <div class="text-success">

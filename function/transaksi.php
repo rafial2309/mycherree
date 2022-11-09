@@ -47,7 +47,7 @@ if ($_GET['menu'] == 'cari' ) {
 	?>
 	<tr class="intro-x">
                                         
-        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;">#INV-<?php echo $data['Inv_Number'] ?></a> </td>
+        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;"><?php echo $data['Inv_Number'] ?></a> </td>
         <td class="w-40">
             <a href="" class="font-medium whitespace-nowrap"><?php echo $data['Cust_Nama'] ?></a> 
             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
@@ -96,7 +96,7 @@ if ($_GET['menu'] == 'cari' ) {
                         <ul class="dropdown-content"> 
                             <li> <div class="dropdown-header">Process</div> </li> 
                             <li> <hr class="dropdown-divider"> </li> 
-                            <li> <a href="javascript:;" onclick="printInvoice(<?= $data['Inv_Number']?>)" class="dropdown-item"> <img src="plugin/lucide/printer.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Print Invoice </a> </li> 
+                            <li> <a href="javascript:;" onclick="printInvoice('<?= $data['Inv_Number']?>')" class="dropdown-item"> <img src="plugin/lucide/printer.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Print Invoice </a> </li> 
                             <?php if ($data['Status_Payment']=='N') { ?>
                             <li> <a href="javascript:;" onclick="gopayment('<?php echo $data['Inv_Number']  ?>###<?php echo $data['Payment_Amount']  ?>')" data-tw-toggle="modal" data-tw-target="#payment-modal" class="dropdown-item" class="dropdown-item"> <img src="plugin/lucide/credit-card.svg" class="w-4 h-4 mr-2" style="box-shadow: none;filter: invert(0%) sepia(0%) saturate(7500%) hue-rotate(327deg) brightness(96%) contrast(104%);"> Payment </a> 
                             </li> 
@@ -170,7 +170,7 @@ if ($_GET['menu'] == 'cari' ) {
 
     <tr class="intro-x">
                                         
-        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;">#INV-<?php echo $data['Inv_Number'] ?></a> </td>
+        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;"><?php echo $data['Inv_Number'] ?></a> </td>
         <td class="w-40">
             <a href="" class="font-medium whitespace-nowrap"><?php echo $data['Cust_Nama'] ?></a> 
             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
@@ -223,7 +223,7 @@ if ($_GET['menu'] == 'cari' ) {
 
     <tr class="intro-x">
                                         
-        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;">#INV-<?php echo $data['Inv_Number'] ?></a> </td>
+        <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;"><?php echo $data['Inv_Number'] ?></a> </td>
         <td class="w-40">
             <a href="" class="font-medium whitespace-nowrap"><?php echo $data['Cust_Nama'] ?></a> 
             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>

@@ -28,7 +28,7 @@
                                 <?php } ?>
                                 
 
-                                <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Invoice: <a href="" class="underline decoration-dotted ml-1">#INV-<?php echo $data['Inv_Number'] ?></a> </div>
+                                <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Invoice: <a href="" class="underline decoration-dotted ml-1"><?php echo $data['Inv_Number'] ?></a> </div>
                                 <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Transaction Date: <?php echo date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])); ?> </div>
                                 <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Ready Date: <?php echo date('D, d M Y', strtotime($data['Inv_Tg_Selesai'])); ?> </div>
                                 <div class="flex items-center mt-3"> <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i> Payment Status: <?php if ($data['Status_Payment']=='N') { echo '<span class="bg-warning/20 text-warning rounded px-2 ml-1">UNPAID</span>'; }else{ echo '<span class="bg-success/20 text-success rounded px-2 ml-1">PAID</span>'; }?> </div>
