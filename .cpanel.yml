@@ -1,9 +1,5 @@
 ---
- 
 deployment:
- 
- tasks:
- 
- - export DEPLOYPATH=/home/u1738884/public_html/pos
- 
- - /usr/bin/rsync -Paz * $DEPLOYPATH --delete
+  tasks:
+    - export DEPLOYPATH=/home/u1738884/public_html/pos
+    - /bin/cp * $DEPLOYPATH
