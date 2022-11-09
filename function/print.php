@@ -95,8 +95,10 @@ if ($_GET['type'] == 'invoice') {
 					if ($invoice['Total_Diskon'] <> 0) {
 						$afterDisc = number_format($item['Total_Price'] - ($item['Total_Price'] * ($promo['Persentase'] / 100)),0,',','.');
 						$price = '<strike>'.number_format($item['Total_Price'],0,',','.').'</strike> '. $afterDisc;
+					} elseif ($item['Disc_Amount'] <> 0){
+						$price = '<strike>'.number_format($item['Item_Price'],0,',','.').'</strike> '. number_format($item['Total_Price'],0,',','.');
 					} else {
-						$price = number_format($item['Total_Price'],0,',','.');
+						$price = number_format($item['Item_Price'],0,',','.');
 					}
 					echo '
 					<tr> 	

@@ -218,16 +218,32 @@ $invoice    = mysqli_fetch_assoc($sql);
                         <div class="col-span-12">
                             <hr>
                         </div>
-                        
+                         <div class="col-span-6">
+                            <label for="regular-form-1" class="form-label">Discount</label>
+                            <div class="input-group">
+                                <input type="text" max="100" onkeyup="updateitempersen()" name="disc_persen" id="disc_persen" class="form-control uang" placeholder="10"  aria-describedby="input-group-email">                                             
+                                <div id="input-group-email" class="input-group-text">%</div> 
+                            </div>
+                        </div>
                         <div class="col-span-6">
+                            <label for="regular-form-1" class="form-label text-white">Discount</label>
                             <div class="input-group">
                                     <div id="input-group-email" class="input-group-text">Rp</div> 
-                                    <input type="number" onchange="updateitemprice()" name="adjustment" id="adjustment" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email">
+                                    <input type="text" onkeyup="updateitemprice()" name="disc_rupiah" id="disc_rupiah" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email">                                             
+                            </div>
+                        </div>
+                        
+                        <div class="col-span-6">
+                            <label for="regular-form-1" class="form-label">Adjustment</label>
+                            <div class="input-group">
+                                    <div id="input-group-email" class="input-group-text">Rp</div> 
+                                    <input type="text" onkeyup="updateitemprice()" name="adjustment" id="adjustment" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email">
 
                                     
                             </div>
                         </div>
                         <div class="col-span-6">
+                            <label for="regular-form-1" class="form-label text-white">Adjustment</label>
                             <input id="note_adjustment" name="note_adjustment" type="text" class="form-control" placeholder="Note Adjustment">
                             <!-- kirimdata -->
                                     
@@ -433,17 +449,36 @@ $invoice    = mysqli_fetch_assoc($sql);
         updateitemprice();
     }
 
+    function updateitempersen(){
+        var Item_Price = document.getElementById('Item_Price').value;
+        var item_qty = document.getElementById('item_qty').value
+        var persen = document.getElementById('disc_persen').value;
+        if (persen=='') {persen='0';}
+        
+        var pengurang = (parseInt(Item_Price) * parseInt(item_qty) * (parseInt(persen.replace(".", "")) / parseInt(100)));
+        var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) - pengurang);
+
+        document.getElementById('disc_rupiah').value = pengurang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        document.getElementById('Total_Price').value = priceupdate;
+        document.getElementById('pricetampil').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
     function updateitemprice(){
         var Item_Price = document.getElementById('Item_Price').value;
         var item_qty = document.getElementById('item_qty').value
+        var rupiah = document.getElementById('disc_rupiah').value;
         var adjustment = document.getElementById('adjustment').value;
-        if (adjustment=='') {adjustment='0';}
-
-        var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) + parseInt(adjustment.replace(".", "")));
+        
+        adjustment  = (adjustment == '') ? '0' : adjustment;
+        rupiah      = (rupiah == '') ? '0' : rupiah;
+        
+        var pengurang = parseInt(rupiah.replace(".", ""));
+        var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) - pengurang) + parseInt(adjustment.replace(".", ""));
 
         document.getElementById('Total_Price').value = priceupdate;
-        document.getElementById('pricetampil').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");;
+        document.getElementById('pricetampil').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
+    
     function updateitemqty1(data){
         if (data=='plus') {
             var item_qty = document.getElementById('item_qty_edit').value;
@@ -458,14 +493,32 @@ $invoice    = mysqli_fetch_assoc($sql);
         updateitemprice1();
     }
 
+    function updateitempersen1(){
+        var Item_Price = document.getElementById('Item_Price_edit').value;
+        var item_qty = document.getElementById('item_qty_edit').value
+        var persen = document.getElementById('disc_persen_edit').value;
+        if (persen=='') {persen='0';}
+        
+        var pengurang = (parseInt(Item_Price) * parseInt(item_qty) * (parseInt(persen.replace(".", "")) / parseInt(100)));
+        var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) - pengurang);
+
+        document.getElementById('disc_rupiah_edit').value = pengurang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        document.getElementById('Total_Price_edit').value = priceupdate;
+        document.getElementById('pricetampiledit').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
     function updateitemprice1(){
         var Item_Price = document.getElementById('Item_Price_edit').value;
         var item_qty = document.getElementById('item_qty_edit').value
+        var rupiah = document.getElementById('disc_rupiah_edit').value;
         var adjustment = document.getElementById('adjustment_edit').value;
-        if (adjustment=='') {adjustment='0';}
-
-        var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) + parseInt(adjustment.replace(".", "")));
-
+        
+        adjustment  = (adjustment == '') ? '0' : adjustment;
+        rupiah      = (rupiah == '') ? '0' : rupiah;
+        
+        var pengurang = parseInt(rupiah.replace(".", ""));
+        var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) - pengurang) + parseInt(adjustment.replace(".", ""));
+        
         document.getElementById('Total_Price_edit').value = priceupdate;
         document.getElementById('pricetampiledit').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");;
     }

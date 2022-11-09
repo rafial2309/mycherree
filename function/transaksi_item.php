@@ -173,17 +173,20 @@ if ($_GET['menu'] == 'getitem' ) {
 	$Qty 				= $_POST['item_qty'];
 	$Item_Pcs 			= $_POST['Item_Pcs'];
 	$Total_Price 		= $_POST['Total_Price'];
+	$disc_persen		= ($_POST['disc_persen']) ? true : false;
+	$disc_rupiah		= str_replace(".","",$_POST['disc_rupiah']);
 
 	if (isset($_POST['invoice'])) {
-		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'$invoice','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','')");	
+		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'$invoice','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','','$disc_persen','$disc_rupiah')");	
 	} else {
-		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','')");	
+		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','','$disc_persen','$disc_rupiah')");	
 	}
 }elseif ($_GET['menu'] == 'edititem') { 
 	$id = $_POST['id'];
 	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Item WHERE Inv_Item_No='$id'"));
 	$databrand = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Brand_ID,Brand_Name from Master_Brand WHERE Brand_ID='$data[Brand_ID]'"));
 	$datacolour = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Colour_ID,Colour_Name from Master_Colour WHERE Colour_ID='$data[Colour_ID]'"));
+	$persen = ($data['Disc_Persen'] == true) ? ($data['Disc_Amount'] / $data['Item_Price']) * 100 : 0;
 
  ?>
  		<link rel="stylesheet" href="plugin/selectize/selectize.css" />
@@ -248,16 +251,33 @@ if ($_GET['menu'] == 'getitem' ) {
             <div class="col-span-12">
                 <hr>
             </div>
-            
             <div class="col-span-6">
-                <div class="input-group">
-                     <div id="input-group-email" class="input-group-text">Rp</div> 
-                     <input type="number" onchange="updateitemprice1()" name="adjustment" id="adjustment_edit" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email" value="<?php echo $data['Adjustment'] ?>">
+				<label for="regular-form-1" class="form-label">Discount</label>
+				<div class="input-group">
+					<input type="text" max="100" onkeyup="updateitempersen1()" name="disc_persen" id="disc_persen_edit" class="form-control uang" placeholder="10"  aria-describedby="input-group-email" value="<?= number_format($persen,0,',','.')?>">                                             
+					<div id="input-group-email" class="input-group-text">%</div> 
+				</div>
+			</div>
+			<div class="col-span-6">
+				<label for="regular-form-1" class="form-label text-white">Discount</label>
+				<div class="input-group">
+						<div id="input-group-email" class="input-group-text">Rp</div> 
+						<input type="text" onkeyup="updateitemprice1()" name="disc_rupiah" id="disc_rupiah_edit" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email"  value="<?= number_format($data['Disc_Amount'],0,',','.')?>">                                             
+				</div>
+			</div>
+			
+            <div class="col-span-6">
+                <label for="regular-form-1" class="form-label">Adjustment</label>
+				<div class="input-group">
+					<div id="input-group-email" class="input-group-text">Rp</div> 
+                    <input type="text" onkeyup="updateitemprice1()" name="adjustment" id="adjustment_edit" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email" value="<?php echo $data['Adjustment'] ?>">
 
                      
                 </div>
             </div>
             <div class="col-span-6">
+				<label for="regular-form-1" class="form-label text-white">Adjusment</label>
+                                        
                <input id="note_adjustment_edit" name="note_adjustment" type="text" class="form-control" placeholder="Note Adjustment" value="<?php echo $data['Adjustment_Note'] ?>">
                <!-- kirimdata -->    
                 

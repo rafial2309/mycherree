@@ -511,14 +511,32 @@
                     updateitemprice1();
                 }
 
+                function updateitempersen1(){
+                    var Item_Price = document.getElementById('Item_Price_edit').value;
+                    var item_qty = document.getElementById('item_qty_edit').value
+                    var persen = document.getElementById('disc_persen_edit').value;
+                    if (persen=='') {persen='0';}
+                    
+                    var pengurang = (parseInt(Item_Price) * parseInt(item_qty) * (parseInt(persen.replace(".", "")) / parseInt(100)));
+                    var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) - pengurang);
+
+                    document.getElementById('disc_rupiah_edit').value = pengurang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    document.getElementById('Total_Price_edit').value = priceupdate;
+                    document.getElementById('pricetampiledit').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                }
+
                 function updateitemprice1(){
                     var Item_Price = document.getElementById('Item_Price_edit').value;
                     var item_qty = document.getElementById('item_qty_edit').value
+                    var rupiah = document.getElementById('disc_rupiah_edit').value;
                     var adjustment = document.getElementById('adjustment_edit').value;
-                    if (adjustment=='') {adjustment='0';}
-
-                    var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) + parseInt(adjustment.replace(".", "")));
-
+                    
+                    adjustment  = (adjustment == '') ? '0' : adjustment;
+                    rupiah      = (rupiah == '') ? '0' : rupiah;
+                    
+                    var pengurang = parseInt(rupiah.replace(".", ""));
+                    var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) - pengurang) + parseInt(adjustment.replace(".", ""));
+                    
                     document.getElementById('Total_Price_edit').value = priceupdate;
                     document.getElementById('pricetampiledit').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");;
                 }
