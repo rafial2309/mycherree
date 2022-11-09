@@ -118,6 +118,11 @@ if ($_GET['type'] == 'invoice') {
 						</td>
 					</tr>
 					<tr> 	
+						<td colspan="2"><b>Request Customer:</b> 
+							'.$item['Request_Customer'].' 
+						</td>
+					</tr>
+					<tr> 	
 						<td colspan="2"><b>#MARK#:</b> 
 							'.$item['Item_Note'].' 
 						</td>

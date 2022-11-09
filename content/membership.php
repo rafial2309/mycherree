@@ -69,7 +69,7 @@
                                     <label for="pos-form-3" class="form-label">Jumlah Pembayaran</label>
                                     <div class="input-group">    
                                         <div id="input-group-uang" class="input-group-text">Rp</div> 
-                                        <input type="number" name="Registrasi_Payment" id="pos-form-3" class="form-control flex-1 uang" placeholder="50.000"  aria-describedby="input-group-uang">
+                                        <input type="text" name="Registrasi_Payment" id="pos-form-3" class="form-control flex-1 uang" placeholder="50.000"  aria-describedby="input-group-uang">
                                     </div>
                                 </div>
                                 <div class="col-span-6">

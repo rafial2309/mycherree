@@ -173,13 +173,14 @@ if ($_GET['menu'] == 'getitem' ) {
 	$Qty 				= $_POST['item_qty'];
 	$Item_Pcs 			= $_POST['Item_Pcs'];
 	$Total_Price 		= $_POST['Total_Price'];
+	$request 			= $_POST['request'];
 	$disc_persen		= ($_POST['disc_persen']) ? true : false;
 	$disc_rupiah		= str_replace(".","",$_POST['disc_rupiah']);
 
 	if (isset($_POST['invoice'])) {
-		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'$invoice','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','','$disc_persen','$disc_rupiah')");	
+		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'$invoice','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','','$disc_persen','$disc_rupiah','$request')");	
 	} else {
-		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','','$disc_persen','$disc_rupiah')");	
+		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','','$disc_persen','$disc_rupiah','$request')");	
 	}
 }elseif ($_GET['menu'] == 'edititem') { 
 	$id = $_POST['id'];
@@ -248,6 +249,13 @@ if ($_GET['menu'] == 'getitem' ) {
                 <label for="pos-form-5" class="form-label">Condition</label>
                 <textarea id="item_note_edit" name="note" class="form-control w-full mt-2" placeholder="Item notes"><?php echo $data['Item_Note'] ?></textarea>
             </div>
+			<div class="col-span-12">
+				<label for="regular-form-1" class="form-label">Request Customer</label> 
+				<div class="mt-1">
+					<input type="text" name="request" id="request" autocomplete="off" class="form-control" placeholder="Input Request Customer" value="<?= $data['Request_Customer']?>">
+				</div>
+			</div>
+			
             <div class="col-span-12">
                 <hr>
             </div>
@@ -349,9 +357,11 @@ if ($_GET['menu'] == 'getitem' ) {
 	$Qty 				= $_POST['item_qty_edit'];
 	$Item_Pcs 			= $_POST['Item_Pcs'];
 	$Total_Price 		= $_POST['Total_Price'];
+	$request 			= $_POST['request'];
+	$disc_persen		= ($_POST['disc_persen']) ? true : false;
+	$disc_rupiah		= str_replace(".","",$_POST['disc_rupiah']);
 
-	mysqli_query($conn,"UPDATE Invoice_Item SET Deskripsi='$Deskripsi', Colour_ID='$Colour_ID',Brand_ID='$Brand_ID',Size='$Size',Item_Note='$Item_Note',Adjustment='$Adjustment',Adjustment_Note='$Adjustment_Note',Qty='$Qty',Total_Price='$Total_Price' WHERE Inv_Item_No='$Inv_Item_No'");
-
+	mysqli_query($conn,"UPDATE Invoice_Item SET Deskripsi='$Deskripsi', Colour_ID='$Colour_ID',Brand_ID='$Brand_ID',Size='$Size',Item_Note='$Item_Note',Adjustment='$Adjustment',Adjustment_Note='$Adjustment_Note',Qty='$Qty',Total_Price='$Total_Price', Request_Customer='$request', Disc_Amount='$disc_rupiah', Disc_Persen='$disc_persen' WHERE Inv_Item_No='$Inv_Item_No'");
 
 	exit();
 } elseif ($_GET['menu'] == 'savetransaksi') { 

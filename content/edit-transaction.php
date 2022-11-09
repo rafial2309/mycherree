@@ -216,6 +216,12 @@ $invoice    = mysqli_fetch_assoc($sql);
                             <textarea id="item_note" name="note" class="form-control w-full mt-2" placeholder="Item notes"></textarea>
                         </div>
                         <div class="col-span-12">
+                            <label for="regular-form-1" class="form-label">Request Customer</label> 
+                            <div class="mt-1">
+                                <input type="text" name="request" id="request" autocomplete="off" class="form-control" placeholder="Input Request Customer">
+                            </div>
+                        </div>
+                        <div class="col-span-12">
                             <hr>
                         </div>
                          <div class="col-span-6">
