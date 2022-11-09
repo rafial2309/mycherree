@@ -38,8 +38,8 @@ if ($_GET['type'] == 'invoice') {
 			My Cherree Laundry  <br/>
 			BGM PIK Blog G No 77<br/>
 			Jakarta Utara, DKI Jakarta 14470<br/>
-			WA : 0877 2410 9018<br>
-			Telp : (021) 22338540 
+			
+			Tel: (021) 22338540 | WA: 0877 2410 9018
 			</p>
 			============================
 			<div style="width: 100%">
@@ -61,14 +61,14 @@ if ($_GET['type'] == 'invoice') {
 						</tr>
 						<tr>
 							<td width="40%" align="left">Order</td>
-							<td width="60%">: <?= date('d/m/Y', strtotime($invoice['Inv_Tgl_Masuk']))?> </td>
+							<td width="60%">: <?= date('d M Y', strtotime($invoice['Inv_Tgl_Masuk']))?> </td>
 						</tr>
 						<tr>
-							<td width="40%" align="left">Selesai</td>
-							<td width="60%">: <?= date('d/m/Y', strtotime($invoice['Inv_Tg_Selesai']))?> </td>
+							<td width="40%" align="left">Ready</td>
+							<td width="60%">: <?= date('d M Y', strtotime($invoice['Inv_Tg_Selesai']))?> </td>
 						</tr>
 						<tr>
-							<td width="40%" align="left">Serve By</td>
+							<td width="40%" align="left">Served By</td>
 							<td width="60%">: <?= $invoice['Staff_Name']?> </td>
 						</tr>
 					</table>
@@ -116,7 +116,7 @@ if ($_GET['type'] == 'invoice') {
 						</td>
 					</tr>
 					<tr> 	
-						<td colspan="2"><b>Notes:</b> 
+						<td colspan="2"><b>#MARK#:</b> 
 							'.$item['Item_Note'].' 
 						</td>
 					</tr>
@@ -148,9 +148,7 @@ if ($_GET['type'] == 'invoice') {
 			<br>
 			============================
 			<div style="font-size:18px">
-			Printed on: <br>
-			<?= date('d-m-Y H:i:s')?><br>
-			by <?= $_SESSION['Staff_Name']?>
+			Print: <?= date('d M Y H:i:s')?> | <?= $_SESSION['Staff_Name']?>
 			</div>
 			&nbsp;
 		
