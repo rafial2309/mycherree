@@ -24,6 +24,29 @@ if ($_GET['menu'] == 'create' ) {
 	$Cust_Note 		    = $_POST['Cust_Note'];
 
     mysqli_query($conn, "UPDATE Customer SET Cust_Nama='$Cust_Nama', Cust_Telp='$Cust_Telp', Cust_Tgl_Lahir='$Cust_Tgl_Lahir', Cust_Alamat='$Cust_Alamat', Cust_Note='$Cust_Note' WHERE Cust_No='$Cust_No'");
+
+} elseif ($_GET['menu'] == 'createdeposit') {
+    // INPUT DEPOSIT
+    $Cust_No            = $_POST['Cust_No'];
+    $Total_Deposit      = str_replace('.', '', $_POST['Total_Deposit']);
+    $Note               = $_POST['Note'];
+    $Tgl                = date('Y-m-d');
+
+    mysqli_query($conn, "INSERT INTO Customer_Deposit VALUES (0,'$Cust_No','$Total_Deposit','CREDIT (+)','$Note','$Tgl')");
+    echo "<script>location.href='../app?p=customer_detail&Cust_No=".$Cust_No."';</script>";
+    exit();
+
+} elseif ($_GET['menu'] == 'usedeposit') {
+    // INPUT DEPOSIT
+    $Cust_No            = $_POST['Cust_No'];
+    $Total_Deposit      = str_replace('.', '', $_POST['Total_Deposit_2']);
+    $Note               = $_POST['Note_2'];
+    $Tgl                = date('Y-m-d');
+
+    mysqli_query($conn, "INSERT INTO Customer_Deposit VALUES (0,'$Cust_No','$Total_Deposit','DEBIT (-)','$Note','$Tgl')");
+    echo "<script>location.href='../app?p=customer_detail&Cust_No=".$Cust_No."';</script>";
+    exit();
+
 } elseif ($_GET['menu'] == 'data') {
     $requestData= $_REQUEST;
     $columns = array( 
@@ -147,6 +170,59 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData[] = "".$row["Payment_Amount"]."";
         $nestedData[] = "".$row["Status_Payment"]."";
         $nestedData[] = "".$row["Status_Taken"]."";
+        
+        $data[] = $nestedData;
+    }
+    //----------------------------------------------------------------------------------
+    $json_data = array(
+                "draw"            => intval( $requestData['draw'] ),  
+                "recordsTotal"    => intval( $totalData ), 
+                "recordsFiltered" => intval( $totalFiltered ), 
+                "data"            => $data );
+    //----------------------------------------------------------------------------------
+    echo json_encode($json_data);
+    exit();
+} elseif ($_GET['menu'] == 'datadeposit') {
+    $Cust_No = $_GET['Cust_No'];
+    $requestData= $_REQUEST;
+    $columns = array( 
+        0 =>'Nilai',
+        1 =>'Jenis',
+        2 =>'Note',
+        3 =>'Tanggal',
+    );
+    //----------------------------------------------------------------------------------
+    //join 2 tabel dan bisa lebih, tergantung kebutuhan
+    $sql = "SELECT * from Customer_Deposit WHERE Cust_No='$Cust_No'";
+    $query=mysqli_query($conn, $sql) or die("colours?menu=datadeposit: get dataku");
+    $totalData = mysqli_num_rows($query);
+    $totalFiltered = $totalData;
+
+    //----------------------------------------------------------------------------------
+    $sql = " SELECT * from Customer_Deposit";
+    $sql.= " WHERE Cust_No='$Cust_No'";
+    if( !empty($requestData['search']['value']) ) {
+        //----------------------------------------------------------------------------------
+        $sql.=" AND Nilai NOT LIKE '[DELETE]%' AND (Nilai LIKE '%".$requestData['search']['value']."%' "; 
+        $sql.=" OR Note LIKE '".$requestData['search']['value']."%' ";
+        $sql.=" OR Tanggal LIKE '".$requestData['search']['value']."%' )";
+    }
+    //----------------------------------------------------------------------------------
+    $query=mysqli_query($conn, $sql) or die("colours?menu=datadeposit: get dataku");
+    $totalFiltered = mysqli_num_rows($query);
+    $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
+    $query=mysqli_query($conn, $sql) or die("colours?menu=datadeposit: get dataku");
+    //----------------------------------------------------------------------------------
+    $data = array();
+    $i = 1;
+    while( $row=mysqli_fetch_array($query) ) {
+
+        $nestedData=array(); 
+        $nestedData[] = "".$i++."";
+        $nestedData[] = "".date('d M Y', strtotime($row["Tanggal"]))."";
+        $nestedData[] = "".$row["Nilai"]."";
+        $nestedData[] = "".$row["Jenis"]."";
+        $nestedData[] = "".$row["Note"]."";
         
         $data[] = $nestedData;
     }
