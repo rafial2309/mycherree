@@ -165,7 +165,7 @@
                                         <div id="data-print"></div> 
                                     </div> 
                                     <div class="px-5 pb-8 text-center"> 
-                                        <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button> 
+                                        <button type="button" class="btn btn-primary w-36" onclick="printAll()" target="_blank"><i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print All </button> 
                                     </div> 
                                 </div> 
                             </div> 
@@ -225,6 +225,11 @@
                     })
                 }
                 
+                function printAll() {
+                    var invoice = document.getElementById('invoice').value;
+                    window.open('function/print?type=marker&invoice='+invoice+'&item_no=1', '_blank');
+                }
+
                 function printItem(invoice, item_no) {
                     window.open('function/print?type=marker&invoice='+invoice+'&item_no='+item_no, '_blank');
                 }

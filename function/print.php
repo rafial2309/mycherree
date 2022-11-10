@@ -176,12 +176,22 @@ if ($_GET['type'] == 'invoice') {
 		</div>
 <?php 
 } elseif ($_GET['type'] == 'marker') {
-	$invoice = $_GET['invoice'];
+	$id = $_GET['invoice'];
 	$item_no = $_GET['item_no'];
 
 	$sql = mysqli_query($conn, "SELECT *FROM Invoice_Item it JOIN Invoice i ON it.Inv_Number = i.Inv_Number 
-								WHERE i.Inv_Number='$invoice' AND it.Item_No='$item_no'");
+								WHERE i.Inv_Number='$id' AND it.Item_No='$item_no'");
 	$data = mysqli_fetch_assoc($sql);
+
+	$query = mysqli_query($conn, "SELECT *FROM Invoice_Item WHERE Inv_Number='$id'");
+	$total = mysqli_num_rows($query);
+	
+	if ($item_no <> $total) {
+		$next = $item_no + 1;
+		$link = 'print?type=marker&invoice=' . $id . '&item_no=' . $next;
+	} else {
+		$link = '';
+	}
 ?>	
 	<!DOCTYPE html>
 	<html moznomarginboxes mozdisallowselectionprint style="background-color: #fff">
@@ -233,9 +243,18 @@ if ($_GET['type'] == 'invoice') {
 	{	
 		let id = '<?= $id ?>';
 		let link = '<?= $link ?>';
+		let type = '<?= $_GET["type"] ?>';
 		window.print();
 	   	setTimeout(function () {
-		      window.location.href = "../app?p="+ link +"&invoice="+id; //will redirect to your blog page (an ex: blog.html)
+			   if (type == 'marker') {
+				   if (link == '') {
+						window.close();
+				   } else {
+					    window.location.href = link; //will redirect to your blog page (an ex: blog.html)
+				   }
+			   } else {
+				    window.location.href = "../app?p="+ link +"&invoice="+id; //will redirect to your blog page (an ex: blog.html)
+			   }
 		}, 3000); //will call the function after 2 secs.
 	}
 
