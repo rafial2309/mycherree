@@ -168,7 +168,7 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData[] = "".date('d M Y', strtotime($row["Inv_Tg_Selesai"]))."";
         $nestedData[] = "".$row["Cust_Nama"]."";
         $nestedData[] = "".$row["Total_PCS"]."";
-        $nestedData[] = "".$row["Payment_Amount"]."";
+        $nestedData[] = "".number_format($row["Payment_Amount"],0,',','.')."";
         $nestedData[] = "".$row["Status_Payment"]."";
         $nestedData[] = "".$row["Status_Taken"]."";
         
@@ -221,7 +221,7 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData=array(); 
         $nestedData[] = "".$i++."";
         $nestedData[] = "".date('d M Y', strtotime($row["Tanggal"]))."";
-        $nestedData[] = "".$row["Nilai"]."";
+        $nestedData[] = "".number_format($row["Nilai"],0,',','.')."";
         $nestedData[] = "".$row["Jenis"]."";
         $nestedData[] = "".$row["Note"]."";
         

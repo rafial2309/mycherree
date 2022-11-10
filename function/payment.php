@@ -72,7 +72,7 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData[] = "<p style='font-size:15px'>".$row["Inv_Number"]."</p>";
         $nestedData[] = "<p style='font-size:15px'>".$row["Cust_Nama"] ."</p>";
         $nestedData[] = "<p style='font-size:15px'>".$row["Payment_Name"] ."</p>";
-        $nestedData[] = "<p style='font-size:15px'>".$row["Payment_Total"] ."</p>";
+        $nestedData[] = "<p style='font-size:15px'>Rp ".number_format($row["Payment_Total"],0,',','.') ."</p>";
         $nestedData[] = "<p style='font-size:15px'>".$row["Payment_Tgl"] ."</p>";
         $nestedData[] = "<p style='font-size:15px'>".$row["Payment_Type"] ."</p>";
         $nestedData[] = "<p style='font-size:15px'>".$row["Payment_Note"] ."</p>";

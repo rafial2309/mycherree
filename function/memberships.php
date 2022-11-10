@@ -183,6 +183,12 @@ if ($_GET['menu'] == 'create' ) {
         <label for="expired" class="form-label">Expired Date</label>
         <input id="expired" type="date" name="Cust_Member_Exp" class="form-control flex-1" readonly>
     </div>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        // Format mata uang.
+        $( '.uang' ).mask('000.000.000', {reverse: true});
+    });
+</script>
 <?php 
     exit();
     }else {

@@ -264,6 +264,10 @@
                     contentType: false,
 
                     success: function (data) {
+                      if (data.search('Saldo Tidak Cukup') > -1) {
+                          alert('Saldo Deposit Tidak Cukup!');
+                          return false;
+                      }
                       console.log("success");
                       document.getElementById('closemodalpayment').click();
                       document.getElementById('success-additem').click();

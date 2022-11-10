@@ -96,11 +96,14 @@ $Staff_Name         = $_SESSION['Staff_Name'];
              <div class="mt-1 mb-2"> <label>Paymet Method</label>
                  <div class="flex flex-col sm:flex-row mt-3">
                      <div class="form-check mr-3"> <input id="radio-cash" class="form-check-input" type="radio" name="payment_method" value="CASH" checked> 
-                        <label class="form-check-label" for="radio-cash"> CASH</label> </div>
-
-                     <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-transfer" class="form-check-input" type="radio" name="payment_method" value="TRANSFER"> 
-                        <label class="form-check-label" for="radio-transfer"> TRANSFER</label> </div>
-
+                        <label class="form-check-label" for="radio-cash"> CASH</label> 
+                    </div>
+                    <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-transfer" class="form-check-input" type="radio" name="payment_method" value="TRANSFER"> 
+                        <label class="form-check-label" for="radio-transfer"> TRANSFER</label> 
+                    </div>
+                    <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-deposit" class="form-check-input" type="radio" name="payment_method" value="DEPOSIT"> 
+                        <label class="form-check-label" for="radio-deposit"> DEPOSIT</label> 
+                    </div>
                  </div>
              </div>
         </div>
@@ -145,7 +148,8 @@ $Staff_Name         = $_SESSION['Staff_Name'];
      <script type="text/javascript">
         $('#invoice_data').selectize();
      </script>
-<?php } elseif($_GET['menu'] == 'savepayment'){ 
+<?php 
+} elseif($_GET['menu'] == 'savepayment'){ 
 
    
     $customer = explode("###",$_POST['customer']);
@@ -156,6 +160,37 @@ $Staff_Name         = $_SESSION['Staff_Name'];
     $pay_tgl                = date('Y-m-d H:i:s');
     $pay_tgl_taken          = date('d M Y H:i:s');
 
+    if ($payment_method == 'DEPOSIT') {
+        $totalcredit = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(nilai) as total from Customer_Deposit where Cust_No='$customer[0]' and Jenis='CREDIT (+)'"));
+        $totaldebit = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(nilai) as total from Customer_Deposit where Cust_No='$customer[0]' and Jenis='DEBIT (-)'"));
+        
+        $total = intval($totalcredit["total"]) - intval($totaldebit["total"]);
+        
+        $bayar = 0;
+        foreach ($_POST['invoice'] as $invoice) {
+            if ($invoice=='') {
+                break;
+            }
+
+            $invoicedata = explode("--",$invoice);
+
+            $id = $invoicedata[0];
+            $sql = mysqli_query($conn, "SELECT * FROM Invoice WHERE Inv_Number='$id'");
+            $data = mysqli_fetch_assoc($sql);
+
+            $bayar += $data['Payment_Amount'];
+        }
+
+        if ($bayar > $total) {
+            echo 'Saldo Tidak Cukup';
+            exit();
+        } else {
+            $date = date('Y-m-d');
+            mysqli_query($conn, "INSERT INTO Customer_Deposit VALUES (0, '$customer[0]','$bayar','DEBIT (-)','Bayar Invoice','$date')");
+            echo 'Saldo Cukup';
+        }
+    }
+    
     foreach ($_POST['invoice'] as $invoice) {
         if ($invoice=='') {
             break;
