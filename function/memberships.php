@@ -133,7 +133,59 @@ if ($_GET['menu'] == 'create' ) {
 
     mysqli_query($conn, "UPDATE Registrasi_Member SET Status_Payment='$Status_Payment', Payment_Type='$Payment_Type', Staff_ID='$Staff_ID', Staff_Name='$Staff_Name' WHERE Registrasi_ID='$Registrasi_ID'");
 
-} else {
+} elseif ($_GET['menu'] == 'formsz') {  ?>
+    <link rel="stylesheet" href="plugin/selectize/selectize.css" />
+    <script type="text/javascript" src="plugin/selectize/selectize.min.js"></script>
+    <div class="col-span-12">
+        <label for="pilihcustomer" class="form-label">Customer</label>
+        <select name="Customer" id="pilihcustomer" data-placeholder="Select Customers" class="w-full pilihcustomer">
+            <option>-- SELECT CUSTOMER --</option>
+            <?php 
+                $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
+                while($datacust = mysqli_fetch_assoc($querycust)){
+            ?>
+                <option value="<?php echo $datacust['Cust_No'] ?> - <?php echo $datacust['Cust_Nama'] ?>"><?php echo $datacust['Cust_Nama'] ?> | <?php echo $datacust['Cust_Alamat'] ?></option>
+            <?php } ?>
+        </select>
+
+        <script type="text/javascript">
+            $('#pilihcustomer').selectize();
+        </script>
+    </div>
+     <div class="col-span-12">
+        <label for="pilihdiscount" class="form-label">Discount</label>
+        <select name="Discount_No" id="pilihdiscount" data-placeholder="Select Customers" class="w-full pilihdiscount">
+            <option>-- SELECT DISCOUNT --</option>
+            <?php 
+                $query = mysqli_query($conn,"SELECT * from Discount WHERE Discount_Status='Y' order by Discount_Nama asc");
+                while($disc = mysqli_fetch_assoc($query)){
+            ?>
+                <option value="<?php echo $disc['Discount_No'] ?>"><?php echo $disc['Discount_Nama'] ?> (<?php echo $disc['Persentase'] ?>%)</option>
+            <?php } ?>
+        </select>
+        <script type="text/javascript">
+            $('#pilihdiscount').selectize();
+        </script>
+    </div>
+    <div class="col-span-12">
+        <label for="pos-form-3" class="form-label">Jumlah Pembayaran</label>
+        <input type="text" name="Registrasi_Payment" id="pos-form-3" class="form-control flex-1 uang" placeholder="50.000">
+        <!-- <div class="input-group">    
+            <div id="input-group-uang" class="input-group-text">Rp</div> 
+            <input type="text" name="Registrasi_Payment" id="pos-form-3" class="form-control flex-1 uang" placeholder="50.000"  aria-describedby="input-group-uang">
+        </div> -->
+    </div>
+    <div class="col-span-6">
+        <label for="pos-form-4" class="form-label">Start Date</label>
+        <input id="pos-form-4" type="date" name="Cust_Member_Join" class="form-control flex-1" onchange="fillExpired(this.valueAsDate)">
+    </div>
+    <div class="col-span-6">
+        <label for="expired" class="form-label">Expired Date</label>
+        <input id="expired" type="date" name="Cust_Member_Exp" class="form-control flex-1" readonly>
+    </div>
+<?php 
+    exit();
+    }else {
 	// DELETE CUSTOMER
 	$Registrasi_ID = $_GET['id'];
 

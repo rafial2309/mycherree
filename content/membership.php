@@ -1,4 +1,4 @@
-            
+           
             <div class="wrapper-box">
                 <!-- BEGIN: Content -->
                 <div class="content">
@@ -6,7 +6,7 @@
                         <h2 class="intro-y text-lg font-medium">
                             Transaction - Membership
                         </h2>
-                        <button class="ml-auto btn btn-primary shadow-md mr-2" href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-membership-modal"><i data-lucide='plus-circle' class='w-5 h-5'></i> &nbsp; Registration Membership</button>
+                        <button onclick="showform()" class="ml-auto btn btn-primary shadow-md mr-2" data-tw-toggle="modal" data-tw-target="#new-membership-modal"><i data-lucide='plus-circle' class='w-5 h-5'></i> &nbsp; Registration Membership</button>
                         
                     </div>
                     <div class="grid grid-cols-12 gap-6 mt-5">
@@ -37,49 +37,11 @@
                             <form id="create" action="function/memberships?menu=create" method="post">
                             <div class="modal-header">
                                 <h2 class="font-medium text-base mr-auto">
-                                    New Customer
+                                    New Member Registration
                                 </h2>
                             </div>
-                            <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                                <div class="col-span-12">
-                                    <label for="pos-form-1" class="form-label">Customer</label>
-                                    <select name="Customer" id="pos-form-1" data-placeholder="Select Customers" class="tom-select w-full">
-                                        <option>-- SELECT CUSTOMER --</option>
-                                        <?php 
-                                            $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
-                                            while($datacust = mysqli_fetch_assoc($querycust)){
-                                        ?>
-                                            <option value="<?php echo $datacust['Cust_No'] ?> - <?php echo $datacust['Cust_Nama'] ?>"><?php echo $datacust['Cust_Nama'] ?> | <?php echo $datacust['Cust_Alamat'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                                 <div class="col-span-12">
-                                    <label for="pos-form-2" class="form-label">Discount</label>
-                                    <select name="Discount_No" id="pos-form-2" data-placeholder="Select Customers" class="tom-select w-full">
-                                        <option>-- SELECT DISCOUNT --</option>
-                                        <?php 
-                                            $query = mysqli_query($conn,"SELECT * from Discount WHERE Discount_Status='Y' order by Discount_Nama asc");
-                                            while($disc = mysqli_fetch_assoc($query)){
-                                        ?>
-                                            <option value="<?php echo $disc['Discount_No'] ?>"><?php echo $disc['Discount_Nama'] ?> (<?php echo $disc['Persentase'] ?>%)</option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                                <div class="col-span-12">
-                                    <label for="pos-form-3" class="form-label">Jumlah Pembayaran</label>
-                                    <div class="input-group">    
-                                        <div id="input-group-uang" class="input-group-text">Rp</div> 
-                                        <input type="text" name="Registrasi_Payment" id="pos-form-3" class="form-control flex-1 uang" placeholder="50.000"  aria-describedby="input-group-uang">
-                                    </div>
-                                </div>
-                                <div class="col-span-6">
-                                    <label for="pos-form-4" class="form-label">Start Date</label>
-                                    <input id="pos-form-4" type="date" name="Cust_Member_Join" class="form-control flex-1" onchange="fillExpired(this.valueAsDate)">
-                                </div>
-                                <div class="col-span-6">
-                                    <label for="expired" class="form-label">Expired Date</label>
-                                    <input id="expired" type="date" name="Cust_Member_Exp" class="form-control flex-1" readonly>
-                                </div>
+                            <div class="modal-body grid grid-cols-12 gap-4 gap-y-3" id="showform">
+                                
                             </div>
                             <div class="modal-footer text-right">
                                 <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Cancel</button>
@@ -166,6 +128,7 @@
                 <!-- END: Content -->
             </div>
             <?php include 'appjs.php'; ?>
+
             <script type="text/javascript">
                 $(document).ready(function() {
                     $('#example').DataTable( {
@@ -205,6 +168,19 @@
                                 $('#edit-persentase').val(obj.Persentase);
                             }
                     });
+                }
+
+                function showform() {
+                    $.ajax({
+                        url:'function/memberships?menu=formsz',
+                        type:'POST',
+                        dataType:'html',
+                        success:function (response) {
+                            $('#showform').html(response);
+
+                        },
+
+                    })
                 }    
                 function btnDelete(id) {
                     location.href = "function/discounts?menu=delete&id="+id;
