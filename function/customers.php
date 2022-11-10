@@ -24,6 +24,7 @@ if ($_GET['menu'] == 'create' ) {
 	$Cust_Note 		    = $_POST['Cust_Note'];
 
     mysqli_query($conn, "UPDATE Customer SET Cust_Nama='$Cust_Nama', Cust_Telp='$Cust_Telp', Cust_Tgl_Lahir='$Cust_Tgl_Lahir', Cust_Alamat='$Cust_Alamat', Cust_Note='$Cust_Note' WHERE Cust_No='$Cust_No'");
+    mysqli_query($conn, "UPDATE Registrasi_Member SET Cust_Nama='$Cust_Nama' WHERE Cust_No='$Cust_No'");
 
 } elseif ($_GET['menu'] == 'createdeposit') {
     // INPUT DEPOSIT
