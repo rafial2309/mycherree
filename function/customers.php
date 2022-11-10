@@ -75,13 +75,78 @@ if ($_GET['menu'] == 'create' ) {
         }
 
         $nestedData=array(); 
-        $nestedData[] = "<p style='font-size:15px'>".$row["Cust_Nama"]."</p>";
+        $nestedData[] = "<a href='app?p=customer_detail&Cust_No=".$row["Cust_No"]."' style='font-size:15px' class='underline decoration-dotted whitespace-nowrap'>".$row["Cust_Nama"]."</a>";
         $nestedData[] = "<p style='font-size:15px'>".$row["Cust_Telp"] ."</p>";
         $nestedData[] = "".$row["Cust_Alamat"]."<nl><small style='opacity:0'>".$row["Cust_No"]."<small>";
         $nestedData[] = "".$member."";
         $nestedData[] = "".date('d F Y', strtotime($row['Cust_Tgl_Join']))."";
         $nestedData[] = "".$row["Cust_Note"]."";
         $nestedData[] = "<button class='btn btn-sm btn-pending w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#edit-customer-modal' onclick='btnEdit(".$row['Cust_No'].")'>EDIT</button><button class='btn btn-sm btn-danger w-16 mr-1 mb-2' onclick='btnDelete(".$row['Cust_No'].")'>DELETE</button>";
+        
+        $data[] = $nestedData;
+    }
+    //----------------------------------------------------------------------------------
+    $json_data = array(
+                "draw"            => intval( $requestData['draw'] ),  
+                "recordsTotal"    => intval( $totalData ), 
+                "recordsFiltered" => intval( $totalFiltered ), 
+                "data"            => $data );
+    //----------------------------------------------------------------------------------
+    echo json_encode($json_data);
+    exit();
+}elseif ($_GET['menu'] == 'datasingle') {
+    $Cust_No = $_GET['Cust_No'];
+    $requestData= $_REQUEST;
+    $columns = array( 
+        0 =>'Inv_Number',
+        1 =>'Inv_Tgl_Masuk',
+        2 =>'Inv_Tgl_Selesai',
+        3 =>'Cust_Nama',
+        4 =>'Total_PCS',
+        5 =>'Payment_Amount',
+        6 =>'Status_Payment',
+        7 =>'Status_Taken',
+    );
+    //----------------------------------------------------------------------------------
+    //join 2 tabel dan bisa lebih, tergantung kebutuhan
+    $sql = "SELECT * from Invoice WHERE Cust_ID='$Cust_No'";
+    $query=mysqli_query($conn, $sql) or die("colours?menu=datasingle: get dataku");
+    $totalData = mysqli_num_rows($query);
+    $totalFiltered = $totalData;
+
+    //----------------------------------------------------------------------------------
+    $sql = " SELECT * from Invoice";
+    $sql.= " WHERE Cust_ID='$Cust_No'";
+    if( !empty($requestData['search']['value']) ) {
+        //----------------------------------------------------------------------------------
+        $sql.=" AND Cust_Nama NOT LIKE '[DELETE]%' AND (Cust_Nama LIKE '%".$requestData['search']['value']."%' "; 
+        $sql.=" OR Inv_Number LIKE '".$requestData['search']['value']."%' ";
+        $sql.=" OR Inv_Tgl_Masuk LIKE '".$requestData['search']['value']."%' ";
+        $sql.=" OR Inv_Tgl_Selesai LIKE '".$requestData['search']['value']."%' ";
+        $sql.=" OR Payment_Amount LIKE '".$requestData['search']['value']."%' ";
+        $sql.=" OR Status_Taken LIKE '".$requestData['search']['value']."%' ";
+        $sql.=" OR Status_Payment LIKE '".$requestData['search']['value']."%' )";
+    }
+    //----------------------------------------------------------------------------------
+    $query=mysqli_query($conn, $sql) or die("colours?menu=datasingle: get dataku");
+    $totalFiltered = mysqli_num_rows($query);
+    $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
+    $query=mysqli_query($conn, $sql) or die("colours?menu=datasingle: get dataku");
+    //----------------------------------------------------------------------------------
+    $data = array();
+    $i = 1;
+    while( $row=mysqli_fetch_array($query) ) {
+
+        $nestedData=array(); 
+        $nestedData[] = "".$i++."";
+        $nestedData[] = "<a href='app?p=transactions_detail&invoice=" . $row['Inv_Number'] ."' style='font-size:15px' class='underline decoration-dotted whitespace-nowrap'>".$row["Inv_Number"]."</a>";
+        $nestedData[] = "".date('d M Y', strtotime($row["Inv_Tgl_Masuk"]))."";
+        $nestedData[] = "".date('d M Y', strtotime($row["Inv_Tg_Selesai"]))."";
+        $nestedData[] = "".$row["Cust_Nama"]."";
+        $nestedData[] = "".$row["Total_PCS"]."";
+        $nestedData[] = "".$row["Payment_Amount"]."";
+        $nestedData[] = "".$row["Status_Payment"]."";
+        $nestedData[] = "".$row["Status_Taken"]."";
         
         $data[] = $nestedData;
     }
