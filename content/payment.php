@@ -212,7 +212,7 @@
                     var sudahada         = 'N';
 
                     $("input[name='invoice[]']").each(function() {
-                        var valsiki = $(this).val().substring(0, 7);
+                        var valsiki = $(this).val().substring(0, 12);
                         if (valsiki==inv[0]) {
                             sudahada = 'Y';
                         }
@@ -223,7 +223,7 @@
                     }else{
                         if (inv[0]!='') {
                             document.getElementById("isi_inv").insertAdjacentHTML("beforeend",
-                            "<div class='flex items-center mb-1 datainv'>&nbsp; INV-"+inv[0]+"<div class='ml-auto'>Rp "+payment+"</div><input type='hidden' name='invoice[]' value='"+inv[0]+"--"+inv[1]+"'></div>");
+                            "<div class='flex items-center mb-1 datainv'>&nbsp; "+inv[0]+"<div class='ml-auto'>Rp "+payment+"</div><input type='hidden' name='invoice[]' value='"+inv[0]+"--"+inv[1]+"'></div>");
                         }
                         
                     }

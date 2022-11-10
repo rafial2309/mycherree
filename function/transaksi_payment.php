@@ -139,7 +139,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
             $queryinv = mysqli_query($conn,"SELECT * from Invoice WHERE Cust_ID='$customer_data' AND Status_Payment='N' ");
             while($datainv = mysqli_fetch_assoc($queryinv)){
         ?>
-            <option value="<?php echo $datainv['Inv_Number'] ?>###<?php echo $datainv['Payment_Amount'] ?>">INV-<?php echo $datainv['Inv_Number'] ?> &nbsp; Rp <?php echo number_format($datainv['Payment_Amount'] ,0,",",".")?></option>
+            <option value="<?php echo $datainv['Inv_Number'] ?>###<?php echo $datainv['Payment_Amount'] ?>"><?php echo $datainv['Inv_Number'] ?> &nbsp; Rp <?php echo number_format($datainv['Payment_Amount'] ,0,",",".")?></option>
         <?php } ?>
      </select> 
      <script type="text/javascript">
@@ -225,7 +225,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
     <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
        
         <div class="col-span-12">
-            <center> <strong style="font-size: 25px;">INV-<c id="invnum"></c></strong> </center>
+            <center> <strong style="font-size: 25px;"><c id="invnum"></c></strong> </center>
             <input type="hidden" name="invoicedata" value="<?php echo $datainv['Inv_Number']; ?>">
         </div>
         

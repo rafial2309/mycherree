@@ -817,6 +817,12 @@
                     </a>
                     <ul class="" id="menucustom">
                         <li>
+                            <a href="app?p=deadline" class="top-menu">
+                                <div class="top-menu__icon"> <i data-lucide="navigation"></i> </div>
+                                <div class="top-menu__title"> Deadline Ready </div>
+                            </a>
+                        </li>
+                        <li>
                             <a href="app?p=daily-invoice" class="top-menu">
                                 <div class="top-menu__icon"> <i data-lucide="file-text"></i> </div>
                                 <div class="top-menu__title"> Daily Invoice </div>
