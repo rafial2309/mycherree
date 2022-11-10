@@ -9,7 +9,7 @@
 
                         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
                             
-                            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-order-modal" class="btn btn-primary shadow-md mr-2"> <i data-lucide="user" class="w-4 h-4 mr-2"></i> <c id="tombolcust"><?php if (!isset($_SESSION['Cust_No'])) { echo "SELECT CUSTOMER";} else{ echo "UPDATE CUSTOMER"; } ?></c> </a> 
+                            <a onclick="showformcust()" href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-order-modal" class="btn btn-primary shadow-md mr-2"> <i data-lucide="user" class="w-4 h-4 mr-2"></i> <c id="tombolcust"><?php if (!isset($_SESSION['Cust_No'])) { echo "SELECT CUSTOMER";} else{ echo "UPDATE CUSTOMER"; } ?></c> </a> 
                         </div>
                     </div>
                     <div class="intro-y grid grid-cols-12 gap-5 mt-5">
@@ -144,19 +144,8 @@
                                     </h2>
                                 </div>
                                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                                    <div class="col-span-12">
-                                         <label class="form-label">Customers</label>
-                                         <div class="mt-1">
-                                             <select name="customer" id="customer" data-placeholder="Select Customers" class="tom-select w-full" onchange="cekcust()">
-                                                <option>-- SELECT CUSTOMER --</option>
-                                                <?php 
-                                                    $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
-                                                    while($datacust = mysqli_fetch_assoc($querycust)){
-                                                ?>
-                                                    <option value="<?php echo $datacust['Cust_No'] ?>+<?php echo $datacust['Cust_Nama'] ?>"><?php echo $datacust['Cust_Nama'] ?> | <?php echo $datacust['Cust_Alamat'] ?></option>
-                                                <?php } ?>
-                                             </select> 
-                                         </div>
+                                    <div class="col-span-12" id="showformcust">
+                                         
                                     </div>
                                     <div class="col-span-12">
                                         <input type="text" name="telp" id="telp" class="form-control" placeholder="Input Phone">
@@ -380,6 +369,19 @@
                     // Format mata uang.
                     $( '.uang' ).mask('000.000.000', {reverse: true});
                 }) 
+
+                function showformcust() {
+                    $.ajax({
+                        url:'function/transaksi_item?menu=showformcust',
+                        type:'POST',
+                        dataType:'html',
+                        success:function (response) {
+                            $('#showformcust').html(response);
+
+                        },
+
+                    })
+                }  
 
                 function cekcust(){
                     var id = document.getElementById('customer').value;

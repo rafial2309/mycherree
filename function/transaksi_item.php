@@ -442,7 +442,25 @@ if ($_GET['menu'] == 'getitem' ) {
 	unset($_SESSION["Discount_No"]);
 
 	exit();
-}elseif ($_GET['menu'] == 'savetransaksirewash') { 
+}elseif ($_GET['menu'] == 'showformcust') { ?>
+	<link rel="stylesheet" href="plugin/selectize/selectize.css" />
+    <script type="text/javascript" src="plugin/selectize/selectize.min.js"></script>
+	<label class="form-label">Customers</label>
+     <div class="mt-1">
+         <select name="customer" id="customer" data-placeholder="Select Customers" class="w-full customer" onchange="cekcust()">
+            <option></option>
+            <?php 
+                $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
+                while($datacust = mysqli_fetch_assoc($querycust)){
+            ?>
+                <option value="<?php echo $datacust['Cust_No'] ?>+<?php echo $datacust['Cust_Nama'] ?>"><?php echo $datacust['Cust_Nama'] ?> | <?php echo $datacust['Cust_Alamat'] ?></option>
+            <?php } ?>
+         </select> 
+    </div>
+    <script type="text/javascript">
+        $('#customer').selectize();
+    </script>
+<?php }elseif ($_GET['menu'] == 'savetransaksirewash') { 
 
 	$Inv_Number 	= $_POST['Inv_Number'];
 	$Inv_Number_R 	= $_POST['Inv_Number']."R";
