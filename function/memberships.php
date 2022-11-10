@@ -139,7 +139,7 @@ if ($_GET['menu'] == 'create' ) {
     <div class="col-span-12">
         <label for="pilihcustomer" class="form-label">Customer</label>
         <select name="Customer" id="pilihcustomer" data-placeholder="Select Customers" class="w-full pilihcustomer">
-            <option>-- SELECT CUSTOMER --</option>
+            <option></option>
             <?php 
                 $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
                 while($datacust = mysqli_fetch_assoc($querycust)){
@@ -155,7 +155,7 @@ if ($_GET['menu'] == 'create' ) {
      <div class="col-span-12">
         <label for="pilihdiscount" class="form-label">Discount</label>
         <select name="Discount_No" id="pilihdiscount" data-placeholder="Select Customers" class="w-full pilihdiscount">
-            <option>-- SELECT DISCOUNT --</option>
+            <option></option>
             <?php 
                 $query = mysqli_query($conn,"SELECT * from Discount WHERE Discount_Status='Y' order by Discount_Nama asc");
                 while($disc = mysqli_fetch_assoc($query)){
