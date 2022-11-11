@@ -223,7 +223,7 @@
                                         <label for="pos-form-5" class="form-label">Condition</label>
                                         <textarea id="item_note" name="note" class="form-control w-full mt-2" placeholder="Item notes"></textarea>
                                     </div>
-                                    <div class="col-span-12">
+                                    <div class="col-span-12" hidden>
                                         <label for="regular-form-1" class="form-label">Request Customer</label> 
                                         <div class="mt-1">
                                             <input type="text" name="request" id="request" autocomplete="off" class="form-control" placeholder="Input Request Customer">
@@ -487,6 +487,7 @@
                     document.getElementById('disc_rupiah').value = pengurang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     document.getElementById('Total_Price').value = priceupdate;
                     document.getElementById('pricetampil').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    updateitempersen();
                 }
 
                 function updateitemprice(){
@@ -531,6 +532,7 @@
                     document.getElementById('disc_rupiah_edit').value = pengurang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     document.getElementById('Total_Price_edit').value = priceupdate;
                     document.getElementById('pricetampiledit').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    updateitempersen1();
                 }
 
                 function updateitemprice1(){
@@ -686,7 +688,7 @@
                       }else{
                           console.log("success");
                           document.getElementById('success-additem').click();
-                          setTimeout(function() { window.location.reload(); }, 2000);
+                          setTimeout(function() { location.href='function/print?type=invoice&invoice='+data }, 2000);
                       }
                       
                     },

@@ -249,7 +249,7 @@ if ($_GET['menu'] == 'getitem' ) {
                 <label for="pos-form-5" class="form-label">Condition</label>
                 <textarea id="item_note_edit" name="note" class="form-control w-full mt-2" placeholder="Item notes"><?php echo $data['Item_Note'] ?></textarea>
             </div>
-			<div class="col-span-12">
+			<div class="col-span-12" hidden>
 				<label for="regular-form-1" class="form-label">Request Customer</label> 
 				<div class="mt-1">
 					<input type="text" name="request" id="request" autocomplete="off" class="form-control" placeholder="Input Request Customer" value="<?= $data['Request_Customer']?>">
@@ -384,6 +384,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		$Payment_Rounding	= $Payment_Amount-$Payment_Before;
 
 		mysqli_query($conn, "UPDATE Invoice SET Cust_ID='$Cust_ID', Cust_Nama='$Cust_Nama', Cust_Alamat='$Cust_Alamat', Cust_Telp='$Cust_Telp', Note='$Note', Inv_Tg_Selesai='$Inv_Tg_Selesai', Discount_No='$Discount_No', Total_PCS='$Total_PCS', Total_Diskon='$Total_Diskon', Total_Voucher='$Total_Voucher', Payment_Before='$Payment_Before', Payment_Amount='$Payment_Amount', Payment_Rounding='$Payment_Rounding' WHERE Inv_Number='$invoice'");
+		echo $invoice;
 		exit();
 	}
 
@@ -440,7 +441,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	unset($_SESSION["Cust_Telp"]);
 	unset($_SESSION["Cust_Alamat"]);
 	unset($_SESSION["Discount_No"]);
-
+	echo $Inv_Number;
 	exit();
 }elseif ($_GET['menu'] == 'showformcust') { ?>
 	<link rel="stylesheet" href="plugin/selectize/selectize.css" />
