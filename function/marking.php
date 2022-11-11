@@ -85,12 +85,12 @@ if ($_GET['menu'] == 'data' ) {
                     <div class="grid grid-cols-12 gap-4 gap-y-5">
                     
                         <?php 
-                        $queryfoto = mysqli_query($conn, "SELECT foto FROM Invoice_Foto WHERE Inv_Item_No='$dataitem[Inv_Item_No]'");
+                        $queryfoto = mysqli_query($conn, "SELECT * FROM Invoice_Foto WHERE Inv_Item_No='$dataitem[Inv_Item_No]'");
                         while($datafoto = mysqli_fetch_assoc($queryfoto)) { ?>
                         <div class="col-span-2">
                             <div class="card no-b">
                                 <div>
-                                    <a onclick="openprev('<?php echo $dataitem['Inv_Item_No']; ?>/<?php echo $datafoto['foto']; ?>')" href="javascript:;" data-tw-toggle="modal" data-tw-target="#prev-item-modal"  class="progressive replace">
+                                    <a onclick="openprev('<?php echo $dataitem['Inv_Item_No']; ?>/<?php echo $datafoto['foto']; ?>','<?php echo $datafoto['Inv_Number']; ?>')" href="javascript:;" data-tw-toggle="modal" data-tw-target="#prev-item-modal"  class="progressive replace">
                                         <img id="myImg" src="media/images/<?php echo $dataitem['Inv_Item_No']; ?>/<?php echo $datafoto['foto']; ?>" class="preview" alt="image" />
                                      </a>
                                      
@@ -153,4 +153,11 @@ if ($_GET['menu'] == 'data' ) {
 
         mysqli_query($conn, "INSERT into Invoice_Foto values(0,'','$Inv_Number','$namafile','$Inv_Item_No')");
         echo $Inv_Number;
+}elseif ($_GET['menu'] == 'deletepic'){
+    $urlpic = "../".$_POST['urlpic'];
+    $datapic = explode("/",$_POST['urlpic']);
+
+    unlink($urlpic);
+    mysqli_query($conn, "DELETE FROM Invoice_Foto WHERE foto='$datapic[3]'");
+    exit();
 }

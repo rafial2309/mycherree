@@ -138,6 +138,11 @@
                                         <button type="button" style="float: right;" class="btn btn-primary btn-lg btn-block">PREVIEW</button>
                                     </h2>
                                     <div class="text-right">
+                                        <input type="text" id="urlpic" name="">
+                                        <input type="text" id="urlpicinv" name="">
+                                        <button onclick="deletepic()" type="button" class="btn btn-outline-danger w-32 mr-1">DELETE</button>
+                                    </div>
+                                    <div class="text-right">
                                         <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Close</button>
                                     </div>
                                 </div>
@@ -224,6 +229,24 @@
 
                     })
                 }
+
+                function deletepic(){
+                    var urlpic     = document.getElementById('urlpic').value;
+                    var urlpicinv     = document.getElementById('urlpicinv').value;
+                    $.ajax({
+                        url:'function/marking?menu=deletepic',
+                        type:'POST',
+                        dataType:'html',
+                        data:{
+                          urlpic: urlpic,
+                        },
+                        success:function (response) {
+                            document.getElementById('success-additem').click();
+                            document.getElementById('tmark-'+urlpicinv).click();
+                        },
+
+                    })
+                }
                 
                 function printAll() {
                     var invoice = document.getElementById('invoice').value;
@@ -290,8 +313,11 @@
                     document.getElementById('Inv_Item_No').value = item;
                 }
 
-                 function openprev(barcode){
+                 function openprev(barcode,inv){
+
                     document.getElementById('imageya').innerHTML = "<img style='width:100%' alt='testImage' src='media/images/"+barcode+"'> </img>";
+                    document.getElementById('urlpic').value = "media/images/"+barcode;
+                    document.getElementById('urlpicinv').value = inv;
                     //document.getElementById('openprev').click();
                  }
 
