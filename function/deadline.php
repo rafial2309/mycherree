@@ -14,7 +14,10 @@ $tgl1 = $_GET['tgl1'];
             <th>Order</th>
             <th>Ready</th>
             <th>Customer</th>
-            <th>Total Pcs</th>
+            <th>Pcs</th>
+            <th>Total</th>
+            <th>Payment</th>
+            <th>Sign</th>
         </tr>
     </thead>
     <tbody id="hasil">
@@ -30,6 +33,9 @@ $tgl1 = $_GET['tgl1'];
             <td><?php echo date('d M Y', strtotime($data['Inv_Tg_Selesai'])); ?></td>
             <td><?php echo $data['Cust_Nama'] ?></td>
             <td><?php echo $data['Total_PCS'] ?></td>
+            <td>Rp <?php echo number_format($data['Payment_Amount'] ,0,",",".")?></td>
+            <td><?php echo $data['Status_Payment'] ?></td>
+            <td></td>
         </tr>
         <?php } ?>
     </tbody>
