@@ -489,7 +489,7 @@ if ($_GET['type'] == 'customer') {
     $baris = 5;
     $no = 1;
     
-    $sql = mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE Payment_Tgl BETWEEN '$start' AND '$end'");
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE DATE(Payment_Tgl) >= '$start' AND DATE(Payment_Tgl) <= '$end'");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
@@ -662,7 +662,7 @@ if ($_GET['type'] == 'customer') {
     $type   = $_POST['type'];
 
     if ($type == 'daily')
-        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Payment_Tgl BETWEEN '$start' AND '$end'");
+        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE DATE(Payment_Tgl) >='$start' AND DATE(Payment_Tgl) <= '$end'");
     elseif ($type == 'monthly')
         $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE MONTH(Payment_Tgl)='$bulan' AND YEAR(Payment_Tgl)='$tahun'");
     else  
