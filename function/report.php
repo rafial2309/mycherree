@@ -296,7 +296,7 @@ if ($_GET['type'] == 'customer') {
     
     $baris = 5;
     $no = 1;
-    
+
     $sql = mysqli_query($conn, "SELECT *FROM Invoice WHERE Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
@@ -311,10 +311,25 @@ if ($_GET['type'] == 'customer') {
         $baris++;
         $no++;
     }
+    $akhir = $baris - 1; 
+
+    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
+    $total = mysqli_fetch_assoc($query);
+    
+    $mulai = $akhir + 3;
+    $after = $mulai + 1;
+
+    $sheet->setCellValue('H' . $mulai, 'Total Amount');
+    $sheet->setCellValue('I' . $mulai, 'Total PCS');
+    $sheet->setCellValue('H' . $after, $total['Total_Amount']);
+    $sheet->setCellValue('I' . $after, $total['Total_PCS']);
+    
+    $sheet->getStyle('H'.$mulai.':I' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('H'.$after.':I' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+      
     foreach ($sheet->getColumnIterator() as $column) {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
     }
-    $akhir = $baris - 1; 
     $sheet->getStyle('B5:B' . $akhir)->getAlignment()->setHorizontal('right');
     $sheet->getStyle('A5:I' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
     $sheet->getStyle('G5:H' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
@@ -361,10 +376,26 @@ if ($_GET['type'] == 'customer') {
         $baris++;
         $no++;
     }
+
+    $akhir = $baris - 1; 
+
+    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
+    $total = mysqli_fetch_assoc($query);
+    
+    $mulai = $akhir + 3;
+    $after = $mulai + 1;
+
+    $sheet->setCellValue('H' . $mulai, 'Total Amount');
+    $sheet->setCellValue('I' . $mulai, 'Total PCS');
+    $sheet->setCellValue('H' . $after, $total['Total_Amount']);
+    $sheet->setCellValue('I' . $after, $total['Total_PCS']);
+    
+    $sheet->getStyle('H'.$mulai.':I' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('H'.$after.':I' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    
     foreach ($sheet->getColumnIterator() as $column) {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
     }
-    $akhir = $baris - 1; 
     $sheet->getStyle('B5:B' . $akhir)->getAlignment()->setHorizontal('right');
     $sheet->getStyle('A5:I' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
     $sheet->getStyle('G5:H' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
@@ -410,10 +441,25 @@ if ($_GET['type'] == 'customer') {
         $baris++;
         $no++;
     }
+    $akhir = $baris - 1; 
+
+    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE YEAR(Inv_Tgl_Masuk)='$tahun'");
+    $total = mysqli_fetch_assoc($query);
+    
+    $mulai = $akhir + 3;
+    $after = $mulai + 1;
+
+    $sheet->setCellValue('H' . $mulai, 'Total Amount');
+    $sheet->setCellValue('I' . $mulai, 'Total PCS');
+    $sheet->setCellValue('H' . $after, $total['Total_Amount']);
+    $sheet->setCellValue('I' . $after, $total['Total_PCS']);
+    
+    $sheet->getStyle('H'.$mulai.':I' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('H'.$after.':I' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    
     foreach ($sheet->getColumnIterator() as $column) {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
     }
-    $akhir = $baris - 1; 
     $sheet->getStyle('B5:B' . $akhir)->getAlignment()->setHorizontal('right');
     $sheet->getStyle('A5:I' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
     $sheet->getStyle('G5:H' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
@@ -765,6 +811,36 @@ if ($_GET['type'] == 'customer') {
     $sheet->getStyle('E5:F' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
     $sheet->getColumnDimension('A')->setAutoSize(false)->setWidth(8);
 
+} elseif ($_GET['type'] == 'get-total') {
+    $start  = date('Y-m-d', strtotime($_POST['start']));
+    $end    = date('Y-m-d', strtotime($_POST['end']));
+
+    $month  = date('Y-m-d', strtotime($_POST['month']));
+    $year   = date('Y-m-d', strtotime($_POST['year']));
+
+    $bulan  = substr($month, 5, 2);
+    $tahun  = substr($month, 0, 4);
+
+    $yearly = substr($year, 0, 4);
+
+    $type   = $_POST['type'];
+    
+    if ($type == 'daily') 
+        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
+    elseif ($type == 'monthly')
+        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
+    else 
+        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE YEAR(Inv_Tgl_Masuk)='$tahun'");
+    
+    $total = mysqli_fetch_assoc($query);
+
+    $data = [
+        'Total_Amount'  => 'Total Amount : '. number_format($total['Total_Amount'],0,',','.'),
+        'Total_PCS'     => 'Total PCS : ' . number_format($total['Total_PCS'],0,',','.').' PCS',
+    ];
+
+    echo json_encode($data);
+    exit();
 }
 
 

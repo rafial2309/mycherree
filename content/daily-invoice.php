@@ -94,6 +94,9 @@
                                                             <tr><th colspan="6">Tidak ada data untuk ditampilkan</th></tr>
                                                         </tbody>
                                                     </table>
+                                                    <br>
+                                                    <p id="total-pcs"></p>
+                                                    <p id="total-amount"></p>
                                                 </div>  
                                             </div>
                                         </div>
@@ -160,8 +163,39 @@
                                 $('#header-invoice').text('Yearly Invoice')
                             
                             $('#type-value').val(type);
+                            showTotal();
                         }
                     });
+                }
+
+                function showTotal() {
+                    let url;
+                    let start   = $('#start').val();
+                    let end     = $('#end').val();
+                    let month   = $('#month').val();
+                    let year    = $('#year').val();
+                    let type    = $('#type-value').val();
+                    
+                    let data = {
+                        start: start,
+                        end: end,
+                        month: month,
+                        year: year,
+                        type: type
+                    }
+
+                    $.ajax({
+                        type:'POST',
+                        url:'function/report?type=get-total',
+                        data:data,
+                        success: function(data) { // Jika berhasil
+                            var json = data,
+                            obj = JSON.parse(json);
+                            $('#total-pcs').html(obj.Total_PCS);
+                            $('#total-amount').html(obj.Total_Amount);
+                        }
+                    });
+
                 }
 
                 function btnDownload() {
