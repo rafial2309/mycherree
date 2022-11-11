@@ -16,7 +16,10 @@ if ($_GET['type'] == 'invoice') {
 	}
 	
 	$invoice = mysqli_fetch_assoc($sql);
-
+	if ($invoice['Status_Payment'] == 'Y') {
+		$sql_payment 	= mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE Inv_Number = '$invoice[Inv_Number]'");
+		$payment 		= mysqli_fetch_assoc($sql_payment);
+	}
 	?>
 	<!DOCTYPE html>
 	<html moznomarginboxes mozdisallowselectionprint style="background-color: #fff">
@@ -36,10 +39,10 @@ if ($_GET['type'] == 'invoice') {
 			<p style="text-align: center; font-size:14px">
 				<img src="../src/images/logo-mycherree.png" style="width:50%"><br>
 			My Cherree Laundry  <br/>
-			BGM PIK Blog G No 77<br/>
-			Jakarta Utara, DKI Jakarta 14470<br/>
+			<?= ($_SESSION['cabang'] == 'MCL1') ? 'BGM PIK Blok G No 77':'Central Market PIK'?><br/>
+			Jakarta Utara 14470<br/>
 			
-			Tel: (021) 22338540 | WA: 0877 2410 9018
+			Tel: (021) 22338540 | WA: <?= ($_SESSION['cabang'] == 'MCL1') ? '+62 877 2410 9018':'+62 812 9055 1743 '?>
 			</p>
 			============================
 			<div style="width: 100%">
@@ -52,8 +55,8 @@ if ($_GET['type'] == 'invoice') {
 				<div style="width: 100%;">
 					<table style="font-size:16px; margin-top:10px">
 						<tr>
-							<td width="50%" align="left">Invoice</td>
-							<td width="50%">: [#<?= $invoice['Inv_Number']?>] </td>
+							<td width="40%" align="left">Invoice</td>
+							<td width="60%">: [#<?= $invoice['Inv_Number']?>] </td>
 						</tr>
 						<tr>
 							<td width="40%" align="left">Customer</td>
@@ -79,9 +82,14 @@ if ($_GET['type'] == 'invoice') {
 				<center>
 				
 				</center>
-			============================
 			</div>
-
+			============================
+			<center>
+				<b style="font-size:18px">
+					Request Customer : <br><span style="font-weight:normal"><?= $invoice['Note']?></span>
+				</b>
+			</center>
+			============================
 			<?php
 			$discount 	= $invoice['Discount_No'];
 			$sql 		= mysqli_query($conn, "SELECT *FROM Discount WHERE Discount_No='$discount'");
@@ -118,11 +126,6 @@ if ($_GET['type'] == 'invoice') {
 						</td>
 					</tr>
 					<tr> 	
-						<td colspan="2"><b>Request Customer:</b> 
-							'.$item['Request_Customer'].' 
-						</td>
-					</tr>
-					<tr> 	
 						<td colspan="2"><b>#MARK#:</b> 
 							'.$item['Item_Note'].' 
 						</td>
@@ -152,6 +155,14 @@ if ($_GET['type'] == 'invoice') {
 					<td align="right"><?= number_format($invoice['Payment_Amount'],0,',','.')?></td>
 				</tr>
 			</table>
+			<br>
+			============================
+			<br><br>
+			<div style="font-size:18px">
+			Payment  : <?= ($invoice['Status_Payment'] == 'Y') ? 'PAID':'UNPAID' ?><br>
+			Method : <?= ($invoice['Status_Payment'] == 'Y') ? $payment['Payment_Type']:'-'?><br>
+			Date : <?= ($invoice['Status_Payment'] == 'Y') ? date('D, d M Y', strtotime($payment['Payment_Tgl'])):'-'?><br>
+			</div>
 			<br>
 			============================
 			<div style="font-size:18px">
