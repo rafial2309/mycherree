@@ -225,6 +225,95 @@ if ($_GET['type'] == 'invoice') {
 		</div>
 	</body>
 	</html>
+<?php 
+} elseif ($_GET['type'] == 'membership') {
+	
+	$id 		= $_GET['id'];
+	$sql 		= mysqli_query($conn, "SELECT *FROM Registrasi_Member WHERE Registrasi_ID='$id'");
+	$member		= mysqli_fetch_assoc($sql);
+
+	$member_id	= $member['Discount_No'];
+	$query 		= mysqli_query($conn, "SELECT *FROM Discount WHERE Discount_No='$member_id'");
+	$discount	= mysqli_fetch_assoc($query);
+
+	$link 		= '../app?p=membership';
+	
+?>
+
+	
+	<!DOCTYPE html>
+	<html moznomarginboxes mozdisallowselectionprint style="background-color: #fff">
+	<head>
+		<title>Print Invoice</title>
+		<style type="text/css">
+			body.receipt .sheet { width: 80mm;  font-family: 'Calibri'; height: auto; margin: 0 auto;padding-right: 20px;padding-left: 5px; } /* change height as you like */
+			@media print { body.receipt { width: 80mm; } } /* this line is needed for fixing Chrome's bug */
+			@media print { #printarea { width: 80mm } }
+			.collapse { border: 1px solid black; border-collapse:collapse}
+		</style>
+	</head>
+	<body style="font-size: 22px;" class="receipt" onload="printGO()" oncontextmenu="return false">
+		<!-- <button onclick="saveSignat()">SAVE SIGNATURE</button>
+		<button onclick="window.print()">PRINT</button> -->
+		<div id="printarea" style="background-color: #fff;" class="sheet">
+			<p style="text-align: center; font-size:14px">
+				<img src="../src/images/logo-mycherree.png" style="width:50%"><br>
+			My Cherree Laundry  <br/>
+			<?= ($_SESSION['cabang'] == 'MCL1') ? 'BGM PIK Blok G No 77':'Central Market PIK'?><br/>
+			Jakarta Utara 14470<br/>
+			
+			Tel: (021) 22338540 | WA: <?= ($_SESSION['cabang'] == 'MCL1') ? '+62 877 2410 9018':'+62 812 9055 1743 '?>
+			</p>
+			============================
+			<center>
+				<b style="font-size:18px">
+					Proof of Membership Member
+				</b>
+			</center>
+			============================
+			<br>
+			<table width="100%" style="font-size:18px"> 	
+				<tr>
+					<td align="left">Name</td>
+					<td align="left">: <?= $member['Cust_Nama'] ?></td>
+				</tr>
+				
+				<tr>
+					<td align="left">Discount </td>
+					<td align="left">: <?= $discount['Persentase']?>%</td>
+				</tr>
+		
+				<tr>
+					<td align="left" colspan="2">Lifetime Member </td>
+				</tr>
+			</table>
+			============================
+			<table width="100%" style="font-size:18px"> 	
+				<tr>
+					<td align="left">Total</td>
+					<td align="left">: <?= number_format($member['Registrasi_Payment'],0,',','.') ?></td>
+				</tr>
+				<tr>
+					<td align="left">Payment </td>
+					<td align="left">: PAID</td>
+				</tr>		
+				<tr>
+					<td align="left">Method </td>
+					<td align="left">: <?= $member['Payment_Type']?></td>
+				</tr>
+				<tr>
+					<td align="left">Date </td>
+					<td align="left">: <?= date('D, d M Y', strtotime($member['Registrasi_Tgl']))?></td>
+				</tr>
+
+			</table>
+			============================
+			<div style="font-size:18px">
+			Print: <?= date('d M Y H:i:s')?> | <?= $_SESSION['Staff_Name']?>
+			</div>
+			&nbsp;
+		</div>
+	</html>
 <?php } ?>
 
 <form method="POST" enctype="multipart/form-data" action="simpanz" id="myForm">
@@ -257,7 +346,7 @@ if ($_GET['type'] == 'invoice') {
 		let type = '<?= $_GET["type"] ?>';
 		window.print();
 	   	setTimeout(function () {
-			   if (type == 'marker') {
+			   if (type != 'invoice') {
 				   if (link == '') {
 						window.close();
 				   } else {

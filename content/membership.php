@@ -196,6 +196,10 @@
                     // }
                 }
 
+                function printMember(id) {
+                    location.href='function/print?type=membership&id='+id;
+                }
+
                 function btnPayment(id) {
                      $.ajax({
                         url : "function/memberships?menu=get_payment",

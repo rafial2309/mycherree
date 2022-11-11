@@ -72,7 +72,7 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData[] = ($row['Status_Payment'] == 'Y') ? $amount." | ".$row["Payment_Type"] : "";
         $nestedData[] = $row["Cust_Member_Join"]." - ".$row["Cust_Member_Exp"];
         $nestedData[] = $row["Staff_Name"];
-        $nestedData[] = "<button class='btn btn-sm btn-primary w-16 mr-1 mb-2'>PRINT</button>";
+        $nestedData[] = "<button class='btn btn-sm btn-primary w-16 mr-1 mb-2' onclick='printMember(".$row['Registrasi_ID'].")'>PRINT</button>";
         
         $data[] = $nestedData;
     }
