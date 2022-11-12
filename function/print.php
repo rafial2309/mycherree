@@ -56,7 +56,7 @@ if ($_GET['type'] == 'invoice') {
 					<table style="font-size:16px; margin-top:10px">
 						<tr>
 							<td width="40%" align="left">Invoice</td>
-							<td width="60%">: [#<?= $invoice['Inv_Number']?>] </td>
+							<td width="60%">: <?= $invoice['Inv_Number']?> </td>
 						</tr>
 						<tr>
 							<td width="40%" align="left">Customer</td>
@@ -109,10 +109,10 @@ if ($_GET['type'] == 'invoice') {
 						$price = '<strike>'.number_format($item['Total_Price'],0,',','.').'</strike> '. $afterDisc;
 					} elseif ($item['Disc_Amount'] <> 0){
 						$price = '<strike>'.number_format($item['Item_Price'],0,',','.').'</strike> '. number_format($item['Total_Price'],0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? $item['Total_Price'] : 'NON-MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? number_format($item['Total_Price'],0,',','.') : 'NON-MEMBER';
 					} else {
 						$price = number_format($item['Item_Price'],0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? (10/100) * $item['Total_Price'] : 'NON-MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? number_format((10/100) * $item['Total_Price'],0,',','.') : 'NON-MEMBER';
 					}
 
 					echo '
@@ -120,17 +120,14 @@ if ($_GET['type'] == 'invoice') {
 						<td colspan="2">&nbsp;</td>
 					</tr>
 					<tr>
-						<td align="left">'.number_format($item['Qty'],0,',','.').'</td>
-						<td align="right">'.number_format($item['Total_Price'],0,',','.').'</td>
+						<td align="left">'.number_format($item['Qty'],0,',','.').' '.$item['Deskripsi'].'</td>
+						<td align="right" valign="top" style="padding-left:8px">'.number_format($item['Total_Price'],0,',','.').'</td>
 					</tr>
 					<tr>
-						<td align="left"></td>
-						<td align="right">(Membership 10%) '.$hargaMember.'</td>
+						<td align="left">Membership 10%</td>
+						<td align="right">'.$hargaMember.'</td>
 					</tr>
 
-					<tr> 	
-						<td colspan="2">'.$item['Deskripsi'].'</td>
-					</tr>
 					<tr> 	
 						<td colspan="2"> 
 							
@@ -172,7 +169,7 @@ if ($_GET['type'] == 'invoice') {
 			<div style="font-size:18px">
 			Payment  : <?= ($invoice['Status_Payment'] == 'Y') ? 'PAID':'UNPAID' ?><br>
 			Method : <?= ($invoice['Status_Payment'] == 'Y') ? $payment['Payment_Type']:'-'?><br>
-			Date : <?= ($invoice['Status_Payment'] == 'Y') ? date('D, d M Y', strtotime($payment['Payment_Tgl'])):'-'?><br>
+			Payment Received : <?= ($invoice['Status_Payment'] == 'Y') ? date('D, d M Y', strtotime($payment['Payment_Tgl'])):'-'?><br>
 			</div>
 			<br>
 			============================
@@ -231,7 +228,8 @@ if ($_GET['type'] == 'invoice') {
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
 			<h6>
-				<span style="font-size:14px; font-weight: normal"><?= date('d F Y', strtotime($data['Inv_Tg_Selesai']))?> | <?= $data['Deskripsi']?>[#<?= $data['Inv_Number'] ?>][<?= $data['Item_No']?> / <?= $data['Total_PCS']?>]</span>
+				<span style="font-size:16px; font-weight: normal;text-transform: uppercase;"><?= date('d F Y', strtotime($data['Inv_Tg_Selesai']))?> <?= $data['Inv_Number'] ?> <?= $data['Item_No']?> / <?= $data['Total_PCS']?></span><br>
+				<span style="font-size:14px; font-weight: normal;text-transform: uppercase;"><?= $data['Deskripsi']?></span>
 			</h6>
 		</div>
 	</body>
@@ -355,18 +353,18 @@ if ($_GET['type'] == 'invoice') {
 		let id = '<?= $id ?>';
 		let link = '<?= $link ?>';
 		let type = '<?= $_GET["type"] ?>';
-		window.print();
-	   	setTimeout(function () {
-			   if (type != 'invoice') {
-				   if (link == '') {
-						window.close();
-				   } else {
-					    window.location.href = link; //will redirect to your blog page (an ex: blog.html)
-				   }
-			   } else {
-				    window.location.href = "../app?p="+ link +"&invoice="+id; //will redirect to your blog page (an ex: blog.html)
-			   }
-		}, 3000); //will call the function after 2 secs.
+		// window.print();
+	 //   	setTimeout(function () {
+		// 	   if (type != 'invoice') {
+		// 		   if (link == '') {
+		// 				window.close();
+		// 		   } else {
+		// 			    window.location.href = link; //will redirect to your blog page (an ex: blog.html)
+		// 		   }
+		// 	   } else {
+		// 		    window.location.href = "../app?p="+ link +"&invoice="+id; //will redirect to your blog page (an ex: blog.html)
+		// 	   }
+		// }, 3000); //will call the function after 2 secs.
 	}
 
 
