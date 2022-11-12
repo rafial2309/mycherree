@@ -120,7 +120,7 @@ if ($_GET['type'] == 'invoice') {
 						<td colspan="2">&nbsp;</td>
 					</tr>
 					<tr>
-						<td align="left">'.number_format($item['Qty'],0,',','.').' '.$item['Deskripsi'].'</td>
+						<td align="left">'.number_format($item['Qty'],0,',','.').' Item &nbsp; '.$item['Deskripsi'].'</td>
 						<td align="right" valign="top" style="padding-left:8px">'.number_format($item['Total_Price'],0,',','.').'</td>
 					</tr>';
 
