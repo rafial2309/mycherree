@@ -353,18 +353,18 @@ if ($_GET['type'] == 'invoice') {
 		let id = '<?= $id ?>';
 		let link = '<?= $link ?>';
 		let type = '<?= $_GET["type"] ?>';
-		// window.print();
-	 //   	setTimeout(function () {
-		// 	   if (type != 'invoice') {
-		// 		   if (link == '') {
-		// 				window.close();
-		// 		   } else {
-		// 			    window.location.href = link; //will redirect to your blog page (an ex: blog.html)
-		// 		   }
-		// 	   } else {
-		// 		    window.location.href = "../app?p="+ link +"&invoice="+id; //will redirect to your blog page (an ex: blog.html)
-		// 	   }
-		// }, 3000); //will call the function after 2 secs.
+		window.print();
+	   	setTimeout(function () {
+			   if (type != 'invoice') {
+				   if (link == '') {
+						window.close();
+				   } else {
+					    window.location.href = link; //will redirect to your blog page (an ex: blog.html)
+				   }
+			   } else {
+				    window.location.href = "../app?p="+ link +"&invoice="+id; //will redirect to your blog page (an ex: blog.html)
+			   }
+		}, 3000); //will call the function after 2 secs.
 	}
 
 
