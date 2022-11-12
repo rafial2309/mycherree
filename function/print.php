@@ -105,14 +105,14 @@ if ($_GET['type'] == 'invoice') {
 					$customer = mysqli_fetch_assoc($cust);
 					if ($invoice['Total_Diskon'] <> 0) {
 						$afterDisc = number_format($item['Total_Price'] - ($item['Total_Price'] * ($promo['Persentase'] / 100)),0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? $afterDisc : 'NON-MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? $afterDisc : 'NON MEMBER';
 						$price = '<strike>'.number_format($item['Total_Price'],0,',','.').'</strike> '. $afterDisc;
 					} elseif ($item['Disc_Amount'] <> 0){
 						$price = '<strike>'.number_format($item['Item_Price'],0,',','.').'</strike> '. number_format($item['Total_Price'],0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? number_format($item['Total_Price'],0,',','.') : 'NON-MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? number_format($item['Total_Price'],0,',','.') : 'NON MEMBER';
 					} else {
 						$price = number_format($item['Item_Price'],0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? number_format((10/100) * $item['Total_Price'],0,',','.') : 'NON-MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? number_format((10/100) * $item['Total_Price'],0,',','.') : 'NON MEMBER';
 					}
 
 					echo '
@@ -122,12 +122,16 @@ if ($_GET['type'] == 'invoice') {
 					<tr>
 						<td align="left">'.number_format($item['Qty'],0,',','.').' '.$item['Deskripsi'].'</td>
 						<td align="right" valign="top" style="padding-left:8px">'.number_format($item['Total_Price'],0,',','.').'</td>
-					</tr>
-					<tr>
-						<td align="left">Membership 10%</td>
-						<td align="right">'.$hargaMember.'</td>
-					</tr>
+					</tr>';
 
+					if ($customer['Cust_Member_Name'] == 'MEMBERSHIP') {
+					echo '
+					<tr>
+						<td align="left">Discount Member 10%</td>
+						<td align="right">'.$hargaMember.'</td>
+					</tr>';
+					}
+					echo'
 					<tr> 	
 						<td colspan="2"> 
 							
@@ -153,17 +157,22 @@ if ($_GET['type'] == 'invoice') {
 				</tr>
 				
 				<tr>
-					<td align="left">Discount(<?= (mysqli_num_rows($sql) > 0) ? $promo['Discount_Nama'].' '.$promo['Persentase'].'%' : '-'?>) </td>
+					<td align="left">Discount(<?= (mysqli_num_rows($sql) > 0) ? $promo['Discount_Nama'].' '.$promo['Persentase'].'%' : ''?>) </td>
 					<td align="right"><?= number_format($invoice['Total_Diskon'],0,',','.')?></td>
 				</tr>
 		
-
+				<tr>
+					<td align="left">Rounding</td>
+					<td align="right"><?= number_format($invoice['Payment_Rounding'],0,',','.')?></td>
+				</tr>
 				<tr style="font-size: 20px;font-weight: bold;">
 					<td align="left">TOTAL </td>
 					<td align="right"><?= number_format($invoice['Payment_Amount'],0,',','.')?></td>
 				</tr>
 			</table>
 			<br>
+			
+				<?= ($customer['Cust_Member_Name'] <> 'MEMBERSHIP') ? '<center style="font-size: 18px;">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center><br>' : ''?>
 			============================
 			<br><br>
 			<div style="font-size:18px">
@@ -185,7 +194,7 @@ if ($_GET['type'] == 'invoice') {
 					<td class="collapse">&nbsp;Penerima&nbsp;</td>
 					<td class="collapse">&nbsp;Pengecek&nbsp;</td>
 				</tr>
-				<tr class="collapse" height="100">
+				<tr class="collapse" height="50">
 					<td class="collapse"></td>
 					<td class="collapse"></td>
 					<td class="collapse"></td>
@@ -228,7 +237,8 @@ if ($_GET['type'] == 'invoice') {
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
 			<h6>
-				<span style="font-size:16px; font-weight: normal;text-transform: uppercase;"><?= date('d F Y', strtotime($data['Inv_Tg_Selesai']))?> <?= $data['Inv_Number'] ?> <?= $data['Item_No']?> / <?= $data['Total_PCS']?></span><br>
+				<span style="font-size:14px; font-weight: normal;text-transform: uppercase;">My Cherree Laundry Indonesia</span><br>
+				<span style="font-size:20px; font-weight: bold;text-transform: uppercase;"><?= date('d M Y', strtotime($data['Inv_Tg_Selesai']))?> <?= $data['Inv_Number'] ?> &nbsp; <?= $data['Item_No']?>/<?= $data['Total_PCS']?></span><br>
 				<span style="font-size:14px; font-weight: normal;text-transform: uppercase;"><?= $data['Deskripsi']?></span>
 			</h6>
 		</div>
