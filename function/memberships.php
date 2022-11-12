@@ -154,7 +154,7 @@ if ($_GET['menu'] == 'create' ) {
     </div>
      <div class="col-span-12">
         <label for="pilihdiscount" class="form-label">Discount</label>
-        <select name="Discount_No" id="pilihdiscount" data-placeholder="Select Customers" class="w-full pilihdiscount">
+        <select name="Discount_No" id="pilihdiscount" data-placeholder="Select Customers" class="pilihdiscount">
             <option></option>
             <?php 
                 $query = mysqli_query($conn,"SELECT * from Discount WHERE Discount_Status='Y' order by Discount_Nama asc");

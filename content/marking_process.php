@@ -138,8 +138,8 @@
                                         <button type="button" style="float: right;" class="btn btn-primary btn-lg btn-block">PREVIEW</button>
                                     </h2>
                                     <div class="text-right">
-                                        <input type="text" id="urlpic" name="">
-                                        <input type="text" id="urlpicinv" name="">
+                                        <input type="hidden" id="urlpic" name="">
+                                        <input type="hidden" id="urlpicinv" name="">
                                         <button onclick="deletepic()" type="button" class="btn btn-outline-danger w-32 mr-1">DELETE</button>
                                     </div>
                                     <div class="text-right">

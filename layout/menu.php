@@ -823,6 +823,12 @@
                             </a>
                         </li>
                         <li>
+                            <a href="app?p=report-customer" class="top-menu">
+                                <div class="top-menu__icon"> <i data-lucide="users"></i> </div>
+                                <div class="top-menu__title"> Report Customer </div>
+                            </a>
+                        </li>
+                        <li>
                             <a href="app?p=daily-invoice" class="top-menu">
                                 <div class="top-menu__icon"> <i data-lucide="file-text"></i> </div>
                                 <div class="top-menu__title"> Daily Invoice </div>

@@ -34,7 +34,7 @@ $tgl1 = $_GET['tgl1'];
             <td><?php echo $data['Cust_Nama'] ?></td>
             <td><?php echo $data['Total_PCS'] ?></td>
             <td>Rp <?php echo number_format($data['Payment_Amount'] ,0,",",".")?></td>
-            <td><?php echo $data['Status_Payment'] ?></td>
+            <td><?php if ($data['Status_Payment']=='Y') { echo 'PAID'; } ?></td>
             <td></td>
         </tr>
         <?php } ?>
