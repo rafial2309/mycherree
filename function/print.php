@@ -37,7 +37,7 @@ if ($_GET['type'] == 'invoice') {
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
 			<p style="text-align: center; font-size:14px">
-				<img src="../src/images/logo-mycherree.png" style="width:50%"><br>
+				<img src="../src/images/logo-mycherree.png" style="width:50%" hidden><br>
 			My Cherree Laundry  <br/>
 			<?= ($_SESSION['cabang'] == 'MCL1') ? 'BGM PIK Blok G No 77':'Central Market PIK'?><br/>
 			Jakarta Utara 14470<br/>
@@ -100,21 +100,32 @@ if ($_GET['type'] == 'invoice') {
 				<?php
 				$total = 0;
 				while ($item = mysqli_fetch_assoc($query)) {
+					$as = $invoice['Cust_ID'];
+					$cust = mysqli_query($conn, "SELECT *FROM Customer WHERE Cust_No='$as'");
+					$customer = mysqli_fetch_assoc($cust);
 					if ($invoice['Total_Diskon'] <> 0) {
 						$afterDisc = number_format($item['Total_Price'] - ($item['Total_Price'] * ($promo['Persentase'] / 100)),0,',','.');
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? $afterDisc : 'NON-MEMBER';
 						$price = '<strike>'.number_format($item['Total_Price'],0,',','.').'</strike> '. $afterDisc;
 					} elseif ($item['Disc_Amount'] <> 0){
 						$price = '<strike>'.number_format($item['Item_Price'],0,',','.').'</strike> '. number_format($item['Total_Price'],0,',','.');
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? $item['Total_Price'] : 'NON-MEMBER';
 					} else {
 						$price = number_format($item['Item_Price'],0,',','.');
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? (10/100) * $item['Total_Price'] : 'NON-MEMBER';
 					}
+
 					echo '
 					<tr> 	
 						<td colspan="2">&nbsp;</td>
 					</tr>
 					<tr>
 						<td align="left">'.number_format($item['Qty'],0,',','.').'</td>
-						<td align="right">'.$price.'</td>
+						<td align="right">'.number_format($item['Total_Price'],0,',','.').'</td>
+					</tr>
+					<tr>
+						<td align="left"></td>
+						<td align="right">(Membership 10%) '.$hargaMember.'</td>
 					</tr>
 
 					<tr> 	
@@ -126,7 +137,7 @@ if ($_GET['type'] == 'invoice') {
 						</td>
 					</tr>
 					<tr> 	
-						<td colspan="2"><b>#MARK#:</b> 
+						<td colspan="2"><b>NOTE :</b> 
 							'.$item['Item_Note'].' 
 						</td>
 					</tr>
@@ -145,7 +156,7 @@ if ($_GET['type'] == 'invoice') {
 				</tr>
 				
 				<tr>
-					<td align="left">Discount(<?= (mysqli_num_rows($sql) > 0) ? $promo['Persentase'].'%' : '-'?>) </td>
+					<td align="left">Discount(<?= (mysqli_num_rows($sql) > 0) ? $promo['Discount_Nama'].' '.$promo['Persentase'].'%' : '-'?>) </td>
 					<td align="right"><?= number_format($invoice['Total_Diskon'],0,',','.')?></td>
 				</tr>
 		
