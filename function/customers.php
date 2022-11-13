@@ -154,7 +154,7 @@ if ($_GET['menu'] == 'create' ) {
     //----------------------------------------------------------------------------------
     $query=mysqli_query($conn, $sql) or die("colours?menu=datasingle: get dataku");
     $totalFiltered = mysqli_num_rows($query);
-    $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
+    $sql.=" ORDER BY Inv_No DESC  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
     $query=mysqli_query($conn, $sql) or die("colours?menu=datasingle: get dataku");
     //----------------------------------------------------------------------------------
     $data = array();
@@ -211,7 +211,7 @@ if ($_GET['menu'] == 'create' ) {
     //----------------------------------------------------------------------------------
     $query=mysqli_query($conn, $sql) or die("colours?menu=datadeposit: get dataku");
     $totalFiltered = mysqli_num_rows($query);
-    $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
+    $sql.=" ORDER BY Deposit_No DESC LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
     $query=mysqli_query($conn, $sql) or die("colours?menu=datadeposit: get dataku");
     //----------------------------------------------------------------------------------
     $data = array();
