@@ -401,7 +401,13 @@
 
                 function editTrans() {
                     let id = '<?= $data['Inv_No']?>';
-                    location.href='app?p=edit-transaction&id='+id;
+                    let payment = '<?= $data['Status_Payment']?>';
+                    
+                    if (payment == 'Y') {
+                        alert('Transaksi Sudah Dibayar! Tidak dapat melakukan edit invoice!');
+                    } else {
+                        location.href='app?p=edit-transaction&id='+id;
+                    }
                 }
 
                 function updatechangestatpay(){
