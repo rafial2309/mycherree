@@ -4,6 +4,7 @@ date_default_timezone_set("Asia/Jakarta");
 include "../config/configuration.php";
 $Staff_ID 			= $_SESSION['Staff_ID'];
 $Staff_Name 		= $_SESSION['Staff_Name'];
+$cabang             = $_SESSION['cabang'];
 
 function angka_pembulatan($angka,$digit,$minimal)
 {
@@ -31,15 +32,15 @@ if ($_GET['menu'] == 'cari' ) {
 	$keyword 	= $_POST['keyword'];
 	$status 	= $_POST['status'];
 	if ($status=='ALL') {
-		$query 		= mysqli_query($conn,"SELECT * from Invoice where Status_Inv!='C' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
+		$query 		= mysqli_query($conn,"SELECT * from Invoice where Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 	}elseif($status=='UNPAID'){
-		$query 		= mysqli_query($conn,"SELECT * from Invoice where Status_Inv!='C' AND Status_Payment='N' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
+		$query 		= mysqli_query($conn,"SELECT * from Invoice where Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Status_Payment='N' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 	}elseif($status=='PAID'){
-		$query 		= mysqli_query($conn,"SELECT * from Invoice where Status_Inv!='C' AND Status_Payment='Y' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
+		$query 		= mysqli_query($conn,"SELECT * from Invoice where Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Status_Payment='Y' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 	}elseif($status=='UNTAKEN'){
-		$query 		= mysqli_query($conn,"SELECT * from Invoice where Status_Inv!='C' AND Status_Taken='N' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
+		$query 		= mysqli_query($conn,"SELECT * from Invoice where Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Status_Taken='N' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 	}elseif($status=='TAKEN'){
-		$query 		= mysqli_query($conn,"SELECT * from Invoice where Status_Inv!='C' AND Status_Taken!='N' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
+		$query 		= mysqli_query($conn,"SELECT * from Invoice where Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Status_Taken!='N' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 	}
 	
 
@@ -162,7 +163,7 @@ if ($_GET['menu'] == 'cari' ) {
 }else if ($_GET['menu'] == 'caricancel' ) {
     $keyword    = $_POST['keyword'];
     $status     = $_POST['status'];
-    $query      = mysqli_query($conn,"SELECT * from Invoice where Status_Inv='C' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
+    $query      = mysqli_query($conn,"SELECT * from Invoice where Inv_Number LIKE '%$cabang%' AND Status_Inv='C' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 
     while($data = mysqli_fetch_assoc($query)){
         $invoice = $data['Inv_Number'];
@@ -215,7 +216,7 @@ if ($_GET['menu'] == 'cari' ) {
 }else if ($_GET['menu'] == 'carirewash' ) {
     $keyword    = $_POST['keyword'];
     $status     = $_POST['status'];
-    $query      = mysqli_query($conn,"SELECT * from Invoice_Rewash where (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
+    $query      = mysqli_query($conn,"SELECT * from Invoice_Rewash where Inv_Number LIKE '%$cabang%' AND (Inv_Number LIKE '%$keyword%' OR Cust_Nama LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%' OR Cust_Alamat LIKE '%$keyword%') order by Inv_No DESC LIMIT 15");
 
     while($data = mysqli_fetch_assoc($query)){
         $invoice = $data['Inv_Number'];

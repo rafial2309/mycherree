@@ -4,22 +4,23 @@ date_default_timezone_set("Asia/Jakarta");
 $hariini        = date('Y-m-d');
 $bulanini       = date('m');
 $tahunini       = date('Y');
-$totalsales     = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Amount) as total from Invoice WHERE Status_Inv!='C' AND YEAR(Inv_Tgl_Masuk)='$tahunini' AND MONTH(Inv_Tgl_Masuk)='$bulanini'"));
+$cabang         = $_SESSION['cabang'];
+$totalsales     = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Amount) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND YEAR(Inv_Tgl_Masuk)='$tahunini' AND MONTH(Inv_Tgl_Masuk)='$bulanini'"));
 
-$totalpcs       = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_PCS) as total from Invoice WHERE Status_Inv!='C' AND YEAR(Inv_Tgl_Masuk)='$tahunini' AND MONTH(Inv_Tgl_Masuk)='$bulanini'"));
+$totalpcs       = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_PCS) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND YEAR(Inv_Tgl_Masuk)='$tahunini' AND MONTH(Inv_Tgl_Masuk)='$bulanini'"));
 
-$totalcust      = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(Cust_ID) as total from Invoice WHERE Status_Inv!='C' AND YEAR(Inv_Tgl_Masuk)='$tahunini' AND MONTH(Inv_Tgl_Masuk)='$bulanini' GROUP BY Cust_ID"));
+$totalcust      = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(Cust_ID) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND YEAR(Inv_Tgl_Masuk)='$tahunini' AND MONTH(Inv_Tgl_Masuk)='$bulanini' GROUP BY Cust_ID"));
 
-$totalpayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Total) as total from Invoice_Payment WHERE YEAR(Payment_Tgl)='$tahunini' AND MONTH(Payment_Tgl)='$bulanini'"));
+$totalpayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Total) as total from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Payment_Tgl)='$tahunini' AND MONTH(Payment_Tgl)='$bulanini'"));
 
 
-$todaysales     = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Amount) as total from Invoice WHERE Status_Inv!='C' AND Inv_Tgl_Masuk='$hariini'"));
+$todaysales     = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Amount) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Inv_Tgl_Masuk='$hariini'"));
 
-$todaypcs       = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_PCS) as total from Invoice WHERE Status_Inv!='C' AND Inv_Tgl_Masuk='$hariini'"));
+$todaypcs       = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_PCS) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Inv_Tgl_Masuk='$hariini'"));
 
-$todaycust      = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(Cust_ID) as total from Invoice WHERE Status_Inv!='C' AND Inv_Tgl_Masuk='$hariini' GROUP BY Cust_ID"));
+$todaycust      = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(Cust_ID) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Inv_Tgl_Masuk='$hariini' GROUP BY Cust_ID"));
 
-$todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Total) as total from Invoice_Payment WHERE Payment_Tgl='$hariini'"));
+$todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Total) as total from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND Payment_Tgl='$hariini'"));
 ?>
 
 <div class="wrapper-box">
