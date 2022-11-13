@@ -87,6 +87,8 @@
                                                                 <th>Alamat</th>
                                                                 <th>Total PCS</th>
                                                                 <th>Amount</th>
+                                                                <th>Status</th>
+                                                                <th>Payment</th>
                                                                 <th>Staff</th>
                                                             </tr>
                                                         </thead>
@@ -146,6 +148,8 @@
                             { data: 'Cust_Alamat' },
                             { data: 'Total_PCS' },
                             { data: 'Payment_Amount' },
+                            { data: 'Cust_Member_Name' },
+                            { data: 'Status_Payment' },
                             { data: 'Staff_Name' },
                         ],
                         "language" : {

@@ -1,6 +1,7 @@
 <?php
 require '../config/configuration.php';
 require '../vendor/autoload.php';
+session_start();
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -286,18 +287,21 @@ if ($_GET['type'] == 'customer') {
     $sheet->setCellValue('F4', 'Alamat');
     $sheet->setCellValue('G4', 'Total PCS');
     $sheet->setCellValue('H4', 'Total Pembayaran');
-    $sheet->setCellValue('I4', 'Dikerjakan oleh');
+    $sheet->setCellValue('I4', 'Status');
+    $sheet->setCellValue('J4', 'Payment');
+    $sheet->setCellValue('K4', 'Dikerjakan oleh');
     
-    $sheet->getStyle('A4:I4')->getAlignment()->setVertical('center')->setHorizontal('center');
-    $sheet->getStyle('A4:I4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('A4:I4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
+    $sheet->getStyle('A4:K4')->getAlignment()->setVertical('center')->setHorizontal('center');
+    $sheet->getStyle('A4:K4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A4:K4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
     
     $sheet->freezePane('A5');
     
     $baris = 5;
     $no = 1;
+    $cabang = $_SESSION['cabang'];
 
-    $sql = mysqli_query($conn, "SELECT *FROM Invoice WHERE Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice JOIN Customer ON Invoice.Cust_ID = Customer.Cust_No WHERE Invoice.Inv_Number LIKE '%$cabang%' AND Invoice.Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
@@ -307,33 +311,37 @@ if ($_GET['type'] == 'customer') {
         $sheet->setCellValue('F' . $baris, $data['Cust_Alamat']);
         $sheet->setCellValue('G' . $baris, $data['Total_PCS']);
         $sheet->setCellValue('H' . $baris, $data['Payment_Amount']);
-        $sheet->setCellValue('I' . $baris, $data['Staff_Name']);
+        $sheet->setCellValue('I' . $baris, ($data['Cust_Member_Name'] == 'MEMBERSHIP') ? 'MEMBER' : 'NONMEMBER');
+        $sheet->setCellValue('J' . $baris, ($data['Status_Payment'] == 'Y') ? 'PAID' : 'UNPAID');
+        $sheet->setCellValue('K' . $baris, $data['Staff_Name']);
         $baris++;
         $no++;
     }
     $akhir = $baris - 1; 
 
-    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
+    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
     $total = mysqli_fetch_assoc($query);
     
     $mulai = $akhir + 3;
     $after = $mulai + 1;
 
-    $sheet->setCellValue('H' . $mulai, 'Total Amount');
-    $sheet->setCellValue('I' . $mulai, 'Total PCS');
-    $sheet->setCellValue('H' . $after, $total['Total_Amount']);
-    $sheet->setCellValue('I' . $after, $total['Total_PCS']);
+    $sheet->setCellValue('J' . $mulai, 'Total Amount');
+    $sheet->setCellValue('K' . $mulai, 'Total PCS');
     
-    $sheet->getStyle('H'.$mulai.':I' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('H'.$after.':I' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->setCellValue('J' . $after, $total['Total_Amount']);
+    $sheet->setCellValue('K' . $after, $total['Total_PCS']);
+    
+    $sheet->getStyle('J'.$mulai.':K' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('J'.$after.':K' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
       
     foreach ($sheet->getColumnIterator() as $column) {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
     }
     $sheet->getStyle('B5:B' . $akhir)->getAlignment()->setHorizontal('right');
-    $sheet->getStyle('A5:I' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A5:K' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
     $sheet->getStyle('G5:H' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
     $sheet->getColumnDimension('A')->setAutoSize(false)->setWidth(8);
+    $sheet->getColumnDimension('I')->setAutoSize(false)->setWidth(15);
 
 } elseif ($_GET['type'] == 'monthly-invoice') {
     $month  = date('Y-m-d', strtotime($_POST['month']));
@@ -348,11 +356,13 @@ if ($_GET['type'] == 'customer') {
     $sheet->setCellValue('F4', 'Alamat');
     $sheet->setCellValue('G4', 'Total PCS');
     $sheet->setCellValue('H4', 'Total Pembayaran');
-    $sheet->setCellValue('I4', 'Dikerjakan oleh');
+    $sheet->setCellValue('I4', 'Status');
+    $sheet->setCellValue('J4', 'Payment');
+    $sheet->setCellValue('K4', 'Dikerjakan oleh');
     
-    $sheet->getStyle('A4:I4')->getAlignment()->setVertical('center')->setHorizontal('center');
-    $sheet->getStyle('A4:I4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('A4:I4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
+    $sheet->getStyle('A4:K4')->getAlignment()->setVertical('center')->setHorizontal('center');
+    $sheet->getStyle('A4:K4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A4:K4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
     
     $sheet->freezePane('A5');
     
@@ -361,8 +371,9 @@ if ($_GET['type'] == 'customer') {
 
     $bulan = substr($month, 5, 2);
     $tahun = substr($month, 0, 4);
+    $cabang = $_SESSION['cabang'];
     
-    $sql = mysqli_query($conn, "SELECT *FROM Invoice WHERE MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice JOIN Customer ON Invoice.Cust_ID = Customer.Cust_No WHERE Invoice.Inv_Number LIKE '%$cabang%' AND MONTH(Invoice.Inv_Tgl_Masuk)='$bulan' AND YEAR(Invoice.Inv_Tgl_Masuk)='$tahun'");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
@@ -372,34 +383,38 @@ if ($_GET['type'] == 'customer') {
         $sheet->setCellValue('F' . $baris, $data['Cust_Alamat']);
         $sheet->setCellValue('G' . $baris, $data['Total_PCS']);
         $sheet->setCellValue('H' . $baris, $data['Payment_Amount']);
-        $sheet->setCellValue('I' . $baris, $data['Staff_Name']);
+        $sheet->setCellValue('I' . $baris, ($data['Cust_Member_Name'] == 'MEMBERSHIP') ? 'MEMBER' : 'NONMEMBER');
+        $sheet->setCellValue('J' . $baris, ($data['Status_Payment'] == 'Y') ? 'PAID' : 'UNPAID');
+        $sheet->setCellValue('K' . $baris, $data['Staff_Name']);
         $baris++;
         $no++;
     }
 
     $akhir = $baris - 1; 
 
-    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
+    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
     $total = mysqli_fetch_assoc($query);
     
     $mulai = $akhir + 3;
     $after = $mulai + 1;
 
-    $sheet->setCellValue('H' . $mulai, 'Total Amount');
-    $sheet->setCellValue('I' . $mulai, 'Total PCS');
-    $sheet->setCellValue('H' . $after, $total['Total_Amount']);
-    $sheet->setCellValue('I' . $after, $total['Total_PCS']);
+    $sheet->setCellValue('J' . $mulai, 'Total Amount');
+    $sheet->setCellValue('K' . $mulai, 'Total PCS');
     
-    $sheet->getStyle('H'.$mulai.':I' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('H'.$after.':I' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->setCellValue('J' . $after, $total['Total_Amount']);
+    $sheet->setCellValue('K' . $after, $total['Total_PCS']);
+    
+    $sheet->getStyle('J'.$mulai.':K' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('J'.$after.':K' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
     
     foreach ($sheet->getColumnIterator() as $column) {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
     }
     $sheet->getStyle('B5:B' . $akhir)->getAlignment()->setHorizontal('right');
-    $sheet->getStyle('A5:I' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A5:K' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
     $sheet->getStyle('G5:H' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
     $sheet->getColumnDimension('A')->setAutoSize(false)->setWidth(8);
+    $sheet->getColumnDimension('I')->setAutoSize(false)->setWidth(15);
 
 } elseif ($_GET['type'] == 'yearly-invoice') {
     $year   = date('Y-m-d', strtotime($_POST['year']));
@@ -414,11 +429,13 @@ if ($_GET['type'] == 'customer') {
     $sheet->setCellValue('F4', 'Alamat');
     $sheet->setCellValue('G4', 'Total PCS');
     $sheet->setCellValue('H4', 'Total Pembayaran');
-    $sheet->setCellValue('I4', 'Dikerjakan oleh');
+    $sheet->setCellValue('I4', 'Status');
+    $sheet->setCellValue('J4', 'Payment');
+    $sheet->setCellValue('K4', 'Dikerjakan oleh');
     
-    $sheet->getStyle('A4:I4')->getAlignment()->setVertical('center')->setHorizontal('center');
-    $sheet->getStyle('A4:I4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('A4:I4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
+    $sheet->getStyle('A4:K4')->getAlignment()->setVertical('center')->setHorizontal('center');
+    $sheet->getStyle('A4:K4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A4:K4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
     
     $sheet->freezePane('A5');
     
@@ -426,8 +443,9 @@ if ($_GET['type'] == 'customer') {
     $no = 1;
 
     $tahun = substr($year, 0, 4);
-    
-    $sql = mysqli_query($conn, "SELECT *FROM Invoice WHERE YEAR(Inv_Tgl_Masuk)='$tahun'");
+    $cabang = $_SESSION['cabang'];
+
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice JOIN Customer ON Invoice.Cust_ID = Customer.Cust_No WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Invoice.Inv_Tgl_Masuk)='$tahun'");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
@@ -437,33 +455,38 @@ if ($_GET['type'] == 'customer') {
         $sheet->setCellValue('F' . $baris, $data['Cust_Alamat']);
         $sheet->setCellValue('G' . $baris, $data['Total_PCS']);
         $sheet->setCellValue('H' . $baris, $data['Payment_Amount']);
-        $sheet->setCellValue('I' . $baris, $data['Staff_Name']);
+        $sheet->setCellValue('I' . $baris, ($data['Cust_Member_Name'] == 'MEMBERSHIP') ? 'MEMBER' : 'NONMEMBER');
+        $sheet->setCellValue('J' . $baris, ($data['Status_Payment'] == 'Y') ? 'PAID' : 'UNPAID');
+        $sheet->setCellValue('K' . $baris, $data['Staff_Name']);
         $baris++;
         $no++;
     }
     $akhir = $baris - 1; 
 
-    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE YEAR(Inv_Tgl_Masuk)='$tahun'");
+    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
     $total = mysqli_fetch_assoc($query);
     
     $mulai = $akhir + 3;
     $after = $mulai + 1;
 
-    $sheet->setCellValue('H' . $mulai, 'Total Amount');
-    $sheet->setCellValue('I' . $mulai, 'Total PCS');
-    $sheet->setCellValue('H' . $after, $total['Total_Amount']);
-    $sheet->setCellValue('I' . $after, $total['Total_PCS']);
+    $sheet->setCellValue('J' . $mulai, 'Total Amount');
+    $sheet->setCellValue('K' . $mulai, 'Total PCS');
     
-    $sheet->getStyle('H'.$mulai.':I' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('H'.$after.':I' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->setCellValue('J' . $after, $total['Total_Amount']);
+    $sheet->setCellValue('K' . $after, $total['Total_PCS']);
+    
+    $sheet->getStyle('J'.$mulai.':K' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('J'.$after.':K' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
     
     foreach ($sheet->getColumnIterator() as $column) {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
     }
     $sheet->getStyle('B5:B' . $akhir)->getAlignment()->setHorizontal('right');
-    $sheet->getStyle('A5:I' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A5:K' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
     $sheet->getStyle('G5:H' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
     $sheet->getColumnDimension('A')->setAutoSize(false)->setWidth(8);
+    $sheet->getColumnDimension('I')->setAutoSize(false)->setWidth(15);
+
 
 }  elseif ($_GET['type'] == 'daily-payment') {
     $start  = date('Y-m-d', strtotime($_POST['start']));
@@ -619,13 +642,14 @@ if ($_GET['type'] == 'customer') {
     $yearly = substr($year, 0, 4);
 
     $type   = $_POST['type'];
+    $cabang = $_SESSION['cabang'];
 
     if ($type == 'daily')
-        $sql = mysqli_query($conn, "SELECT * from Invoice WHERE Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
+        $sql = mysqli_query($conn, "SELECT * from Invoice JOIN Customer ON Invoice.Cust_ID = Customer.Cust_No WHERE Invoice.Inv_Number LIKE '%$cabang%' AND Invoice.Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
     elseif ($type == 'monthly')
-        $sql = mysqli_query($conn, "SELECT * from Invoice WHERE MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
+        $sql = mysqli_query($conn, "SELECT * from Invoice JOIN Customer ON Invoice.Cust_ID = Customer.Cust_No WHERE Invoice.Inv_Number LIKE '%$cabang%' AND MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
     else  
-        $sql = mysqli_query($conn, "SELECT * from Invoice WHERE YEAR(Inv_Tgl_Masuk)='$yearly'");
+        $sql = mysqli_query($conn, "SELECT * from Invoice JOIN Customer ON Invoice.Cust_ID = Customer.Cust_No WHERE Invoice.Inv_Number LIKE '%$cabang%' AND YEAR(Inv_Tgl_Masuk)='$yearly'");
 
     $data = array();
     $json = array();
@@ -640,6 +664,8 @@ if ($_GET['type'] == 'customer') {
         $nestedData['Cust_Alamat']      = $row["Cust_Alamat"];
         $nestedData['Total_PCS']        = number_format($row["Total_PCS"],0,',','.');
         $nestedData['Payment_Amount']   = number_format($row["Payment_Amount"],0,',','.');
+        $nestedData['Cust_Member_Name'] = ($row['Cust_Member_Name'] == 'MEMBERSHIP') ? 'MEMBER' : 'NONMEMBER';
+        $nestedData['Status_Payment']   = ($row['Status_Payment'] == 'Y') ? 'PAID' : 'UNPAID';
         $nestedData['Staff_Name']       = $row["Staff_Name"];
         
         $data[] = $nestedData;
@@ -824,13 +850,14 @@ if ($_GET['type'] == 'customer') {
     $yearly = substr($year, 0, 4);
 
     $type   = $_POST['type'];
-    
+    $cabang = $_SESSION['cabang'];
+
     if ($type == 'daily') 
-        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
+        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
     elseif ($type == 'monthly')
-        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
+        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
     else 
-        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE YEAR(Inv_Tgl_Masuk)='$tahun'");
+        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
     
     $total = mysqli_fetch_assoc($query);
 
