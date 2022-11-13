@@ -67,7 +67,7 @@ if ($_GET['menu'] == 'create' ) {
         
         $nestedData=array(); 
         $nestedData[] = $row['Registrasi_Tgl'];
-        $nestedData[] = $row["Cust_Nama"];
+        $nestedData[] = "<a href='app?p=customer_detail&Cust_No=".$row["Cust_No"]."' style='font-size:15px' class='underline decoration-dotted whitespace-nowrap'>".$row["Cust_Nama"]."</a>";
         $nestedData[] = ($row['Status_Payment'] == 'Y') ? "<button class='btn btn-sm btn-dark w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#payment-member-modal' onclick='btnPayment(".$row['Registrasi_ID'].")'>PAID</button>" : "<button class='btn btn-sm btn-danger w-16 mr-1 mb-2' data-tw-toggle='modal' data-tw-target='#payment-member-modal' onclick='btnPayment(".$row['Registrasi_ID'].")'>UNPAID</button>";
         $nestedData[] = ($row['Status_Payment'] == 'Y') ? $amount." | ".$row["Payment_Type"] : "";
         $nestedData[] = $row["Cust_Member_Join"]." - ".$row["Cust_Member_Exp"];
