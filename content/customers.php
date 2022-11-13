@@ -22,6 +22,9 @@
                                         <th>Membership</th>
                                         <th>Join Date</th>
                                         <th>Note</th>
+                                        <th>Total Amount</th>
+                                        <th>Total PCS</th>
+                                        <th>Last Order</th>
                                         <th width="125px">Action</th>
                                     </tr>
                                 </thead>

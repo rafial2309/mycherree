@@ -5,7 +5,7 @@ session_start();
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Style\{Alignment, Border, Color, Fill};
+use PhpOffice\PhpSpreadsheet\Style\{Alignment, Border, Color, Fill, NumberFormat};
 
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
@@ -18,33 +18,43 @@ if ($_GET['type'] == 'customer') {
     $judul  = 'Customer';
     $search = $_GET['search'];
     
-    $sheet->setCellValue('A3', 'N');
+    $sheet->setCellValue('A3', 'No');
     $sheet->setCellValue('B3', 'Nama');
     $sheet->setCellValue('C3', 'Telepon');
     $sheet->setCellValue('D3', 'Alamat');
     $sheet->setCellValue('E3', 'Status Membership');
     $sheet->setCellValue('F3', 'Tanggal Join');
+    $sheet->setCellValue('G3', 'Last Order');
+    $sheet->setCellValue('H3', 'Total Amount');
+    $sheet->setCellValue('I3', 'Total Order');
     
-    $sheet->getStyle('A3:F3')->getAlignment()->setVertical('center')->setHorizontal('center');
-    $sheet->getStyle('A3:F3')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('A3:F3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
+    $sheet->getStyle('A3:I3')->getAlignment()->setVertical('center')->setHorizontal('center');
+    $sheet->getStyle('A3:I3')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A3:I3')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
     
     $sheet->freezePane('A4');
     
     $baris  = 4;
     $no     = 1;
+    $init   = 0;
     
     $additionalQuery = ($search <> '') ? "AND (Cust_Nama like '%$search%' OR Cust_Alamat like '%$search%' OR Cust_Telp like '%$search%' OR Cust_Member_Name like '%$search%')" : '';
     
-    $sql = mysqli_query($conn, "SELECT *FROM Customer WHERE Cust_Status ='Y' $additionalQuery");
-    
+    $sql  = mysqli_query($conn, "SELECT Customer.*, (SELECT SUM(Payment_Amount) FROM Invoice WHERE Invoice.Cust_ID = Customer.Cust_No) as Total_Amount, (SELECT SUM(Total_PCS) FROM Invoice WHERE Invoice.Cust_ID = Customer.Cust_No) as Total_PCS, Invoice.Inv_Tgl_Masuk FROM Customer LEFT JOIN Invoice ON Customer.Cust_No = Invoice.Cust_ID WHERE Cust_Status ='Y' $additionalQuery ORDER BY Total_PCS DESC");
     while ($data = mysqli_fetch_assoc($sql)) {
+        $last   = ($data['Inv_Tgl_Masuk'] == '') ? '-' : date('D, d M Y', strtotime($data['Inv_Tgl_Masuk']));
+        $amount = ($data['Total_Amount'] == null) ? 0 : $data['Total_Amount'];
+        $pcs    = ($data['Total_PCS'] == null) ? $init.' pcs' : number_format($data['Total_PCS'],0,',','.').' pcs';
+        
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Cust_Nama']);
         $sheet->setCellValue('C' . $baris, $data['Cust_Telp']);
         $sheet->setCellValue('D' . $baris, $data['Cust_Alamat']);
-        $sheet->setCellValue('E' . $baris, $data['Cust_Member_Name']);
+        $sheet->setCellValue('E' . $baris, ($data['Cust_Member_Name'] <> '') ? 'MEMBER' : 'NONMEMBER');
         $sheet->setCellValue('F' . $baris, date('D, d M Y', strtotime($data['Cust_Tgl_Join'])));
+        $sheet->setCellValue('G' . $baris, $last);
+        $sheet->setCellValue('H' . $baris, $amount);
+        $sheet->setCellValue('I' . $baris, $pcs);
         $baris++;
         $no++;
     }
@@ -54,7 +64,9 @@ if ($_GET['type'] == 'customer') {
     }
     
     $akhir = $baris - 1; 
-    $sheet->getStyle('A4:F' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('C4:C' . $akhir)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+    $sheet->getStyle('A4:I' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('H4:H' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
 
 } elseif ($_GET['type'] == 'membership') {
     $judul  = 'Membership';
