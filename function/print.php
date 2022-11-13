@@ -83,12 +83,14 @@ if ($_GET['type'] == 'invoice') {
 				
 				</center>
 			</div>
+			<?php if ($invoice['Note'] <>  '') {?>
 			============================
 			<center>
 				<b style="font-size:18px">
 					Request Customer : <br><span style="font-weight:normal"><?= $invoice['Note']?></span>
 				</b>
 			</center>
+			<?php } ?>
 			============================
 			<?php
 			$discount 	= $invoice['Discount_No'];
