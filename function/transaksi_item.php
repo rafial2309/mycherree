@@ -137,6 +137,10 @@ if ($_GET['menu'] == 'getitem' ) {
         <div class="mr-auto">Discount (<?php echo $namadiskon . " " . $persentase ?>%)</div>
         <div class="font-medium text-danger">-Rp <c id="diskon"><?php echo number_format($diskon ,0,",",".")?></c></div>
     </div>
+	 <div class="flex mt-4">
+        <div class="mr-auto">Total PCS</div>
+        <div class="font-medium text-danger"><c id="totalpcs"><?php echo number_format($datapcs['Total_Pcs'],0,",",".")?></c></div>
+    </div>
     
     <div class="flex mt-4 pt-4 border-t border-slate-200/60 dark:border-darkmode-400">
         <div class="mr-auto font-medium text-base">Total</div>
