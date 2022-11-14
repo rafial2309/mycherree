@@ -9,7 +9,7 @@ $totalsales     = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Amou
 
 $totalpcs       = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_PCS) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND YEAR(Inv_Tgl_Masuk)='$tahunini' AND MONTH(Inv_Tgl_Masuk)='$bulanini'"));
 
-$totalcust      = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(Cust_ID) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND YEAR(Inv_Tgl_Masuk)='$tahunini' AND MONTH(Inv_Tgl_Masuk)='$bulanini' GROUP BY Cust_ID"));
+$totalcust      = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(Cust_ID) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND YEAR(Inv_Tgl_Masuk)='$tahunini' AND MONTH(Inv_Tgl_Masuk)='$bulanini'"));
 
 $totalpayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Total) as total from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Payment_Tgl)='$tahunini' AND MONTH(Payment_Tgl)='$bulanini'"));
 
@@ -18,7 +18,7 @@ $todaysales     = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Amou
 
 $todaypcs       = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_PCS) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Inv_Tgl_Masuk='$hariini'"));
 
-$todaycust      = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(Cust_ID) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Inv_Tgl_Masuk='$hariini' GROUP BY Cust_ID"));
+$todaycust      = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(Cust_ID) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Inv_Tgl_Masuk='$hariini'"));
 
 $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Total) as total from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND Payment_Tgl='$hariini'"));
 ?>
@@ -44,9 +44,7 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="shopping-cart" class="report-box__icon text-primary"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($todaysales['total'])) {
-                                                        echo number_format($todaysales['total'] ,0,",",".");
-                                                    } ?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?= (isset($todaysales['total'])) ? number_format($todaysales['total'] ,0,",",".") : 0; ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Today Sales</div>
                                                 </div>
                                             </div>
@@ -57,9 +55,7 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="credit-card" class="report-box__icon text-pending"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($todaypayment['total'])) {
-                                                        echo number_format($todaypayment['total'] ,0,",",".");
-                                                    } ?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?= (isset($todaypayment['total'])) ? number_format($todaypayment['total'] ,0,",",".") : 0;?></div>
                                                     <div class="text-base text-slate-500 mt-1">Today Payment</div>
                                                 </div>
                                             </div>
@@ -70,9 +66,7 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="monitor" class="report-box__icon text-warning"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($todaypcs['total'])) {
-                                                        echo number_format($todaypcs['total'] ,0,",",".");
-                                                    } ?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?= (isset($todaypcs['total'])) ? number_format($todaypcs['total'] ,0,",",".") : 0; ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Today Pcs</div>
                                                 </div>
                                             </div>
@@ -83,9 +77,7 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="user" class="report-box__icon text-success"></i> 
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($todaycust['total'])) {
-                                                        echo number_format($todaycust['total'] ,0,",",".");
-                                                    } ?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?= (isset($todaycust['total'])) ? number_format($todaycust['total'] ,0,",",".") : 0; ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Today Customers</div>
                                                 </div>
                                             </div>
@@ -104,9 +96,7 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="shopping-cart" class="report-box__icon text-primary"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($totalsales['total'])) {
-                                                        echo number_format($totalsales['total'] ,0,",",".");
-                                                    } ?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?= (isset($totalsales['total'])) ? number_format($totalsales['total'] ,0,",",".") : 0; ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Total Sales</div>
                                                 </div>
                                             </div>
@@ -130,9 +120,7 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="monitor" class="report-box__icon text-warning"></i>
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($totalpcs['total'])) {
-                                                        echo number_format($totalpcs['total'] ,0,",",".");
-                                                    } ?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?= (isset($totalpcs['total'])) ? number_format($totalpcs['total'] ,0,",",".") : 0;?></div>
                                                     <div class="text-base text-slate-500 mt-1">Total Pcs</div>
                                                 </div>
                                             </div>
@@ -143,9 +131,7 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     <div class="flex">
                                                         <i data-lucide="user" class="report-box__icon text-success"></i> 
                                                     </div>
-                                                    <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($totalcust['total'])) {
-                                                        echo number_format($totalcust['total'] ,0,",",".");
-                                                    } ?></div>
+                                                    <div class="text-3xl font-medium leading-8 mt-6"><?= (isset($totalcust['total'])) ? number_format($totalcust['total'] ,0,",",".") : 0;?></div>
                                                     <div class="text-base text-slate-500 mt-1">Total Customers</div>
                                                 </div>
                                             </div>
@@ -169,15 +155,16 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                             <?php
                                                 $queryinv = mysqli_query($conn,"SELECT Inv_Number,Cust_Nama,Payment_Amount from Invoice WHERE Status_Inv!='C' order by Inv_No DESC LIMIT 6");
                                                 while ($datainv = mysqli_fetch_assoc($queryinv)) {
+                                                    $invoice = $datainv['Inv_Number'];
                                                  
                                             ?>
-                                            <div class="intro-x">
+                                            <div class="intro-x" onclick="goInvoice('<?= $invoice ?>')">
                                                 <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
                                                     <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
                                                         <img alt="Midone - HTML Admin Template" src="dist/images/receipt.png">
                                                     </div>
                                                     <div class="ml-4 mr-auto">
-                                                        <div class="font-medium">#INV-<?php echo $datainv['Inv_Number'] ?></div>
+                                                        <div class="font-medium"><?php echo $datainv['Inv_Number'] ?></div>
                                                         <div class="text-slate-500 text-xs mt-0.5"><?php echo $datainv['Cust_Nama'] ?></div>
                                                     </div>
                                                     <div class="text-success">Rp <?php echo number_format($datainv['Payment_Amount'] ,0,",",".")?></div>
@@ -197,4 +184,9 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                 <!-- END: Content -->
             </div>
             <?php include 'appjs.php'; ?>
+            <script>
+                function goInvoice(invoice) {
+                    location.href='app?p=transactions_detail&invoice='+invoice;
+                }
+            </script>
            
