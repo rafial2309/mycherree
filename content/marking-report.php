@@ -8,7 +8,7 @@
                                 <div class="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-4 row-start-4 lg:row-start-4 xl:row-start-auto mt-6 xl:mt-8">
                                     <div class="intro-y flex items-center h-10">
                                         <h2 class="text-lg font-medium truncate mr-5">
-                                            Daily Payment Report
+                                            Daily Marking Report
                                         </h2>
                                     </div>
                                     <div class="report-box-2 before:hidden xl:before:block intro-y mt-5">
