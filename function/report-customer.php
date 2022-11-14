@@ -24,6 +24,8 @@ if ($_GET['menu'] == 'tampilcustomer' ) { ?>
     $tgl1 = $_GET['tgl1'];
     $tgl2 = $_GET['tgl2'];
     $cust = $_GET['cust'];
+    $payment = $_GET['payment'];
+    $taken = $_GET['taken'];
     ?>
    
 
@@ -48,7 +50,8 @@ if ($_GET['menu'] == 'tampilcustomer' ) { ?>
             <tbody id="hasil">
                 <?php 
                     $no=1;
-                    $query=mysqli_query($conn,"SELECT * from Invoice WHERE Cust_Id='$cust' and Inv_Tgl_Masuk>='$tgl1' AND Inv_Tgl_Masuk <= '$tgl2'"); 
+                    $custQuery = ($_GET['cust'] == '') ? '' : 'Cust_Id="'.$cust.'" and';
+                    $query=mysqli_query($conn,"SELECT * from Invoice WHERE $custQuery Inv_Tgl_Masuk>='$tgl1' AND Inv_Tgl_Masuk <= '$tgl2' AND Status_Payment='$payment' AND Status_Taken='$taken'"); 
                     while($data = mysqli_fetch_assoc($query)){
                 ?>
                 <tr>
@@ -59,8 +62,8 @@ if ($_GET['menu'] == 'tampilcustomer' ) { ?>
                     <td><?php echo $data['Cust_Nama'] ?></td>
                     <td><?php echo $data['Total_PCS'] ?></td>
                     <td>Rp <?php echo number_format($data['Payment_Amount'] ,0,",",".")?></td>
-                    <td><?php if ($data['Status_Payment']=='Y') { echo 'PAID'; } ?></td>
-                    <td><?php echo $data['Status_Taken'] ?></td>
+                    <td><?= ($data['Status_Payment']=='Y') ? 'PAID' : 'UNPAID' ?></td>
+                    <td><?= ($data['Status_Taken']=='Y') ? 'TAKEN' : 'UNTAKEN' ?></td>
                 </tr>
                 <?php } ?>
             </tbody>
