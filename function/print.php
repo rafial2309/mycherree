@@ -116,20 +116,21 @@ if ($_GET['type'] == 'invoice') {
 			<table width="100%" style="font-size:18px">
 				<?php
 				$total = 0;
+				$totalItemPrice = 0;
 				while ($item = mysqli_fetch_assoc($query)) {
 					$as = $invoice['Cust_ID'];
 					$cust = mysqli_query($conn, "SELECT *FROM Customer WHERE Cust_No='$as'");
 					$customer = mysqli_fetch_assoc($cust);
 					if ($invoice['Total_Diskon'] <> 0) {
-						$afterDisc = number_format($item['Total_Price'] - ($item['Total_Price'] * ($promo['Persentase'] / 100)),0,',','.');
+						$afterDisc = number_format($item['Total_Price'] - ($item['Item_Price'] * ($promo['Persentase'] / 100)),0,',','.');
 						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? $afterDisc : 'NON MEMBER';
-						$price = '<strike>'.number_format($item['Total_Price'],0,',','.').'</strike> '. $afterDisc;
+						$price = '<strike>'.number_format($item['Item_Price'],0,',','.').'</strike> '. $afterDisc;
 					} elseif ($item['Disc_Amount'] <> 0){
-						$price = '<strike>'.number_format($item['Item_Price'],0,',','.').'</strike> '. number_format($item['Total_Price'],0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? number_format($item['Total_Price'],0,',','.') : 'NON MEMBER';
+						$price = '<strike>'.number_format($item['Item_Price'],0,',','.').'</strike> '. number_format($item['Item_Price'],0,',','.');
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? number_format($item['Item_Price'],0,',','.') : 'NON MEMBER';
 					} else {
 						$price = number_format($item['Item_Price'],0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? number_format((10/100) * $item['Total_Price'],0,',','.') : 'NON MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? number_format((10/100) * $item['Item_Price'],0,',','.') : 'NON MEMBER';
 					}
 
 					echo '
@@ -160,6 +161,7 @@ if ($_GET['type'] == 'invoice') {
 						</td>
 					</tr>
 					';
+					$totalItemPrice += $item['Item_Price'];
 					$total += $item['Total_Price'];
 				}
 				?>     	
@@ -174,7 +176,7 @@ if ($_GET['type'] == 'invoice') {
 				</tr>
 				
 				<tr>
-					<td align="left">Discount(<?= (mysqli_num_rows($sql) > 0) ? $promo['Discount_Nama'].' '.$promo['Persentase'].'%' : ''?>) </td>
+					<td align="left">Discount(<?= (mysqli_num_rows($sql) > 0) ? $promo['Discount_Nama'].' '.$promo['Persentase'].'%' : '-'?>) </td>
 					<td align="right"><?= number_format($invoice['Total_Diskon'],0,',','.')?></td>
 				</tr>
 		
@@ -182,6 +184,12 @@ if ($_GET['type'] == 'invoice') {
 					<td align="left">Rounding</td>
 					<td align="right"><?= number_format($invoice['Payment_Rounding'],0,',','.')?></td>
 				</tr>
+				<?php if ($invoice['Express_Charge'] <> 0) {?>
+				<tr>
+					<td align="left">Express Charge (<?= $invoice['Express_Charge']?>%)</td>
+					<td align="right"><?= number_format(($invoice['Express_Charge']/100)*$totalItemPrice,0,',','.')?></td>
+				</tr>
+				<?php } ?>
 				<tr style="font-size: 20px;font-weight: bold;">
 					<td align="left">TOTAL </td>
 					<td align="right"><?= number_format($invoice['Payment_Amount'],0,',','.')?></td>

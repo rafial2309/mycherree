@@ -116,6 +116,25 @@
                                             
                                         </div> 
                                         <div class="mt-2" style="width: 100%;">
+                                        <div class="grid grid-cols-12 gap-4 gap-y-3">
+                                            <div class="col-span-6">
+                                                <div class="text-slate-500">Percentage Express</div>
+                                                <div class="mt-1">
+                                                    <div class="input-group">
+                                                        <input type="number" id="Percentage_Express" name="Express_Charge" class="form-control block mx-auto" data-single-mode="true" value="0" onblur="goExpress()" required> 
+                                                        <div id="input-group-email" class="input-group-text">%</div> 
+                                                    </div>    
+                                                </div>
+                                            </div>
+                                            <div class="col-span-6">
+                                                <div class="text-slate-500">Express Charge</div>
+                                                <div class="mt-1">
+                                                    <input type="text" id="Express_Charge" class=" form-control block mx-auto" data-single-mode="true" value="0"  readonly> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div> 
+                                        <div class="mt-2" style="width: 100%;">
                                             <div class="text-slate-500">Request Customer</div>
                                             <div class="mt-1">
                                                 <textarea id="Note" name="Note" class="form-control" style="width: 100%;"></textarea>
@@ -437,7 +456,7 @@
 
 
                 function gantitgl(){
-                    document.getElementById('Note').focus();
+                    document.getElementById('Percentage_Express').focus();
                 }
 
                 function tambahitem(Item_ID,Item_Name,Item_Price,Item_Pcs){
@@ -551,6 +570,33 @@
                     document.getElementById('pricetampiledit').innerHTML = priceupdate.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");;
                 }
 
+                function goExpress() {
+                    let persen  = $('#Percentage_Express').val();
+
+                    $.ajax({
+                        url:'function/transaksi_item?menu=totalan',
+                        type:'POST',
+                        dataType:'html',
+                        data: 'persen='+persen,
+                        success:function (response) {
+                            $('#totalan').html(response);
+
+                        },
+
+                    })
+
+                    $.ajax({
+                        url:'function/transaksi_item?menu=getcharge',
+                        type:'POST',
+                        dataType:'html',
+                        data: 'persen='+persen,
+                        success:function (response) {
+                            $('#Express_Charge').val(response);
+                            document.getElementById('Note').focus();
+                        },
+
+                    })
+                }
 
                 function getcart(){
                    

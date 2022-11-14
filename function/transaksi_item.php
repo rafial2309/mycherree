@@ -94,6 +94,11 @@ if ($_GET['menu'] == 'getitem' ) {
 	
 	$subtotal 		= $data['Total_Price'];
 	$totalItemPrice = $data['Total_Item_Price'];
+	$charge			= 0;
+
+	if (isset($_POST['persen'])) {
+		$charge = ((int)$_POST['persen']/100) * $totalItemPrice;
+	}
 	
 	if (isset($_SESSION['Cust_No'])) {
 		$datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$_SESSION[Cust_No]'"));
@@ -116,6 +121,9 @@ if ($_GET['menu'] == 'getitem' ) {
 	if (isset($invoice)) {
 		$customer = $invoice['Cust_ID'];
 		$datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$customer'"));
+		$charge = ($invoice['Express_Charge'] <> 0) ? ($invoice['Express_Charge']/100) * $totalItemPrice : 0;
+		$charge = (isset($_POST['persen'])) ? ((int)$_POST['persen'] / 100) * $totalItemPrice : $charge;
+		
 		if (isset($datadisc['Persentase'])) {
 			$persentase = $datadisc['Persentase'];
 			$namadiskon = $datadisc['Cust_Member_Name'];
@@ -127,7 +135,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		}
 	}
 	
-	$total 		= $subtotal - $diskon;
+	$total 		= $subtotal - $diskon + $charge;
 ?>
 
 	<div class="flex">
@@ -142,6 +150,11 @@ if ($_GET['menu'] == 'getitem' ) {
         <div class="mr-auto">Total PCS</div>
         <div class="font-medium text-danger"><c id="totalpcs"><?php echo number_format($datapcs['Total_Pcs'],0,",",".")?></c></div>
     </div>
+	 <div class="flex mt-4">
+        <div class="mr-auto">Express Charge</div>
+        <div class="font-medium text-danger"><c id="charge"><?php echo number_format($charge,0,",",".")?></c></div>
+    </div>
+    
     
     <div class="flex mt-4 pt-4 border-t border-slate-200/60 dark:border-darkmode-400">
         <div class="mr-auto font-medium text-base">Total</div>
@@ -187,7 +200,22 @@ if ($_GET['menu'] == 'getitem' ) {
 	} else {
 		mysqli_query($conn,"INSERT into Invoice_Item VALUES(0,'','$Item_No','$Deskripsi','$Item_ID','$Colour_ID','$Brand_ID','$Size','$Item_Note','$Item_Price','$Item_Pcs','$Adjustment','$Adjustment_Note','$Qty','$Total_Price','','','$Staff_ID','$Staff_Name','','$disc_persen','$disc_rupiah','$request')");	
 	}
-}elseif ($_GET['menu'] == 'edititem') { 
+} elseif ($_GET['menu'] == 'getcharge') {
+	
+	if (isset($_POST['id'])) {
+		$id = $_POST['id'];
+		$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price, sum(Item_Price) as Total_Item_Price from Invoice_Item WHERE Inv_Number='$id'"));
+	} else {
+		$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price, sum(Item_Price) as Total_Item_Price from Invoice_Item WHERE Inv_Number='' AND Staff_ID='$Staff_ID'"));
+	}
+	
+	$totalItemPrice = $data['Total_Item_Price'];
+	$charge			= ($_POST['persen'] / 100) * $data['Total_Item_Price'];
+	
+	echo number_format($charge,0,',','.');
+	exit();
+
+} elseif ($_GET['menu'] == 'edititem') { 
 	$id = $_POST['id'];
 	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Item WHERE Inv_Item_No='$id'"));
 	$databrand = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Brand_ID,Brand_Name from Master_Brand WHERE Brand_ID='$data[Brand_ID]'"));
@@ -380,6 +408,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		$Cust_Alamat	= $_POST['Cust_Alamat'];
 		$Cust_Telp		= $_POST['Cust_Telp'];
 		
+		$Express_Charge		= $_POST['Express_Charge'];
 		$Discount_No		= $_POST['Discount_No'];
 		$Total_PCS			= $_POST['totalpcs'];
 		$Total_Diskon		= $_POST['diskon'];
@@ -388,7 +417,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		$Payment_Amount		= angka_pembulatan($Payment_Before,2,100);
 		$Payment_Rounding	= $Payment_Amount-$Payment_Before;
 
-		mysqli_query($conn, "UPDATE Invoice SET Cust_ID='$Cust_ID', Cust_Nama='$Cust_Nama', Cust_Alamat='$Cust_Alamat', Cust_Telp='$Cust_Telp', Note='$Note', Inv_Tg_Selesai='$Inv_Tg_Selesai', Discount_No='$Discount_No', Total_PCS='$Total_PCS', Total_Diskon='$Total_Diskon', Total_Voucher='$Total_Voucher', Payment_Before='$Payment_Before', Payment_Amount='$Payment_Amount', Payment_Rounding='$Payment_Rounding' WHERE Inv_Number='$invoice'");
+		mysqli_query($conn, "UPDATE Invoice SET Cust_ID='$Cust_ID', Cust_Nama='$Cust_Nama', Cust_Alamat='$Cust_Alamat', Cust_Telp='$Cust_Telp', Note='$Note', Inv_Tg_Selesai='$Inv_Tg_Selesai', Discount_No='$Discount_No', Total_PCS='$Total_PCS', Total_Diskon='$Total_Diskon', Total_Voucher='$Total_Voucher', Payment_Before='$Payment_Before', Payment_Amount='$Payment_Amount', Payment_Rounding='$Payment_Rounding', Express_Charge='$Express_Charge' WHERE Inv_Number='$invoice'");
 		echo $invoice;
 		exit();
 	}
@@ -422,6 +451,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	$Cust_Alamat		= $_POST['Cust_Alamat'];
 	$Cust_Telp			= $_POST['Cust_Telp'];
 	$Discount_No		= $_POST['Discount_No'];
+	$Express_Charge		= $_POST['Express_Charge'];
 	$Total_PCS			= $_POST['totalpcs'];
 	$Total_Diskon		= $_POST['diskon'];
 	$Total_Voucher		= 0;
@@ -438,7 +468,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	$Point_Transaksi	= 0;
 
 
-	mysqli_query($conn,"INSERT into Invoice VALUES(0,'$Inv_Number','$Inv_Tgl_Masuk','$Inv_Tg_Selesai','$Cust_ID','$Cust_Nama','$Cust_Alamat','$Cust_Telp','$Discount_No','$Total_PCS','$Total_Diskon','$Total_Voucher','$Payment_Before','$Payment_Rounding','$Payment_Amount','$Status_Payment','$Status_Taken','$Status_Inv','$Status_Marking','$Note','$Staff_Name','$Staff_ID','$Point_Transaksi')");
+	mysqli_query($conn,"INSERT into Invoice VALUES(0,'$Inv_Number','$Inv_Tgl_Masuk','$Inv_Tg_Selesai','$Cust_ID','$Cust_Nama','$Cust_Alamat','$Cust_Telp','$Discount_No','$Total_PCS','$Total_Diskon','$Total_Voucher','$Payment_Before','$Payment_Rounding','$Payment_Amount','$Status_Payment','$Status_Taken','$Status_Inv','$Status_Marking','$Note','$Staff_Name','$Staff_ID','$Point_Transaksi','$Express_Charge')");
 
 	mysqli_query($conn,"UPDATE Invoice_Item SET Inv_Number='$Inv_Number' WHERE Inv_Number='' AND Staff_ID='$Staff_ID'");
 

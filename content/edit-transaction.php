@@ -2,6 +2,9 @@
 $id         = $_GET['id'];
 $sql        = mysqli_query($conn, "SELECT *FROM Invoice WHERE Inv_No='$id'");
 $invoice    = mysqli_fetch_assoc($sql);
+
+$data       = mysqli_fetch_assoc(mysqli_query($conn, "SELECT sum(Item_Price) as Total_Item_Price FROM Invoice_Item WHERE Inv_Number = '$invoice[Inv_Number]'"));
+$charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_Item_Price'],0,',','.');
 ?>
 <div class="wrapper-box">
     <!-- BEGIN: Content -->
@@ -94,7 +97,27 @@ $invoice    = mysqli_fetch_assoc($sql);
                                     <input type="date" name="Inv_Tg_Selesai" class=" form-control block mx-auto" value="<?= $invoice['Inv_Tg_Selesai']?>" onchange="gantitgl()" data-single-mode="true" required> 
                                 </div>
                                 
+                            </div>
+                            <div class="mt-2" style="width: 100%;">
+                                <div class="grid grid-cols-12 gap-4 gap-y-3">
+                                    <div class="col-span-6">
+                                        <div class="text-slate-500">Percentage Express</div>
+                                        <div class="mt-1">
+                                            <div class="input-group">
+                                                <input type="number" id="Percentage_Express" name="Express_Charge" class="form-control block mx-auto" data-single-mode="true" value="<?= $invoice['Express_Charge'] ?>" onblur="goExpress()" required> 
+                                                <div id="input-group-email" class="input-group-text">%</div> 
+                                            </div>    
+                                        </div>
+                                    </div>
+                                    <div class="col-span-6">
+                                        <div class="text-slate-500">Express Charge</div>
+                                        <div class="mt-1">
+                                            <input type="text" id="Express_Charge" class=" form-control block mx-auto" data-single-mode="true" value="<?= $charge ?>"  readonly> 
+                                        </div>
+                                    </div>
+                                </div>
                             </div> 
+                                    
                             <div class="mt-2" style="width: 100%;">
                                 <div class="text-slate-500">Request Customer</div>
                                 <div class="mt-1">
@@ -569,6 +592,34 @@ $invoice    = mysqli_fetch_assoc($sql);
                 document.getElementById('closemodalitemnewedit').click();
                 getcart(invoice);
                 document.getElementById('danger-additem').click();
+            },
+
+        })
+    }
+
+    function goExpress() {
+        let persen  = $('#Percentage_Express').val();
+
+        $.ajax({
+            url:'function/transaksi_item?menu=totalan',
+            type:'POST',
+            dataType:'html',
+            data: 'persen='+persen+'&id='+invoice,
+            success:function (response) {
+                $('#totalan').html(response);
+
+            }, 
+
+        })
+
+        $.ajax({
+            url:'function/transaksi_item?menu=getcharge',
+            type:'POST',
+            dataType:'html',
+            data: 'persen='+persen+'&id='+invoice,
+            success:function (response) {
+                $('#Express_Charge').val(response);
+                document.getElementById('Note').focus();
             },
 
         })
