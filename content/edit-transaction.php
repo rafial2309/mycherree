@@ -96,7 +96,7 @@ $invoice    = mysqli_fetch_assoc($sql);
                                 
                             </div> 
                             <div class="mt-2" style="width: 100%;">
-                                <div class="text-slate-500">Note Transaction</div>
+                                <div class="text-slate-500">Request Customer</div>
                                 <div class="mt-1">
                                     <textarea id="Note" name="Note" class="form-control" style="width: 100%;"><?= $invoice['Note']?></textarea>
                                 </div>
