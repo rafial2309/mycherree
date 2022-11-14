@@ -323,7 +323,7 @@ if ($_GET['type'] == 'customer') {
         $sheet->setCellValue('F' . $baris, $data['Cust_Alamat']);
         $sheet->setCellValue('G' . $baris, $data['Total_PCS']);
         $sheet->setCellValue('H' . $baris, $data['Payment_Amount']);
-        $sheet->setCellValue('I' . $baris, ($data['Cust_Member_Name'] == 'MEMBERSHIP') ? 'MEMBER' : 'NONMEMBER');
+        $sheet->setCellValue('I' . $baris, ($data['Cust_Member_Name'] == 'MEMBER') ? 'MEMBER' : 'NONMEMBER');
         $sheet->setCellValue('J' . $baris, ($data['Status_Payment'] == 'Y') ? 'PAID' : 'UNPAID');
         $sheet->setCellValue('K' . $baris, $data['Staff_Name']);
         $baris++;
@@ -395,7 +395,7 @@ if ($_GET['type'] == 'customer') {
         $sheet->setCellValue('F' . $baris, $data['Cust_Alamat']);
         $sheet->setCellValue('G' . $baris, $data['Total_PCS']);
         $sheet->setCellValue('H' . $baris, $data['Payment_Amount']);
-        $sheet->setCellValue('I' . $baris, ($data['Cust_Member_Name'] == 'MEMBERSHIP') ? 'MEMBER' : 'NONMEMBER');
+        $sheet->setCellValue('I' . $baris, ($data['Cust_Member_Name'] == 'MEMBER') ? 'MEMBER' : 'NONMEMBER');
         $sheet->setCellValue('J' . $baris, ($data['Status_Payment'] == 'Y') ? 'PAID' : 'UNPAID');
         $sheet->setCellValue('K' . $baris, $data['Staff_Name']);
         $baris++;
@@ -467,7 +467,7 @@ if ($_GET['type'] == 'customer') {
         $sheet->setCellValue('F' . $baris, $data['Cust_Alamat']);
         $sheet->setCellValue('G' . $baris, $data['Total_PCS']);
         $sheet->setCellValue('H' . $baris, $data['Payment_Amount']);
-        $sheet->setCellValue('I' . $baris, ($data['Cust_Member_Name'] == 'MEMBERSHIP') ? 'MEMBER' : 'NONMEMBER');
+        $sheet->setCellValue('I' . $baris, ($data['Cust_Member_Name'] == 'MEMBER') ? 'MEMBER' : 'NONMEMBER');
         $sheet->setCellValue('J' . $baris, ($data['Status_Payment'] == 'Y') ? 'PAID' : 'UNPAID');
         $sheet->setCellValue('K' . $baris, $data['Staff_Name']);
         $baris++;
@@ -676,7 +676,7 @@ if ($_GET['type'] == 'customer') {
         $nestedData['Cust_Alamat']      = $row["Cust_Alamat"];
         $nestedData['Total_PCS']        = number_format($row["Total_PCS"],0,',','.');
         $nestedData['Payment_Amount']   = number_format($row["Payment_Amount"],0,',','.');
-        $nestedData['Cust_Member_Name'] = ($row['Cust_Member_Name'] == 'MEMBERSHIP') ? 'MEMBER' : 'NONMEMBER';
+        $nestedData['Cust_Member_Name'] = ($row['Cust_Member_Name'] == 'MEMBER') ? 'MEMBER' : 'NONMEMBER';
         $nestedData['Status_Payment']   = ($row['Status_Payment'] == 'Y') ? 'PAID' : 'UNPAID';
         $nestedData['Staff_Name']       = $row["Staff_Name"];
         

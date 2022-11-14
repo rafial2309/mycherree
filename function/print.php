@@ -55,24 +55,39 @@ if ($_GET['type'] == 'invoice') {
 				<div style="width: 100%;">
 					<table style="font-size:16px; margin-top:10px">
 						<tr>
-							<td width="40%" align="left">Invoice</td>
-							<td width="60%">: <?= $invoice['Inv_Number']?> </td>
+							<td width="30%" align="left">Invoice</td>
+							<td width="10%">:</td>
+							<td width="60%"> <?= $invoice['Inv_Number']?> </td>
 						</tr>
 						<tr>
-							<td width="40%" align="left">Customer</td>
-							<td width="60%">: <?= $invoice['Cust_Nama']?></td>
+							<td width="30%" align="left">Customer</td>
+							<td width="10%">:</td>
+							<td width="60%"> <?= $invoice['Cust_Nama']?></td>
 						</tr>
 						<tr>
-							<td width="40%" align="left">Order</td>
-							<td width="60%">: <?= date('d M Y', strtotime($invoice['Inv_Tgl_Masuk']))?> </td>
+							<td width="30%" align="left" valign="top">Alamat</td>
+							<td width="10%" valign="top">:</td>
+							<td width="60%"> <?= $invoice['Cust_Alamat']?> </td>
 						</tr>
 						<tr>
-							<td width="40%" align="left">Ready</td>
-							<td width="60%">: <?= date('d M Y', strtotime($invoice['Inv_Tg_Selesai']))?> </td>
+							<td width="30%" align="left" valign="top">Telepon</td>
+							<td width="10%" valign="top">:</td>
+							<td width="60%"> <?=$invoice['Cust_Telp']?> </td>
 						</tr>
 						<tr>
-							<td width="40%" align="left">Served By</td>
-							<td width="60%">: <?= $invoice['Staff_Name']?> </td>
+							<td width="30%" align="left">Order</td>
+							<td width="10%">:</td>
+							<td width="60%"> <?= date('d M Y', strtotime($invoice['Inv_Tgl_Masuk']))?> </td>
+						</tr>
+						<tr>
+							<td width="30%" align="left">Ready</td>
+							<td width="10%">:</td>
+							<td width="60%"> <?= date('d M Y', strtotime($invoice['Inv_Tg_Selesai']))?> </td>
+						</tr>
+						<tr>
+							<td width="30%" align="left">Served By</td>
+							<td width="10%">:</td>
+							<td width="60%"> <?= $invoice['Staff_Name']?> </td>
 						</tr>
 					</table>
 					<!-- asd -->
@@ -107,14 +122,14 @@ if ($_GET['type'] == 'invoice') {
 					$customer = mysqli_fetch_assoc($cust);
 					if ($invoice['Total_Diskon'] <> 0) {
 						$afterDisc = number_format($item['Total_Price'] - ($item['Total_Price'] * ($promo['Persentase'] / 100)),0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? $afterDisc : 'NON MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? $afterDisc : 'NON MEMBER';
 						$price = '<strike>'.number_format($item['Total_Price'],0,',','.').'</strike> '. $afterDisc;
 					} elseif ($item['Disc_Amount'] <> 0){
 						$price = '<strike>'.number_format($item['Item_Price'],0,',','.').'</strike> '. number_format($item['Total_Price'],0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? number_format($item['Total_Price'],0,',','.') : 'NON MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? number_format($item['Total_Price'],0,',','.') : 'NON MEMBER';
 					} else {
 						$price = number_format($item['Item_Price'],0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBERSHIP') ? number_format((10/100) * $item['Total_Price'],0,',','.') : 'NON MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? number_format((10/100) * $item['Total_Price'],0,',','.') : 'NON MEMBER';
 					}
 
 					echo '
@@ -126,7 +141,7 @@ if ($_GET['type'] == 'invoice') {
 						<td align="right" valign="top" style="padding-left:8px">'.number_format($item['Total_Price'],0,',','.').'</td>
 					</tr>';
 
-					if ($customer['Cust_Member_Name'] == 'MEMBERSHIP') {
+					if ($customer['Cust_Member_Name'] == 'MEMBER') {
 					echo '
 					<tr>
 						<td align="left">Discount Member 10%</td>
@@ -174,7 +189,7 @@ if ($_GET['type'] == 'invoice') {
 			</table>
 			<br>
 			
-				<?= ($customer['Cust_Member_Name'] <> 'MEMBERSHIP') ? '<center style="font-size: 18px;">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center><br>' : ''?>
+				<?= ($customer['Cust_Member_Name'] <> 'MEMBER') ? '<center style="font-size: 18px;">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center><br>' : ''?>
 			============================
 			<br><br>
 			<div style="font-size:18px">
