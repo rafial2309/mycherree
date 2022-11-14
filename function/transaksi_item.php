@@ -85,21 +85,22 @@ if ($_GET['menu'] == 'getitem' ) {
 	if (isset($_POST['id'])) {
 		$id = $_POST['id'];
 		$invoice = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice WHERE Inv_Number='$id'"));
-		$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price from Invoice_Item WHERE Inv_Number='$id'"));
+		$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price, sum(Item_Price) as Total_Item_Price from Invoice_Item WHERE Inv_Number='$id'"));
 		$datapcs = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Item_Pcs*Qty) as Total_Pcs from Invoice_Item WHERE Inv_Number='$id'"));
 	} else {
-		$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price from Invoice_Item WHERE Inv_Number='' AND Staff_ID='$Staff_ID'"));
+		$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_Price) as Total_Price, sum(Item_Price) as Total_Item_Price from Invoice_Item WHERE Inv_Number='' AND Staff_ID='$Staff_ID'"));
 		$datapcs = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Item_Pcs*Qty) as Total_Pcs from Invoice_Item WHERE Inv_Number='' AND Staff_ID='$Staff_ID'"));
 	}
 	
-	$subtotal 	= $data['Total_Price'];
+	$subtotal 		= $data['Total_Price'];
+	$totalItemPrice = $data['Total_Item_Price'];
 	
 	if (isset($_SESSION['Cust_No'])) {
 		$datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$_SESSION[Cust_No]'"));
 		if (isset($datadisc['Persentase'])) {
 			$persentase = $datadisc['Persentase'];
 			$namadiskon = $datadisc['Cust_Member_Name'];
-			$diskon 	= round(($datadisc['Persentase']/100)*$subtotal);
+			$diskon 	= round(($datadisc['Persentase']/100)*$totalItemPrice);
 		}else{
 			$persentase = '';
 			$namadiskon = '';
@@ -118,7 +119,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		if (isset($datadisc['Persentase'])) {
 			$persentase = $datadisc['Persentase'];
 			$namadiskon = $datadisc['Cust_Member_Name'];
-			$diskon 	= round(($datadisc['Persentase']/100)*$subtotal);
+			$diskon 	= round(($datadisc['Persentase']/100)*$totalItemPrice);
 		}else{
 			$persentase = '';
 			$namadiskon = '';

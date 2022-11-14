@@ -240,7 +240,7 @@ $invoice    = mysqli_fetch_assoc($sql);
                         </div>
                         
                         <div class="col-span-6">
-                            <label for="regular-form-1" class="form-label">Adjustment</label>
+                            <label for="regular-form-1" class="form-label">Special Treatment</label>
                             <div class="input-group">
                                     <div id="input-group-email" class="input-group-text">Rp</div> 
                                     <input type="text" onkeyup="updateitemprice()" name="adjustment" id="adjustment" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email">
@@ -250,7 +250,7 @@ $invoice    = mysqli_fetch_assoc($sql);
                         </div>
                         <div class="col-span-6">
                             <label for="regular-form-1" class="form-label text-white">Adjustment</label>
-                            <input id="note_adjustment" name="note_adjustment" type="text" class="form-control" placeholder="Note Adjustment">
+                            <input id="note_adjustment" name="note_adjustment" type="text" class="form-control" placeholder="Note Special Treatment">
                             <!-- kirimdata -->
                                     
                                     
