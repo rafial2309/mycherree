@@ -92,10 +92,10 @@ $Staff_Name         = $_SESSION['Staff_Name'];
         <div class="col-span-12">
             <hr>
         </div>
-        <div class="col-span-6">
+        <div class="col-span-12">
              <div class="mt-1 mb-2"> <label>Paymet Method</label>
                  <div class="flex flex-col sm:flex-row mt-3">
-                     <div class="form-check mr-3"> <input id="radio-cash" class="form-check-input" type="radio" name="payment_method" value="CASH" checked> 
+                    <div class="form-check mr-3"> <input id="radio-cash" class="form-check-input" type="radio" name="payment_method" value="CASH" checked> 
                         <label class="form-check-label" for="radio-cash"> CASH</label> 
                     </div>
                     <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-transfer" class="form-check-input" type="radio" name="payment_method" value="TRANSFER"> 
@@ -103,6 +103,12 @@ $Staff_Name         = $_SESSION['Staff_Name'];
                     </div>
                     <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-deposit" class="form-check-input" type="radio" name="payment_method" value="DEPOSIT"> 
                         <label class="form-check-label" for="radio-deposit"> DEPOSIT</label> 
+                    </div>
+                    <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-deposit" class="form-check-input" type="radio" name="payment_method" value="DEBIT/EDC"> 
+                        <label class="form-check-label" for="radio-deposit"> DEBIT/EDC</label> 
+                    </div>
+                    <div class="form-check mr-3 mt-2 sm:mt-0"> <input id="radio-deposit" class="form-check-input" type="radio" name="payment_method" value="QRIS"> 
+                        <label class="form-check-label" for="radio-deposit"> QRIS</label> 
                     </div>
                  </div>
              </div>
