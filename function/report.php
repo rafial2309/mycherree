@@ -331,20 +331,20 @@ if ($_GET['type'] == 'customer') {
     }
     $akhir = $baris - 1; 
 
-    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
+    $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
     $total = mysqli_fetch_assoc($query);
     
     $mulai = $akhir + 3;
     $after = $mulai + 1;
 
-    $sheet->setCellValue('J' . $mulai, 'Total Amount');
-    $sheet->setCellValue('K' . $mulai, 'Total PCS');
+    $sheet->setCellValue('G' . $mulai, 'Total PCS');
+    $sheet->setCellValue('H' . $mulai, 'Total Amount');
     
-    $sheet->setCellValue('J' . $after, $total['Total_Amount']);
-    $sheet->setCellValue('K' . $after, $total['Total_PCS']);
+    $sheet->setCellValue('G' . $after, $total['Total_PCS']);
+    $sheet->setCellValue('H' . $after, $total['Total_Amount']);
     
-    $sheet->getStyle('J'.$mulai.':K' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('J'.$after.':K' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->getStyle('G'.$mulai.':H' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('G'.$after.':H' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
       
     foreach ($sheet->getColumnIterator() as $column) {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
@@ -410,14 +410,14 @@ if ($_GET['type'] == 'customer') {
     $mulai = $akhir + 3;
     $after = $mulai + 1;
 
-    $sheet->setCellValue('J' . $mulai, 'Total Amount');
-    $sheet->setCellValue('K' . $mulai, 'Total PCS');
+    $sheet->setCellValue('G' . $mulai, 'Total PCS');
+    $sheet->setCellValue('H' . $mulai, 'Total Amount');
     
-    $sheet->setCellValue('J' . $after, $total['Total_Amount']);
-    $sheet->setCellValue('K' . $after, $total['Total_PCS']);
+    $sheet->setCellValue('G' . $after, $total['Total_PCS']);
+    $sheet->setCellValue('H' . $after, $total['Total_Amount']);
     
-    $sheet->getStyle('J'.$mulai.':K' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('J'.$after.':K' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->getStyle('G'.$mulai.':H' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('G'.$after.':H' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
     
     foreach ($sheet->getColumnIterator() as $column) {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
@@ -481,14 +481,14 @@ if ($_GET['type'] == 'customer') {
     $mulai = $akhir + 3;
     $after = $mulai + 1;
 
-    $sheet->setCellValue('J' . $mulai, 'Total Amount');
-    $sheet->setCellValue('K' . $mulai, 'Total PCS');
+    $sheet->setCellValue('G' . $mulai, 'Total PCS');
+    $sheet->setCellValue('H' . $mulai, 'Total Amount');
     
-    $sheet->setCellValue('J' . $after, $total['Total_Amount']);
-    $sheet->setCellValue('K' . $after, $total['Total_PCS']);
+    $sheet->setCellValue('G' . $after, $total['Total_PCS']);
+    $sheet->setCellValue('H' . $after, $total['Total_Amount']);
     
-    $sheet->getStyle('J'.$mulai.':K' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('J'.$after.':K' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
+    $sheet->getStyle('G'.$mulai.':H' . $after)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('G'.$after.':H' . $after)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
     
     foreach ($sheet->getColumnIterator() as $column) {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
