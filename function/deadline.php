@@ -64,14 +64,8 @@ $tgl1 = $_GET['tgl1'];
             </tr>
         </tfoot>
     </table>
-
-        
-
 </div>
-
-
 </div>
-
 
 <script type="text/javascript" src="plugin/datatable/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="plugin/datatable/jquery.dataTables.min.js"></script>
@@ -81,34 +75,19 @@ $tgl1 = $_GET['tgl1'];
 <script type="text/javascript" src="plugin/datatable/vfs_fonts.js"></script>
 <script type="text/javascript" src="plugin/datatable/jszip.min.js"></script>
 <script type="text/javascript" src="plugin/datatable/buttons.html5.min.js"></script>
-<script type="text/javascript">
+<script type="text/javascript">   
+    $(document).ready(function() {
+       
+        $('#example').DataTable( {
+            dom: 'Bfrtip',
+            "paging": false,
+            "order":false,
+            buttons: [
+                { extend: 'excelHtml5', footer: true,messageTop: 'DATE LINE <?php echo date('d F Y', strtotime($tgl1)); ?>' },
+            ]
 
-                
-                $(document).ready(function() {
-                   
-                    $('#example').DataTable( {
-                        dom: 'Bfrtip',
-                        "paging": false,
-                        "order":false,
-                        buttons: [
-                            { extend: 'excelHtml5', footer: true,messageTop: 'DATE LINE <?php echo date('d F Y', strtotime($tgl1)); ?>' },
-                        ]
-
-                        
-                         
-                    } );     
-                } );
-
-              
-
-           
-
-                function btnExcel () {
-                    //let search = $('#example_filter :input').val();
-
-                    //location.href='function/report?type=customer&search='+search;
-                }
-
-                
-
+            
+             
+        } );     
+    } );
 </script>
