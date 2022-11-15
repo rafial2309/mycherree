@@ -10,6 +10,7 @@ $tgl1 = $_GET['tgl1'];
     
 
 <div style="width:100%;">
+    <h2  style="text-align: center;font-size: 18px;text-transform: uppercase;font-weight: bold;">DATE LINE <?php echo date('d F Y', strtotime($tgl1)); ?></h2>
     <table id="example" class="display" style="width:100%">
         <thead>
             <tr>
@@ -21,7 +22,7 @@ $tgl1 = $_GET['tgl1'];
                 <th>Address</th>
                 <th>Item</th>
                 <th style="width:100px">Total</th>
-                <th>L</th>
+                <th>Payment</th>
                 <th>Sign</th>
             </tr>
         </thead>
@@ -42,24 +43,26 @@ $tgl1 = $_GET['tgl1'];
                 <td style="text-transform: capitalize;"><?php echo $data['Cust_Alamat'] ?></td>
                 <td><?php echo $data['Total_PCS']; $totpcs = $totpcs+intval($data['Total_PCS']); ?></td>
                 <td>Rp&nbsp;<?php echo number_format($data['Payment_Amount'] ,0,",","."); $totpay = $totpay+intval($data['Payment_Amount']);?></td>
-                <td><?php if ($data['Status_Payment']=='Y') { echo 'L'; } ?></td>
+                <td><?php if ($data['Status_Payment']=='Y') { echo 'PAID'; } ?></td>
                 <td></td>
             </tr>
             <?php } ?>
+            
+        </tbody>
+        <tfoot>
             <tr style="background-color:yellow;font-weight: bold;font-size: 20px;">
                 <td></td>
-                <td>TOTAL</td>
+                <td style="font-weight:bold;">TOTAL</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td><?php echo number_format($totpcs ,0,",","."); ?></td>
-                <td><?php echo number_format($totpay ,0,",","."); ?></td>
+                <td style="font-weight:bold;"><?php echo number_format($totpcs ,0,",","."); ?></td>
+                <td>Rp&nbsp;<?php echo number_format($totpay ,0,",","."); ?></td>
                 <td></td>
                 <td></td>
             </tr>
-        </tbody>
-        
+        </tfoot>
     </table>
 
         
@@ -82,15 +85,14 @@ $tgl1 = $_GET['tgl1'];
 
                 
                 $(document).ready(function() {
+                   
                     $('#example').DataTable( {
                         dom: 'Bfrtip',
                         "paging": false,
                         "order":false,
                         buttons: [
-                                'excelHtml5',
-                                'pdfHtml5'
-                            
-                            ],  
+                            { extend: 'excelHtml5', footer: true,messageTop: 'DATE LINE <?php echo date('d F Y', strtotime($tgl1)); ?>' },
+                        ]
 
                         
                          
