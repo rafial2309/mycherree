@@ -6,48 +6,78 @@ $tgl1 = $_GET['tgl1'];
 ?>
 <link rel="stylesheet" href="plugin/datatable/jquery.dataTables.min.css" />
 <link rel="stylesheet" href="plugin/datatable/buttons.dataTables.min.css" />
-<table id="example" class="display" style="width:100%">
-    <thead>
-        <tr>
-            <th style="width:30px">No</th>
-            <th>Invoice</th>
-            <th>Order</th>
-            <th>Ready</th>
-            <th>Customer</th>
-            <th>Pcs</th>
-            <th>Total</th>
-            <th>Payment</th>
-            <th>Sign</th>
-        </tr>
-    </thead>
-    <tbody id="hasil">
-        <?php 
-            $no=1;
-            $query=mysqli_query($conn,"SELECT * from Invoice WHERE Inv_Tg_Selesai='$tgl1'"); 
-            while($data = mysqli_fetch_assoc($query)){
-        ?>
-        <tr>
-            <td><?php echo $no++; ?></td>
-            <td><?php echo $data['Inv_Number'] ?></td>
-            <td><?php echo date('d M Y', strtotime($data['Inv_Tgl_Masuk'])); ?></td>
-            <td><?php echo date('d M Y', strtotime($data['Inv_Tg_Selesai'])); ?></td>
-            <td><?php echo $data['Cust_Nama'] ?></td>
-            <td><?php echo $data['Total_PCS'] ?></td>
-            <td>Rp <?php echo number_format($data['Payment_Amount'] ,0,",",".")?></td>
-            <td><?php if ($data['Status_Payment']=='Y') { echo 'PAID'; } ?></td>
-            <td></td>
-        </tr>
-        <?php } ?>
-    </tbody>
-</table>
+<div style="width:100%;display: inline-flex;">
+    
 
-    <script type="text/javascript" src="plugin/datatable/jquery-3.5.1.js"></script>
-    <script type="text/javascript" src="plugin/datatable/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="plugin/datatable/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" src="plugin/datatable/buttons.flash.min.js"></script>
-    <script type="text/javascript" src="plugin/datatable/jszip.min.js"></script>
-    <script type="text/javascript" src="plugin/datatable/buttons.html5.min.js"></script>
+<div style="width:100%;">
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th style="width:30px">No</th>
+                <th>Invoice</th>
+                <th>Order</th>
+                <th>Ready</th>
+                <th>Customer</th>
+                <th>Address</th>
+                <th>Item</th>
+                <th style="width:100px">Total</th>
+                <th>L</th>
+                <th>Sign</th>
+            </tr>
+        </thead>
+        <tbody id="hasil">
+            <?php 
+                $no=1;
+                $totpcs=0;
+                $totpay=0;
+                $query=mysqli_query($conn,"SELECT * from Invoice WHERE Inv_Tg_Selesai='$tgl1'"); 
+                while($data = mysqli_fetch_assoc($query)){
+            ?>
+            <tr>
+                <td><?php echo $no++; ?></td>
+                <td><?php echo $data['Inv_Number'] ?></td>
+                <td><?php echo date('d M Y', strtotime($data['Inv_Tgl_Masuk'])); ?></td>
+                <td><?php echo date('d M Y', strtotime($data['Inv_Tg_Selesai'])); ?></td>
+                <td><?php echo $data['Cust_Nama'] ?></td>
+                <td style="text-transform: capitalize;"><?php echo $data['Cust_Alamat'] ?></td>
+                <td><?php echo $data['Total_PCS']; $totpcs = $totpcs+intval($data['Total_PCS']); ?></td>
+                <td>Rp&nbsp;<?php echo number_format($data['Payment_Amount'] ,0,",","."); $totpay = $totpay+intval($data['Payment_Amount']);?></td>
+                <td><?php if ($data['Status_Payment']=='Y') { echo 'L'; } ?></td>
+                <td></td>
+            </tr>
+            <?php } ?>
+            <tr style="background-color:yellow;font-weight: bold;font-size: 20px;">
+                <td></td>
+                <td>TOTAL</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><?php echo number_format($totpcs ,0,",","."); ?></td>
+                <td><?php echo number_format($totpay ,0,",","."); ?></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+        
+    </table>
 
+        
+
+</div>
+
+
+</div>
+
+
+<script type="text/javascript" src="plugin/datatable/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="plugin/datatable/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="plugin/datatable/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="plugin/datatable/buttons.flash.min.js"></script>
+<script type="text/javascript" src="plugin/datatable/pdfmake.min.js"></script>
+<script type="text/javascript" src="plugin/datatable/vfs_fonts.js"></script>
+<script type="text/javascript" src="plugin/datatable/jszip.min.js"></script>
+<script type="text/javascript" src="plugin/datatable/buttons.html5.min.js"></script>
 <script type="text/javascript">
 
                 
@@ -55,13 +85,21 @@ $tgl1 = $_GET['tgl1'];
                     $('#example').DataTable( {
                         dom: 'Bfrtip',
                         "paging": false,
+                        "order":false,
                         buttons: [
-                            'excel',
+                                'excelHtml5',
+                                'pdfHtml5'
                             
                             ],  
+
+                        
                          
                     } );     
                 } );
+
+              
+
+           
 
                 function btnExcel () {
                     //let search = $('#example_filter :input').val();
