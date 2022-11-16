@@ -351,6 +351,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                         <th>Address</th>
                         <th>Item</th>
                         <th style="width:100px">Total</th>
+                        <th>Untaken</th>
                         <th>Payment</th>
                     </tr>
                 </thead>
@@ -376,6 +377,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                             <td><?php echo $data['Total_PCS']; $totpcs = $totpcs+intval($data['Total_PCS']); ?></td>
                             <td>Rp&nbsp;<?php echo number_format($data['Payment_Amount'] ,0,",","."); $totpay = $totpay+intval($data['Payment_Amount']);?></td>
                             <td><?php if ($data['Status_Taken']=='N') { echo 'UNTAKEN/PENDINGAN'; } ?></td>
+                            <td><?php if ($data['Status_Payment']=='N') { echo 'UNPAID/BL'; }else{ echo 'PAID/L'; } ?></td>
                         </tr>
                     <?php } ?>
                     
