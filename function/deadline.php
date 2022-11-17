@@ -16,8 +16,6 @@ $tgl1 = $_GET['tgl1'];
             <tr>
                 <th style="width:30px">No</th>
                 <th>Invoice</th>
-                <th>Order</th>
-                <th>Ready</th>
                 <th>Customer</th>
                 <th>Address</th>
                 <th>Item</th>
@@ -37,8 +35,6 @@ $tgl1 = $_GET['tgl1'];
             <tr>
                 <td><?php echo $no++; ?></td>
                 <td><?php echo $data['Inv_Number'] ?></td>
-                <td><?php echo date('d M Y', strtotime($data['Inv_Tgl_Masuk'])); ?></td>
-                <td><?php echo date('d M Y', strtotime($data['Inv_Tg_Selesai'])); ?></td>
                 <td><?php echo $data['Cust_Nama'] ?></td>
                 <td style="text-transform: capitalize;"><?php echo $data['Cust_Alamat'] ?></td>
                 <td><?php echo $data['Total_PCS']; $totpcs = $totpcs+intval($data['Total_PCS']); ?></td>
@@ -53,8 +49,7 @@ $tgl1 = $_GET['tgl1'];
             <tr style="background-color:yellow;font-weight: bold;font-size: 20px;">
                 <td></td>
                 <td style="font-weight:bold;">TOTAL</td>
-                <td></td>
-                <td></td>
+                
                 <td></td>
                 <td></td>
                 <td style="font-weight:bold;"><?php echo number_format($totpcs ,0,",","."); ?></td>
