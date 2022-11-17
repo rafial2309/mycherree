@@ -138,7 +138,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		$datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$customer'"));
 		$charge = ($invoice['Express_Charge'] <> 0) ? ($invoice['Express_Charge']/100) * $totalItemPrice : 0;
 		$charge = (isset($_POST['persen'])) ? ((int)$_POST['persen'] / 100) * $totalItemPrice : $charge;
-		$adjust = $invoice['Adjustment'];
+		$adjust = (isset($_POST['adjust'])) ? (int)$_POST['adjust'] : $invoice['Adjustment'];
 		
 		if (isset($datadisc['Persentase'])) {
 			$persentase = $datadisc['Persentase'];
@@ -440,7 +440,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		$Payment_Amount		= angka_pembulatan($Payment_Before,2,100);
 		$Payment_Rounding	= $Payment_Amount-$Payment_Before;
 
-		mysqli_query($conn, "UPDATE Invoice SET Cust_ID='$Cust_ID', Cust_Nama='$Cust_Nama', Cust_Alamat='$Cust_Alamat', Cust_Telp='$Cust_Telp', Note='$Note', Inv_Tg_Selesai='$Inv_Tg_Selesai', Discount_No='$Discount_No', Total_PCS='$Total_PCS', Total_Diskon='$Total_Diskon', Total_Voucher='$Total_Voucher', Payment_Before='$Payment_Before', Payment_Amount='$Payment_Amount', Payment_Rounding='$Payment_Rounding', Express_Charge='$Express_Charge', Adjustment='$Adjustment', Note_Adjustment='$Adjustment_Note' WHERE Inv_Number='$invoice'");
+		mysqli_query($conn, "UPDATE Invoice SET Cust_ID='$Cust_ID', Cust_Nama='$Cust_Nama', Cust_Alamat='$Cust_Alamat', Cust_Telp='$Cust_Telp', Note='$Note', Inv_Tg_Selesai='$Inv_Tg_Selesai', Discount_No='$Discount_No', Total_PCS='$Total_PCS', Total_Diskon='$Total_Diskon', Total_Voucher='$Total_Voucher', Payment_Before='$Payment_Before', Payment_Amount='$Payment_Amount', Payment_Rounding='$Payment_Rounding', Express_Charge='$Express_Charge', Adjustment='$Adjustment', Note_Adjustment='$Note_Adjustment' WHERE Inv_Number='$invoice'");
 		echo $invoice;
 		exit();
 	}

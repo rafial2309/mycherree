@@ -1,4 +1,12 @@
-            
+<?php
+$invoice = '';
+
+if (isset($_GET['invoice'])) {
+    $inv        = $_GET['invoice'];
+    $data       = mysqli_fetch_assoc(mysqli_query($conn, "SELECT Payment_Amount FROM Invoice WHERE Inv_Number='$inv'"));
+    $invoice    = $inv.'###'.$data['Payment_Amount'];
+}
+?>            
             <div class="wrapper-box">
                 <!-- BEGIN: Content -->
                 <div class="content">
@@ -25,7 +33,7 @@
                                 
                                 <button onclick="window.location='app?p=newtransaction'" class="btn btn-primary shadow-md mr-2"> <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> NEW TRANSACTION </button>
 
-                                <button data-tw-toggle="modal" data-tw-target="#payment-modal" onclick="gopayment('MULTI')" class="btn btn-primary shadow-md mr-2"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> PAYMENT </button>
+                                <button id="btn-payment" data-tw-toggle="modal" data-tw-target="#payment-modal" onclick="gopayment('MULTI')" class="btn btn-primary shadow-md mr-2"> <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> PAYMENT </button>
                                
                             </div>
                         </div>
@@ -136,6 +144,15 @@
                     setTimeout(function(){ myFunction(); }, 300);
                     var timeout;
                     var delay = 600;   // 2 seconds
+                    var invoice = '<?= $invoice ?>';
+                    toPayment();
+
+                    function toPayment() {
+                        if (invoice != '') {
+                            $('#btn-payment').click();
+                            gopayment(invoice);
+                        } 
+                    }
 
                     $('#inputcari').keyup(function(e) {
                         //$('#status').html("User started typing!");
@@ -165,8 +182,6 @@
                         })
                     }
                 });
-
-                
 
                 function gantistatus(){
                     var keyword     = document.getElementById('inputcari').value;
@@ -303,7 +318,7 @@
                       console.log("success");
                       document.getElementById('closemodalpayment').click();
                       document.getElementById('success-additem').click();
-                      setTimeout(function() { window.location.reload(); }, 1500);
+                      setTimeout(function() { location.href='app?p=transactions'; }, 1500);
                     },
                     error: function(request, status, error) {
                       console.log("error")

@@ -197,8 +197,8 @@ if ($_GET['type'] == 'invoice') {
 				<?php } ?>
 				<?php if ($invoice['Adjustment'] <> 0) {?>
 				<tr>
-					<td align="left">Adjustment </td>
-					<td align="right"><?= number_format($invoice['Adjustment'],0,',','.')?></td>
+					<td align="left">Adjustment <br> <i>NOTE: <?= $invoice['Note_Adjustment']?></i></td>
+					<td align="right" valign="top"><?= number_format($invoice['Adjustment'],0,',','.')?></td>
 				</tr>
 				<?php } ?>
 				<tr style="font-size: 20px;font-weight: bold;">

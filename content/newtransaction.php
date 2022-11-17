@@ -875,8 +875,13 @@
                         alert('Please select customer before save transaction');
                       }else{
                           console.log("success");
-                          document.getElementById('success-additem').click();
-                          setTimeout(function() { location.href='function/print?type=invoice&invoice='+data }, 2000);
+                          let text = "Apakah ingin melakukan payment sekarang?";
+                          if (confirm(text) == true) {
+                            location.href='app?p=transactions&invoice='+data;
+                          } else {
+                            document.getElementById('success-additem').click();
+                            setTimeout(function() { location.href='function/print?type=invoice&invoice='+data }, 2000);
+                          }
                       }
                       
                     },

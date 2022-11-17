@@ -118,7 +118,25 @@ $charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_It
                                     </div>
                                 </div>
                             </div> 
-                                    
+                            <div class="mt-2" style="width: 100%;">
+                                <div class="grid grid-cols-12 gap-4 gap-y-3">
+                                    <div class="col-span-6">
+                                        <div class="text-slate-500">Adjustment</div>
+                                        <div class="mt-1">
+                                            <div class="input-group">
+                                                <div id="input-group-email" class="input-group-text">Rp</div> 
+                                                <input type="text" id="Adjustment" name="Adjustment" class="form-control uang" data-single-mode="true" value="<?= number_format($invoice['Adjustment'],0,',','.')?>" onkeyup="goExpress()" value="0"> 
+                                            </div>    
+                                        </div>
+                                    </div>
+                                    <div class="col-span-6">
+                                        <div class="text-slate-500">Notes Adjustment</div>
+                                        <div class="mt-1">
+                                            <input type="text" id="Note_Adjustment" name="Note_Adjustment" class=" form-control block mx-auto" data-single-mode="true" value="<?= $invoice['Note_Adjustment']?>" placeholder="Notes Adjustment"> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>         
                             <div class="mt-2" style="width: 100%;">
                                 <div class="text-slate-500">Request Customer</div>
                                 <div class="mt-1">
@@ -706,12 +724,14 @@ $charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_It
 
     function goExpress() {
         let persen  = $('#Percentage_Express').val();
+        let adjust  = $('#Adjustment').val();
+        adjust = parseInt(adjust.replace(".", ""));
 
         $.ajax({
             url:'function/transaksi_item?menu=totalan',
             type:'POST',
             dataType:'html',
-            data: 'persen='+persen+'&id='+invoice,
+            data: 'persen='+persen+'&id='+invoice+'&adjust='+adjust,
             success:function (response) {
                 $('#totalan').html(response);
 
@@ -726,7 +746,6 @@ $charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_It
             data: 'persen='+persen+'&id='+invoice,
             success:function (response) {
                 $('#Express_Charge').val(response);
-                document.getElementById('Note').focus();
             },
 
         })
@@ -837,8 +856,13 @@ $charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_It
             alert('Please select customer before save transaction');
             }else{
                 console.log("success");
-                document.getElementById('success-additem').click();
-                setTimeout(function() { location.href='function/print?type=invoice&invoice='+data; }, 2000);
+                let text = "Apakah ingin melakukan payment sekarang?";
+                if (confirm(text) == true) {
+                    location.href='app?p=transactions&invoice='+data;
+                } else {
+                    document.getElementById('success-additem').click();
+                    setTimeout(function() { location.href='function/print?type=invoice&invoice='+data }, 2000);
+                }
             }
             
         },
