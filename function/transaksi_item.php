@@ -441,7 +441,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		$Payment_Rounding	= $Payment_Amount-$Payment_Before;
 
 		mysqli_query($conn, "UPDATE Invoice SET Cust_ID='$Cust_ID', Cust_Nama='$Cust_Nama', Cust_Alamat='$Cust_Alamat', Cust_Telp='$Cust_Telp', Note='$Note', Inv_Tg_Selesai='$Inv_Tg_Selesai', Discount_No='$Discount_No', Total_PCS='$Total_PCS', Total_Diskon='$Total_Diskon', Total_Voucher='$Total_Voucher', Payment_Before='$Payment_Before', Payment_Amount='$Payment_Amount', Payment_Rounding='$Payment_Rounding', Express_Charge='$Express_Charge', Adjustment='$Adjustment', Note_Adjustment='$Adjustment_Note' WHERE Inv_Number='$invoice'");
-		echo $invoice.'###'.$Payment_Amount;
+		echo $invoice;
 		exit();
 	}
 
@@ -502,7 +502,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	unset($_SESSION["Cust_Telp"]);
 	unset($_SESSION["Cust_Alamat"]);
 	unset($_SESSION["Discount_No"]);
-	echo $Inv_Number.'###'.$Payment_Amount;
+	echo $Inv_Number;
 	exit();
 }elseif ($_GET['menu'] == 'showformcust') { ?>
 	<link rel="stylesheet" href="plugin/selectize/selectize.css" />
