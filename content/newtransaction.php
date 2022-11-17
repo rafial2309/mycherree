@@ -121,7 +121,7 @@
                                                 <div class="text-slate-500">Percentage Express</div>
                                                 <div class="mt-1">
                                                     <div class="input-group">
-                                                        <input type="number" id="Percentage_Express" name="Express_Charge" class="form-control block mx-auto" data-single-mode="true" value="0" onblur="goExpress()" required> 
+                                                        <input type="text" id="Percentage_Express" name="Express_Charge" class="form-control block mx-auto" data-single-mode="true" value="0" onblur="goExpress()"> 
                                                         <div id="input-group-email" class="input-group-text">%</div> 
                                                     </div>    
                                                 </div>
@@ -130,6 +130,25 @@
                                                 <div class="text-slate-500">Express Charge</div>
                                                 <div class="mt-1">
                                                     <input type="text" id="Express_Charge" class=" form-control block mx-auto" data-single-mode="true" value="0"  readonly> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div> 
+                                        <div class="mt-2" style="width: 100%;">
+                                        <div class="grid grid-cols-12 gap-4 gap-y-3">
+                                            <div class="col-span-6">
+                                                <div class="text-slate-500">Adjustment</div>
+                                                <div class="mt-1">
+                                                    <div class="input-group">
+                                                        <div id="input-group-email" class="input-group-text">Rp</div> 
+                                                        <input type="text" id="Adjustment" name="Adjustment" class="form-control uang" data-single-mode="true" onkeyup="goExpress()" value="0"> 
+                                                    </div>    
+                                                </div>
+                                            </div>
+                                            <div class="col-span-6">
+                                                <div class="text-slate-500">Notes Adjustment</div>
+                                                <div class="mt-1">
+                                                    <input type="text" id="Note_Adjustment" name="Note_Adjustment" class=" form-control block mx-auto" data-single-mode="true" placeholder="Notes Adjustment"> 
                                                 </div>
                                             </div>
                                         </div>
@@ -482,6 +501,21 @@
                     $( '.uang' ).mask('000.000.000', {reverse: true});
                 }) 
 
+                function gopayment(data){
+                    $.ajax({
+                        url:'function/transaksi_payment?menu=tampilcust',
+                        type:'POST',
+                        data:{
+                          data: data,
+                        },
+                        dataType:'html',
+                        success:function (response) {
+                            $('#hasilpaymentpop').html(response);
+                        },
+
+                    })
+                }
+
                 function showformcust() {
                     $.ajax({
                         url:'function/transaksi_item?menu=showformcust',
@@ -679,12 +713,14 @@
 
                 function goExpress() {
                     let persen  = $('#Percentage_Express').val();
+                    let adjust  = $('#Adjustment').val();
+                    adjust = parseInt(adjust.replace(".", ""));
 
                     $.ajax({
                         url:'function/transaksi_item?menu=totalan',
                         type:'POST',
                         dataType:'html',
-                        data: 'persen='+persen,
+                        data: 'persen='+persen+'&adjust='+adjust,
                         success:function (response) {
                             $('#totalan').html(response);
 
@@ -699,7 +735,6 @@
                         data: 'persen='+persen,
                         success:function (response) {
                             $('#Express_Charge').val(response);
-                            document.getElementById('Note').focus();
                         },
 
                     })

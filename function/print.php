@@ -115,6 +115,7 @@ if ($_GET['type'] == 'invoice') {
 
 			<table width="100%" style="font-size:18px">
 				<?php
+				$no = 1;
 				$total = 0;
 				$totalItemPrice = 0;
 				while ($item = mysqli_fetch_assoc($query)) {
@@ -138,15 +139,17 @@ if ($_GET['type'] == 'invoice') {
 						<td colspan="2">&nbsp;</td>
 					</tr>
 					<tr>
-						<td align="left">'.number_format($item['Qty'],0,',','.').' Item &nbsp; '.$item['Deskripsi'].'</td>
-						<td align="right" valign="top" style="padding-left:8px">'.number_format($item['Total_Price'],0,',','.').'</td>
+						<td width="5%" valign="top">'.$no.')</td>
+						<td width="80%" align="left">'.number_format($item['Qty'],0,',','.').' Item &nbsp; '.$item['Deskripsi'].'</td>
+						<td width="15%" align="right" valign="top" style="padding-left:8px">'.number_format($item['Total_Price'],0,',','.').'</td>
 					</tr>';
 
 					if ($customer['Cust_Member_Name'] == 'MEMBER') {
 					echo '
 					<tr>
-						<td align="left">Discount Member 10%</td>
-						<td align="right">'.$hargaMember.'</td>
+						<td width="5%">&nbsp;</td>
+						<td width="80%" align="left">Discount Member 10%</td>
+						<td width="15%" align="right">'.$hargaMember.'</td>
 					</tr>';
 					}
 					echo'
@@ -156,13 +159,15 @@ if ($_GET['type'] == 'invoice') {
 						</td>
 					</tr>
 					<tr> 	
-						<td colspan="2"><b>NOTE :</b> 
+						<td width="5%">&nbsp;</td>
+						<td width="95%" colspan="2"><b>NOTE :</b> 
 							'.$item['Item_Note'].' 
 						</td>
 					</tr>
 					';
 					$totalItemPrice += $item['Item_Price'];
 					$total += $item['Total_Price'];
+					$no++;
 				}
 				?>     	
 			</table>
@@ -188,6 +193,12 @@ if ($_GET['type'] == 'invoice') {
 				<tr>
 					<td align="left">Express Charge (<?= $invoice['Express_Charge']?>%)</td>
 					<td align="right"><?= number_format(($invoice['Express_Charge']/100)*$totalItemPrice,0,',','.')?></td>
+				</tr>
+				<?php } ?>
+				<?php if ($invoice['Adjustment'] <> 0) {?>
+				<tr>
+					<td align="left">Adjustment </td>
+					<td align="right"><?= number_format($invoice['Adjustment'],0,',','.')?></td>
 				</tr>
 				<?php } ?>
 				<tr style="font-size: 20px;font-weight: bold;">

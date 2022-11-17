@@ -41,7 +41,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	    <div class="text-slate-500">x <?php echo $data['Qty'] ?></div>
 	    <i data-lucide="edit" class="w-4 h-4 text-slate-500 ml-2"></i> 
 	    <div class="ml-auto font-medium">Rp <?php echo number_format($data['Total_Price'] ,0,",",".")?>&nbsp;&nbsp;
-	    	<button class="btn btn-success shadow-md" onclick="modalpic('<?php echo $data['Inv_Item_No'] ?>')" data-tw-toggle="modal" data-tw-target="#pic-item-modal" style="color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="camera" data-lucide="camera" class="lucide lucide-camera block mx-auto w-4 h-4"><path d="M14.5 4h-5L7 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></button>
+	    	<button type="button" class="btn btn-success shadow-md" onclick="modalpic('<?php echo $data['Inv_Item_No'] ?>')" data-tw-toggle="modal" data-tw-target="#pic-item-modal" style="color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="camera" data-lucide="camera" class="lucide lucide-camera block mx-auto w-4 h-4"><path d="M14.5 4h-5L7 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></button>
 	    </div>
 	</a>
 	<?php
@@ -112,11 +112,8 @@ if ($_GET['menu'] == 'getitem' ) {
 	
 	$subtotal 		= $data['Total_Price'];
 	$totalItemPrice = $data['Total_Item_Price'];
-	$charge			= 0;
-
-	if (isset($_POST['persen'])) {
-		$charge = ((int)$_POST['persen']/100) * $totalItemPrice;
-	}
+	$charge			= (isset($_POST['persen'])) ? ((int)$_POST['persen']/100) * $totalItemPrice : 0;
+	$adjust 		= (isset($_POST['adjust'])) ? (int)$_POST['adjust'] : 0;
 	
 	if (isset($_SESSION['Cust_No'])) {
 		$datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$_SESSION[Cust_No]'"));
@@ -141,6 +138,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		$datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$customer'"));
 		$charge = ($invoice['Express_Charge'] <> 0) ? ($invoice['Express_Charge']/100) * $totalItemPrice : 0;
 		$charge = (isset($_POST['persen'])) ? ((int)$_POST['persen'] / 100) * $totalItemPrice : $charge;
+		$adjust = $invoice['Adjustment'];
 		
 		if (isset($datadisc['Persentase'])) {
 			$persentase = $datadisc['Persentase'];
@@ -153,7 +151,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		}
 	}
 	
-	$total 		= $subtotal - $diskon + $charge;
+	$total 		= $subtotal - $diskon + $charge + $adjust;
 ?>
 
 	<div class="flex">
@@ -164,13 +162,17 @@ if ($_GET['menu'] == 'getitem' ) {
         <div class="mr-auto">Discount (<?php echo $namadiskon . " " . $persentase ?>%)</div>
         <div class="font-medium text-danger">-Rp <c id="diskon"><?php echo number_format($diskon ,0,",",".")?></c></div>
     </div>
-	 <div class="flex mt-4">
+	<div class="flex mt-4">
         <div class="mr-auto">Total PCS</div>
         <div class="font-medium text-danger"><c id="totalpcs"><?php echo number_format($datapcs['Total_Pcs'],0,",",".")?></c></div>
     </div>
-	 <div class="flex mt-4">
+	<div class="flex mt-4">
         <div class="mr-auto">Express Charge</div>
         <div class="font-medium text-danger"><c id="charge"><?php echo number_format($charge,0,",",".")?></c></div>
+    </div>
+	<div class="flex mt-4">
+        <div class="mr-auto">Adjustment</div>
+        <div class="font-medium text-danger"><c id="charge"><?php echo number_format($adjust,0,",",".")?></c></div>
     </div>
     
     
@@ -228,6 +230,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	}
 	
 	$totalItemPrice = $data['Total_Item_Price'];
+	$_POST['persen']= ($_POST['persen'] == '') ? 0 : $_POST['persen'];
 	$charge			= ($_POST['persen'] / 100) * $data['Total_Item_Price'];
 	
 	echo number_format($charge,0,',','.');
@@ -427,6 +430,8 @@ if ($_GET['menu'] == 'getitem' ) {
 		$Cust_Telp		= $_POST['Cust_Telp'];
 		
 		$Express_Charge		= $_POST['Express_Charge'];
+		$Adjustment			= str_replace('.','',$_POST['Adjustment']);
+		$Note_Adjustment	= $_POST['Note_Adjustment'];
 		$Discount_No		= $_POST['Discount_No'];
 		$Total_PCS			= $_POST['totalpcs'];
 		$Total_Diskon		= $_POST['diskon'];
@@ -435,8 +440,8 @@ if ($_GET['menu'] == 'getitem' ) {
 		$Payment_Amount		= angka_pembulatan($Payment_Before,2,100);
 		$Payment_Rounding	= $Payment_Amount-$Payment_Before;
 
-		mysqli_query($conn, "UPDATE Invoice SET Cust_ID='$Cust_ID', Cust_Nama='$Cust_Nama', Cust_Alamat='$Cust_Alamat', Cust_Telp='$Cust_Telp', Note='$Note', Inv_Tg_Selesai='$Inv_Tg_Selesai', Discount_No='$Discount_No', Total_PCS='$Total_PCS', Total_Diskon='$Total_Diskon', Total_Voucher='$Total_Voucher', Payment_Before='$Payment_Before', Payment_Amount='$Payment_Amount', Payment_Rounding='$Payment_Rounding', Express_Charge='$Express_Charge' WHERE Inv_Number='$invoice'");
-		echo $invoice;
+		mysqli_query($conn, "UPDATE Invoice SET Cust_ID='$Cust_ID', Cust_Nama='$Cust_Nama', Cust_Alamat='$Cust_Alamat', Cust_Telp='$Cust_Telp', Note='$Note', Inv_Tg_Selesai='$Inv_Tg_Selesai', Discount_No='$Discount_No', Total_PCS='$Total_PCS', Total_Diskon='$Total_Diskon', Total_Voucher='$Total_Voucher', Payment_Before='$Payment_Before', Payment_Amount='$Payment_Amount', Payment_Rounding='$Payment_Rounding', Express_Charge='$Express_Charge', Adjustment='$Adjustment', Note_Adjustment='$Adjustment_Note' WHERE Inv_Number='$invoice'");
+		echo $invoice.'###'.$Payment_Amount;
 		exit();
 	}
 
@@ -470,6 +475,8 @@ if ($_GET['menu'] == 'getitem' ) {
 	$Cust_Telp			= $_POST['Cust_Telp'];
 	$Discount_No		= $_POST['Discount_No'];
 	$Express_Charge		= $_POST['Express_Charge'];
+	$Adjustment			= str_replace('.','',$_POST['Adjustment']);
+	$Note_Adjustment	= $_POST['Note_Adjustment'];
 	$Total_PCS			= $_POST['totalpcs'];
 	$Total_Diskon		= $_POST['diskon'];
 	$Total_Voucher		= 0;
@@ -486,7 +493,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	$Point_Transaksi	= 0;
 
 
-	mysqli_query($conn,"INSERT into Invoice VALUES(0,'$Inv_Number','$Inv_Tgl_Masuk','$Inv_Tg_Selesai','$Cust_ID','$Cust_Nama','$Cust_Alamat','$Cust_Telp','$Discount_No','$Total_PCS','$Total_Diskon','$Total_Voucher','$Payment_Before','$Payment_Rounding','$Payment_Amount','$Status_Payment','$Status_Taken','$Status_Inv','$Status_Marking','$Note','$Staff_Name','$Staff_ID','$Point_Transaksi','$Express_Charge')");
+	mysqli_query($conn,"INSERT into Invoice VALUES(0,'$Inv_Number','$Inv_Tgl_Masuk','$Inv_Tg_Selesai','$Cust_ID','$Cust_Nama','$Cust_Alamat','$Cust_Telp','$Discount_No','$Total_PCS','$Total_Diskon','$Total_Voucher','$Payment_Before','$Payment_Rounding','$Payment_Amount','$Status_Payment','$Status_Taken','$Status_Inv','$Status_Marking','$Note','$Staff_Name','$Staff_ID','$Point_Transaksi','$Express_Charge','$Adjustment','$Note_Adjustment')");
 
 	mysqli_query($conn,"UPDATE Invoice_Item SET Inv_Number='$Inv_Number' WHERE Inv_Number='' AND Staff_ID='$Staff_ID'");
 
@@ -495,7 +502,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	unset($_SESSION["Cust_Telp"]);
 	unset($_SESSION["Cust_Alamat"]);
 	unset($_SESSION["Discount_No"]);
-	echo $Inv_Number;
+	echo $Inv_Number.'###'.$Payment_Amount;
 	exit();
 }elseif ($_GET['menu'] == 'showformcust') { ?>
 	<link rel="stylesheet" href="plugin/selectize/selectize.css" />
