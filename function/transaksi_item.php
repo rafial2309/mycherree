@@ -40,11 +40,29 @@ if ($_GET['menu'] == 'getitem' ) {
 	    <div class="max-w-[50%]  mr-1" style="text-transform:uppercase;"><?php echo $data['Deskripsi'] ?></div>
 	    <div class="text-slate-500">x <?php echo $data['Qty'] ?></div>
 	    <i data-lucide="edit" class="w-4 h-4 text-slate-500 ml-2"></i> 
-	    <div class="ml-auto font-medium">Rp <?php echo number_format($data['Total_Price'] ,0,",",".")?></div>
+	    <div class="ml-auto font-medium">Rp <?php echo number_format($data['Total_Price'] ,0,",",".")?>&nbsp;&nbsp;
+	    	<button class="btn btn-success shadow-md" onclick="modalpic('<?php echo $data['Inv_Item_No'] ?>')" data-tw-toggle="modal" data-tw-target="#pic-item-modal" style="color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="camera" data-lucide="camera" class="lucide lucide-camera block mx-auto w-4 h-4"><path d="M14.5 4h-5L7 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></button>
+	    </div>
 	</a>
 	<?php
 	}
-} elseif ($_GET['menu'] == 'cekcust') { 
+} elseif ($_GET['menu'] == 'tampillistimage') { ?>
+	<?php 
+	$Inv_Item_No = $_GET['Inv_Item_No'];
+    $queryfoto = mysqli_query($conn, "SELECT * FROM Invoice_Foto WHERE Inv_Item_No='$Inv_Item_No'");
+    while($datafoto = mysqli_fetch_assoc($queryfoto)) { ?>
+    <div class="col-span-2">
+        <div class="card no-b">
+            <div>
+                <a onclick="openprev('<?php echo $datafoto['Inv_Item_No']; ?>/<?php echo $datafoto['foto']; ?>')" href="javascript:;" data-tw-toggle="modal" data-tw-target="#prev-item-modal"  class="progressive replace">
+                    <img id="myImg" src="media/images/<?php echo $datafoto['Inv_Item_No']; ?>/<?php echo $datafoto['foto']; ?>" class="preview" alt="image" />
+                 </a>
+                 
+            </div>
+        </div>
+    </div>
+    <?php } ?> 
+<?php }elseif ($_GET['menu'] == 'cekcust') { 
 	$id = 	explode('+',$_POST['id']);
 	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Customer WHERE Cust_No='$id[0]'"));
 

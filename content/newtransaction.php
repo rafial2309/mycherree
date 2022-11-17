@@ -1,4 +1,4 @@
-
+<script src="plugin/instascan.min.js"></script>
 <div class="wrapper-box">
                 <!-- BEGIN: Content -->
                 <div class="content">
@@ -308,6 +308,99 @@
                             </form>
                         </div>
                     </div>
+                    <!-- MODAL FOTO -->
+
+                    <div id="pic-item-modal" class="modal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog" style="width: 80%;">
+                            <div class="modal-content">
+                                <form id="savepic" action="#" method="post">
+                                <div class="modal-header">
+                                    <h2 class="font-medium text-base mr-auto">
+                                        <button type="button" style="float: right;" class="btn btn-primary btn-lg btn-block" id="snap">Shoot a picture</button>
+                                    </h2>
+                                    <div class="text-right">
+                                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Close</button>
+                                        <button type="submit" class="btn btn-primary w-32">Save</button>
+                                    </div>
+                                </div>
+                                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3" style="height:520px">
+                                    <div class="col-span-6">
+                                        <input type="hidden" name="imgBase64" id='dataimage' value="">
+                                        <input type="hidden" name="Inv_Item_No" id="Inv_Item_No">
+                                        <video id="preview" style="width: 560px; border:2px solid #fff;height: 315px;"></video>
+                                        <div style="width: 100% !important;border: 1px solid #1a3176;margin-top: 10px;text-align: center;color: #1a3176;padding: 5px;">LIVE CAMERA</div>
+                                            <script type="text/javascript">
+
+                                              let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false });
+                                              scanner.addListener('scan', function (content) {
+                                                //alert(content);
+                                                var res = content.replace("#:#", "");
+                                              });
+                                              Instascan.Camera.getCameras().then(function (cameras) {
+                                                if (cameras.length > 0) {
+                                                  if(cameras[1]){ scanner.start(cameras[1]); } else { scanner.start(cameras[0]); }
+                                                } else {
+                                                  console.error('No cameras found.');
+                                                }
+                                              }).catch(function (e) {
+                                                console.error(e);
+                                              });
+
+                                            </script>
+                                        
+                                    </div>
+                                    <div class="col-span-6">
+                                        <canvas id="canvas" width="560" height="315"></canvas>
+                                        <div style="width: 100% !important;border: 1px solid #1a3176;margin-top: 10px;text-align: center;color: #1a3176;padding: 5px;">RESULT</div>
+                                    </div>
+                                    <div class="col-span-12">
+                                        <div class="row">
+                                            <div class="grid grid-cols-12 gap-4 gap-y-5" id="hasilfoto">
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                  
+                                </div>
+                                
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="prev-item-modal" class="modal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <form id="savepic2" action="#" method="post">
+                                <div class="modal-header">
+                                    <h2 class="font-medium text-base mr-auto">
+                                        <button type="button" style="float: right;" class="btn btn-primary btn-lg btn-block">PREVIEW</button>
+                                    </h2>
+                                    <div class="text-right">
+                                        <input type="hidden" id="urlpic" name="">
+                                        <input type="hidden" id="urlpicinv" name="">
+                                        <button onclick="deletepic()" type="button" class="btn btn-outline-danger w-32 mr-1">DELETE</button>
+                                    </div>
+                                    <div class="text-right">
+                                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-32 mr-1">Close</button>
+                                    </div>
+                                </div>
+                                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3" style="height:auto">
+                                    <div class="col-span-12" >
+                                        
+                                        <div id="imageya"></div>
+                                    </div>
+                                  
+
+                                   
+                                  
+                                </div>
+                                
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     <!-- END: Add Item Modal -->
                      <div class="text-center"> 
                         <a id="success-additem" href="javascript:;" style="opacity:0" data-tw-toggle="modal" data-tw-target="#success-modal-preview" class="btn btn-primary">-</a> 
@@ -454,6 +547,20 @@
                     })
                 }
 
+                function modalpic(item){
+                    document.getElementById('Inv_Item_No').value = item;
+                    $.ajax({
+                        url:'function/transaksi_item?menu=tampillistimage&Inv_Item_No='+item,
+                        type:'POST',
+                        dataType:'html',
+                        data: 'Inv_Item_No='+item,
+                        success:function (response) {
+                            $('#hasilfoto').html(response);
+
+                        },
+
+                    })
+                }
 
                 function gantitgl(){
                     document.getElementById('Percentage_Express').focus();
@@ -744,4 +851,117 @@
                   });
                 });
                 
+
+                var frm4 = $('#savepic');
+                frm4.submit(function (e) {
+                  e.preventDefault(e);
+
+                  var formData = new FormData(this);
+
+                  var dd = JSON.stringify(Object.fromEntries(formData));
+                  obj = JSON.parse(dd);
+                  var jenismod = obj.jenismod;
+
+                  var url = 'function/marking?menu=simpangambar';
+
+                  $.ajax({
+                    async: true,
+                    type: frm4.attr('method'),
+                    url: url,
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+
+                    success: function (data) {
+                      console.log("success");
+                      document.getElementById('success-additem').click();
+                      hasilfoto(data);
+                    },
+                    error: function(request, status, error) {
+                      console.log("error")
+                    }
+                  });
+                });
+
+                function hasilfoto(item){
+                    $.ajax({
+                        url:'function/transaksi_item?menu=tampillistimage&Inv_Item_No='+item,
+                        type:'POST',
+                        dataType:'html',
+                        data: 'Inv_Item_No='+item,
+                        success:function (response) {
+                            $('#hasilfoto').html(response);
+
+                        },
+
+                    })
+                }
+
+                function openprev(barcode){
+
+                    document.getElementById('imageya').innerHTML = "<img style='width:100%' alt='testImage' src='media/images/"+barcode+"'> </img>";
+                    document.getElementById('urlpic').value = "media/images/"+barcode;
+                    
+                 }
+
+                 function deletepic(){
+                    var urlpic      = document.getElementById('urlpic').value;
+                    const myArray   = urlpic.split("/");
+                    $.ajax({
+                        url:'function/marking?menu=deletepic',
+                        type:'POST',
+                        dataType:'html',
+                        data:{
+                          urlpic: urlpic,
+                        },
+                        success:function (response) {
+                            document.getElementById('success-additem').click();
+                            hasilfoto(myArray[2]);
+                        },
+
+                    })
+                }
+            </script>
+            <script>
+                'use strict';
+
+                const video = document.getElementById('preview');
+                const canvas = document.getElementById('canvas');
+                const snap = document.getElementById("snap");
+                const errorMsgElement = document.querySelector('span#errorMsg');
+                
+                const constraints = {
+                  audio: true,
+                  video: {
+                    width: 1280, height: 720
+                  }
+                };
+                
+                // Access webcam
+                async function init() {
+                  try {
+                    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                    handleSuccess(stream);
+                  } catch (e) {
+                    errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+                  }
+                }
+                
+                // Success
+                function handleSuccess(stream) {
+                  window.stream = stream;
+                  video.srcObject = stream;
+                }
+                
+                // Load init
+                init();
+                
+                // Draw image
+                var context = canvas.getContext('2d');
+                snap.addEventListener("click", function() {
+                    context.drawImage(video, 0, 0, 560, 315);
+                    var dataURL = canvas.toDataURL();
+                    document.getElementById("dataimage").value = dataURL;
+                });
             </script>

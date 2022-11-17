@@ -118,14 +118,17 @@ if ($_GET['menu'] == 'data' ) {
 	mysqli_query($conn,"UPDATE Invoice_Item SET Item_Note='$data' WHERE Inv_Item_No='$id'");
 
 }elseif ($_GET['menu'] == 'simpangambar'){
-
-        
         date_default_timezone_set('Asia/Jakarta'); 
         $datetimenow  = date('Y-m-d-H-i-s');
         $datetimenow2 = date('d-m-Y H:i:s');
         $Staff_Name   = $_SESSION['Staff_Name'];
+        
+          if (isset($_POST['Inv_Number'])) {
+              $Inv_Number   = $_POST['Inv_Number'];
+          }else{
+              $Inv_Number   = '0';
+          }
           
-          $Inv_Number   = $_POST['Inv_Number'];
           $Inv_Item_No  = $_POST['Inv_Item_No'];
 
 
@@ -152,7 +155,12 @@ if ($_GET['menu'] == 'data' ) {
 
 
         mysqli_query($conn, "INSERT into Invoice_Foto values(0,'','$Inv_Number','$namafile','$Inv_Item_No')");
-        echo $Inv_Number;
+        if ($Inv_Number=='0') {
+            echo $Inv_Item_No;
+        }else{
+            echo $Inv_Number;
+        }
+        
 }elseif ($_GET['menu'] == 'deletepic'){
     $urlpic = "../".$_POST['urlpic'];
     $datapic = explode("/",$_POST['urlpic']);
