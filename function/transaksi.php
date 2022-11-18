@@ -53,6 +53,11 @@ if ($_GET['menu'] == 'cari' ) {
             <a href="" class="font-medium whitespace-nowrap"><?php echo $data['Cust_Nama'] ?></a> 
             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Telp'] ?></div>
+            <?php if ($data['Discount_No']=='1') { ?>
+                <small class="text-success">MEMBER</small>
+            <?php  }else{ ?>
+                <small class="text-warning">NON-MEMBER</small>
+            <?php } ?>
         </td>
         <td>
             <div class="pr-16"><?php echo date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])); ?></div>

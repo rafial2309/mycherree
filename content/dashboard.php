@@ -20,7 +20,7 @@ $todaypcs       = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Total_PCS) a
 
 $todaycust      = mysqli_fetch_assoc(mysqli_query($conn,"SELECT count(Cust_ID) as total from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' AND Inv_Tgl_Masuk='$hariini'"));
 
-$todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Total) as total from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND Payment_Tgl='$hariini'"));
+$todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Total) as total from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND DATE(Payment_Tgl)='$hariini'"));
 ?>
 
 <div class="wrapper-box">
@@ -153,7 +153,7 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                         </div>
                                         <div class="mt-5">
                                             <?php
-                                                $queryinv = mysqli_query($conn,"SELECT Inv_Number,Cust_Nama,Payment_Amount from Invoice WHERE Status_Inv!='C' order by Inv_No DESC LIMIT 6");
+                                                $queryinv = mysqli_query($conn,"SELECT Inv_Number,Cust_Nama,Payment_Amount,Discount_No from Invoice WHERE Status_Inv!='C' order by Inv_No DESC LIMIT 6");
                                                 while ($datainv = mysqli_fetch_assoc($queryinv)) {
                                                     $invoice = $datainv['Inv_Number'];
                                                  
@@ -167,7 +167,13 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                         <div class="font-medium"><?php echo $datainv['Inv_Number'] ?></div>
                                                         <div class="text-slate-500 text-xs mt-0.5"><?php echo $datainv['Cust_Nama'] ?></div>
                                                     </div>
-                                                    <div class="text-success">Rp <?php echo number_format($datainv['Payment_Amount'] ,0,",",".")?></div>
+                                                    <div class="text-success">Rp <?php echo number_format($datainv['Payment_Amount'] ,0,",",".")?>
+                                                        <?php if ($datainv['Discount_No']=='1') { ?>
+                                                            <br><small>MEMBER</small>
+                                                        <?php  }else{ ?>
+                                                            <br><small class="text-warning">NON-MEMBER</small>
+                                                        <?php } ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <?php } ?>
