@@ -30,30 +30,24 @@ if ($_GET['type'] == 'invoice') {
 			@media print { body.receipt { width: 80mm } } /* this line is needed for fixing Chrome's bug */
 			@media print { #printarea { width: 80mm } }
 			.collapse { border: 1px solid black; border-collapse:collapse}
+			table td {line-height:14px}
 		</style>
 	</head>
 	<body style="font-size: 22px;" class="receipt" onload="printGO()" oncontextmenu="return false">
 		<!-- <button onclick="saveSignat()">SAVE SIGNATURE</button>
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
-			<p style="text-align: center; font-size:14px">
-				<img src="../src/images/logo-mycherree.png" style="width:50%" hidden><br>
-			My Cherree Laundry  <br/>
-			<?= ($_SESSION['cabang'] == 'MCL1') ? 'BGM PIK Blok G No 77':'Central Market PIK'?><br/>
-			Jakarta Utara 14470<br/>
+			<p style="text-align: center; font-size:14px; margin-bottom:-15px">
+				<img src="../src/images/logo-mycherree.png" style="width:30%"><br>
+			<?= ($_SESSION['cabang'] == 'MCL1') ? 'BGM PIK Blok G No 77':'Central Market PIK'?>. Jakarta Utara <br/>
 			
 			Tel: (021) 22338540 | WA: <?= ($_SESSION['cabang'] == 'MCL1') ? '+62 877 2410 9018':'+62 812 9055 1743 '?>
 			</p>
-			============================
-			<div style="width: 100%">
+			____________________________
+			<div style="width: 100%; margin-top:0px; margin-bottom:-20px">
 				<center>
-				<div style="width: 100%;margin-top: -10px;margin-bottom: -10px;" onclick="window.print();">
-					<div style="width: 100%">
-					
-					</div>
-				</div>
 				<div style="width: 100%;">
-					<table style="font-size:16px; margin-top:10px">
+					<table width="100%" style="font-size:16px;">
 						<tr>
 							<td width="30%" align="left">Invoice</td>
 							<td width="10%">:</td>
@@ -92,28 +86,24 @@ if ($_GET['type'] == 'invoice') {
 					</table>
 					<!-- asd -->
 				</div>
-
-				</center>
-				<center>
-				
 				</center>
 			</div>
+			____________________________
 			<?php if ($invoice['Note'] <>  '') {?>
-			============================
-			<center>
-				<b style="font-size:18px">
-					Request Customer : <br><span style="font-weight:normal"><?= $invoice['Note']?></span>
+			<center style="margin-top:0px; margin-bottom:-20px">
+				<b style="font-size:16px; line-height:2px">
+					Request Customer : <br><span style="font-weight:normal; margin-top:-10px"><?= $invoice['Note']?></span>
 				</b>
 			</center>
+			____________________________
 			<?php } ?>
-			============================
 			<?php
 			$discount 	= $invoice['Discount_No'];
 			$sql 		= mysqli_query($conn, "SELECT *FROM Discount WHERE Discount_No='$discount'");
 			$promo		= mysqli_fetch_assoc($sql);
 			?>
 
-			<table width="100%" style="font-size:18px">
+			<table width="100%" style="font-size:16px; margin-top:5px; margin-bottom:-15px">
 				<?php
 				$no = 1;
 				$total = 0;
@@ -135,15 +125,30 @@ if ($_GET['type'] == 'invoice') {
 					}
 
 					echo '
-					<tr> 	
-						<td colspan="2">&nbsp;</td>
-					</tr>
 					<tr>
 						<td width="5%" valign="top">'.$no.')</td>
 						<td width="80%" align="left">'.number_format($item['Qty'],0,',','.').' Item &nbsp; '.$item['Deskripsi'].'</td>
-						<td width="15%" align="right" valign="top" style="padding-left:8px">'.number_format($item['Total_Price'],0,',','.').'</td>
+						<td width="15%" align="right" valign="top" style="padding-left:8px">'.number_format($item['Item_Price'],0,',','.').'</td>
 					</tr>';
+					if ($item['Disc_Amount'] <> 0) {
+						$persen = ($item['Disc_Amount']/$item['Item_Price']) * 100;
+						$persen = ($item['Disc_Persen'] == 0) ? 'Discount Item ' : 'Discount Item '.round($persen).'%';
+					echo '
+					<tr>
+						<td width="5%">&nbsp;</td>
+						<td width="80%" align="left">'.$persen.'</td>
+						<td width="15%" align="right">-'.number_format($item['Disc_Amount'],0,',','.').'</td>
+					</tr>';
+					}
 
+					if ($item['Adjustment'] <> 0) {
+					echo '
+					<tr>
+						<td width="5%">&nbsp;</td>
+						<td width="80%" align="left">Adjustment</td>
+						<td width="15%" align="right">'.number_format($item['Adjustment'],0,',','.').'</td>
+					</tr>';
+					}
 					if ($customer['Cust_Member_Name'] == 'MEMBER') {
 					echo '
 					<tr>
@@ -153,11 +158,6 @@ if ($_GET['type'] == 'invoice') {
 					</tr>';
 					}
 					echo'
-					<tr> 	
-						<td colspan="2"> 
-							
-						</td>
-					</tr>
 					<tr> 	
 						<td width="5%">&nbsp;</td>
 						<td width="95%" colspan="2"><b>NOTE :</b> 
@@ -171,10 +171,8 @@ if ($_GET['type'] == 'invoice') {
 				}
 				?>     	
 			</table>
-			============================
-			<br>
-			<br>
-			<table width="100%" style="font-size:18px"> 	
+			____________________________
+			<table width="100%" style="font-size:16px; margin-top:5px; margin-bottom:-15px"> 	
 				<tr>
 					<td align="left"><?= number_format($invoice['Total_PCS'],0,',','.')?> PIECE(S)</td>
 					<td align="right"><?= number_format($total,0,',','.')?></td>
@@ -201,29 +199,25 @@ if ($_GET['type'] == 'invoice') {
 					<td align="right" valign="top"><?= number_format($invoice['Adjustment'],0,',','.')?></td>
 				</tr>
 				<?php } ?>
-				<tr style="font-size: 20px;font-weight: bold;">
+				<tr style="font-size: 18px;font-weight: bold;">
 					<td align="left">TOTAL </td>
 					<td align="right"><?= number_format($invoice['Payment_Amount'],0,',','.')?></td>
 				</tr>
 			</table>
-			<br>
-			
-				<?= ($customer['Cust_Member_Name'] <> 'MEMBER') ? '<center style="font-size: 18px;">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center><br>' : ''?>
-			============================
-			<br><br>
-			<div style="font-size:18px">
-			Payment  : <?= ($invoice['Status_Payment'] == 'Y') ? 'PAID':'UNPAID' ?><br>
-			Method : <?= ($invoice['Status_Payment'] == 'Y') ? $payment['Payment_Type']:'-'?><br>
-			Payment Received : <?= ($invoice['Status_Payment'] == 'Y') ? date('D, d M Y', strtotime($payment['Payment_Tgl'])):'-'?><br>
+			<?= ($customer['Cust_Member_Name'] <> 'MEMBER') ? '____________________________<center style="font-size: 16px; margin-top:5px;margin-bottom:-15px">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center>' : ''?>
+			____________________________
+			<div style="font-size:16px;margin-bottom:-15px;">
+				Payment  : <?= ($invoice['Status_Payment'] == 'Y') ? 'PAID':'UNPAID' ?><br>
+				Method : <?= ($invoice['Status_Payment'] == 'Y') ? $payment['Payment_Type']:'-'?><br>
+				Payment Received : <?= ($invoice['Status_Payment'] == 'Y') ? date('D, d M Y', strtotime($payment['Payment_Tgl'])):'-'?>
 			</div>
-			<br>
-			============================
-			<div style="font-size:18px">
+			____________________________
+			<div style="font-size:16px; ">
 			Print: <?= date('d M Y H:i:s')?> | <?= $_SESSION['Staff_Name']?>
 			</div>
 			&nbsp;
 		
-			<table class="collapse" style="font-size:15px">
+			<table class="collapse" style="font-size:15px; margin-top:-20px">
 				<tr class="collapse">
 					<td class="collapse">&nbsp;Customer&nbsp;</td>
 					<td class="collapse">&nbsp;Counter Staff&nbsp;</td>
