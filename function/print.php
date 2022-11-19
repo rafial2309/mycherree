@@ -37,14 +37,14 @@ if ($_GET['type'] == 'invoice') {
 		<!-- <button onclick="saveSignat()">SAVE SIGNATURE</button>
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
-			<p style="text-align: center; font-size:14px; margin-bottom:-15px">
+			<p style="text-align: center; font-size:14px; margin-bottom:-5px">
 				<img src="../src/images/logo-mycherree.png" style="width:30%"><br>
 			<?= ($_SESSION['cabang'] == 'MCL1') ? 'BGM PIK Blok G No 77':'Central Market PIK'?>. Jakarta Utara <br/>
 			
 			Tel: (021) 22338540 | WA: <?= ($_SESSION['cabang'] == 'MCL1') ? '+62 877 2410 9018':'+62 812 9055 1743 '?>
 			</p>
-			____________________________
-			<div style="width: 100%; margin-top:0px; margin-bottom:-20px">
+			---------------------------------------------
+			<div style="width: 100%; margin-top:-5px;margin-bottom:-10px">
 				<center>
 				<div style="width: 100%;">
 					<table width="100%" style="font-size:16px;">
@@ -88,14 +88,14 @@ if ($_GET['type'] == 'invoice') {
 				</div>
 				</center>
 			</div>
-			____________________________
+			---------------------------------------------
 			<?php if ($invoice['Note'] <>  '') {?>
-			<center style="margin-top:0px; margin-bottom:-20px">
-				<b style="font-size:16px; line-height:2px">
-					Request Customer : <br><span style="font-weight:normal; margin-top:-10px"><?= $invoice['Note']?></span>
-				</b>
+			<center style="margin-top:-25px; margin-bottom:-25px">
+				<p style="font-size:16px;">
+					<b>Request Customer :</b> <br><?= $invoice['Note']?>
+				</p>
 			</center>
-			____________________________
+			---------------------------------------------
 			<?php } ?>
 			<?php
 			$discount 	= $invoice['Discount_No'];
@@ -103,7 +103,7 @@ if ($_GET['type'] == 'invoice') {
 			$promo		= mysqli_fetch_assoc($sql);
 			?>
 
-			<table width="100%" style="font-size:16px; margin-top:5px; margin-bottom:-15px">
+			<table width="100%" style="font-size:16px; margin-top:-5px; margin-bottom:-5px">
 				<?php
 				$no = 1;
 				$total = 0;
@@ -171,8 +171,8 @@ if ($_GET['type'] == 'invoice') {
 				}
 				?>     	
 			</table>
-			____________________________
-			<table width="100%" style="font-size:16px; margin-top:5px; margin-bottom:-15px"> 	
+			---------------------------------------------
+			<table width="100%" style="font-size:16px; margin-top:-5px; margin-bottom:-5px"> 	
 				<tr>
 					<td align="left"><?= number_format($invoice['Total_PCS'],0,',','.')?> PIECE(S)</td>
 					<td align="right"><?= number_format($total,0,',','.')?></td>
@@ -204,14 +204,14 @@ if ($_GET['type'] == 'invoice') {
 					<td align="right"><?= number_format($invoice['Payment_Amount'],0,',','.')?></td>
 				</tr>
 			</table>
-			<?= ($customer['Cust_Member_Name'] <> 'MEMBER') ? '____________________________<center style="font-size: 16px; margin-top:5px;margin-bottom:-15px">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center>' : ''?>
-			____________________________
-			<div style="font-size:16px;margin-bottom:-15px;">
+			<?= ($customer['Cust_Member_Name'] <> 'MEMBER') ? '---------------------------------------------<center style="font-size: 16px; margin-bottom:-5px">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center>' : ''?>
+			---------------------------------------------
+			<div style="font-size:16px; margin-top:-5px;margin-bottom:-5px;">
 				Payment  : <?= ($invoice['Status_Payment'] == 'Y') ? 'PAID':'UNPAID' ?><br>
 				Method : <?= ($invoice['Status_Payment'] == 'Y') ? $payment['Payment_Type']:'-'?><br>
 				Payment Received : <?= ($invoice['Status_Payment'] == 'Y') ? date('D, d M Y', strtotime($payment['Payment_Tgl'])):'-'?>
 			</div>
-			____________________________
+			---------------------------------------------
 			<div style="font-size:16px; ">
 			Print: <?= date('d M Y H:i:s')?> | <?= $_SESSION['Staff_Name']?>
 			</div>
