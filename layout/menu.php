@@ -651,7 +651,8 @@
                 <!-- BEGIN: Breadcrumb -->
                 <nav aria-label="breadcrumb" class="-intro-x h-full mr-auto">
                     <ol class="breadcrumb breadcrumb-light">
-                        <li class="breadcrumb-item"><a href="#">Laundry & Dry Cleaning System V.1</a></li>
+                        <li class="breadcrumb-item" style="margin-top:7px; background-color:black"><a href="#">&nbsp;Pelunasan harus dilakukan sebelum Rabu, 23 November 2022. Jika melewati batas aplikasi akan di non-aktifan otomatis dari sistem.&nbsp;</a></li>
+                        <!-- <li class="breadcrumb-item"><a href="#">Laundry & Dry Cleaning System V.1</a></li> -->
                     </ol>
                 </nav>
                 <!-- END: Breadcrumb -->
