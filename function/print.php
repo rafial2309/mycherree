@@ -26,7 +26,7 @@ if ($_GET['type'] == 'invoice') {
 	<head>
 		<title>Print Invoice</title>
 		<style type="text/css">
-			body.receipt .sheet { width: 80mm; font-family: 'Calibri'; height: auto; margin: 0 auto;padding-right: 20px;padding-left: 5px; } /* change height as you like */
+			body.receipt .sheet { width: 80mm; font-family: 'Times New Roman'; height: auto; margin: 0 auto;padding-right: 20px;padding-left: 5px; } /* change height as you like */
 			@media print { body.receipt { width: 80mm } } /* this line is needed for fixing Chrome's bug */
 			@media print { #printarea { width: 80mm } }
 			.collapse { border: 1px solid black; border-collapse:collapse}
@@ -43,59 +43,59 @@ if ($_GET['type'] == 'invoice') {
 			
 			Tel: (021) 22338540 | WA: <?= ($_SESSION['cabang'] == 'MCL1') ? '+62 877 2410 9018':'+62 812 9055 1743 '?>
 			</p>
-			---------------------------------------------
+			------------------------------------------
 			<div style="width: 100%; margin-top:-5px;margin-bottom:-10px">
 				<center>
 				<div style="width: 100%;">
 					<table width="100%" style="font-size:16px;">
 						<tr>
 							<td width="30%" align="left">Invoice</td>
-							<td width="10%">:</td>
-							<td width="60%"> <?= $invoice['Inv_Number']?> </td>
+							<td width="5%">:</td>
+							<td width="65%"> <?= $invoice['Inv_Number']?> </td>
 						</tr>
 						<tr>
 							<td width="30%" align="left">Customer</td>
-							<td width="10%">:</td>
-							<td width="60%"> <?= $invoice['Cust_Nama']?></td>
+							<td width="5%">:</td>
+							<td width="65%"> <?= $invoice['Cust_Nama']?></td>
 						</tr>
 						<tr>
 							<td width="30%" align="left" valign="top">Alamat</td>
-							<td width="10%" valign="top">:</td>
-							<td width="60%"> <?= $invoice['Cust_Alamat']?> </td>
+							<td width="5%" valign="top">:</td>
+							<td width="65%"> <?= $invoice['Cust_Alamat']?> </td>
 						</tr>
 						<tr>
 							<td width="30%" align="left" valign="top">Telepon</td>
-							<td width="10%" valign="top">:</td>
-							<td width="60%"> <?=$invoice['Cust_Telp']?> </td>
+							<td width="5%" valign="top">:</td>
+							<td width="65%"> <?=$invoice['Cust_Telp']?> </td>
 						</tr>
 						<tr>
 							<td width="30%" align="left">Order</td>
-							<td width="10%">:</td>
-							<td width="60%"> <?= date('d M Y', strtotime($invoice['Inv_Tgl_Masuk']))?> </td>
+							<td width="5%">:</td>
+							<td width="65%"> <?= date('d M Y', strtotime($invoice['Inv_Tgl_Masuk']))?> </td>
 						</tr>
 						<tr>
 							<td width="30%" align="left">Ready</td>
-							<td width="10%">:</td>
-							<td width="60%"> <?= date('d M Y', strtotime($invoice['Inv_Tg_Selesai']))?> </td>
+							<td width="5%">:</td>
+							<td width="65%"> <?= date('d M Y', strtotime($invoice['Inv_Tg_Selesai']))?> </td>
 						</tr>
 						<tr>
 							<td width="30%" align="left">Served By</td>
-							<td width="10%">:</td>
-							<td width="60%"> <?= $invoice['Staff_Name']?> </td>
+							<td width="5%">:</td>
+							<td width="65%"> <?= $invoice['Staff_Name']?> </td>
 						</tr>
 					</table>
 					<!-- asd -->
 				</div>
 				</center>
 			</div>
-			---------------------------------------------
+			------------------------------------------
 			<?php if ($invoice['Note'] <>  '') {?>
 			<center style="margin-top:-25px; margin-bottom:-25px">
 				<p style="font-size:16px;">
 					<b>Request Customer :</b> <br><?= $invoice['Note']?>
 				</p>
 			</center>
-			---------------------------------------------
+			------------------------------------------
 			<?php } ?>
 			<?php
 			$discount 	= $invoice['Discount_No'];
@@ -171,7 +171,7 @@ if ($_GET['type'] == 'invoice') {
 				}
 				?>     	
 			</table>
-			---------------------------------------------
+			------------------------------------------
 			<table width="100%" style="font-size:16px; margin-top:-5px; margin-bottom:-5px"> 	
 				<tr>
 					<td align="left"><?= number_format($invoice['Total_PCS'],0,',','.')?> PIECE(S)</td>
@@ -183,10 +183,6 @@ if ($_GET['type'] == 'invoice') {
 					<td align="right"><?= number_format($invoice['Total_Diskon'],0,',','.')?></td>
 				</tr>
 		
-				<tr>
-					<td align="left">Rounding</td>
-					<td align="right"><?= number_format($invoice['Payment_Rounding'],0,',','.')?></td>
-				</tr>
 				<?php if ($invoice['Express_Charge'] <> 0) {?>
 				<tr>
 					<td align="left">Express Charge (<?= $invoice['Express_Charge']?>%)</td>
@@ -195,23 +191,27 @@ if ($_GET['type'] == 'invoice') {
 				<?php } ?>
 				<?php if ($invoice['Adjustment'] <> 0) {?>
 				<tr>
-					<td align="left">Adjustment <br> <i>NOTE: <?= $invoice['Note_Adjustment']?></i></td>
+					<td align="left">Adjustment (Note: <?= $invoice['Note_Adjustment']?>)</td>
 					<td align="right" valign="top"><?= number_format($invoice['Adjustment'],0,',','.')?></td>
 				</tr>
 				<?php } ?>
+				<tr>
+					<td align="left">Rounding</td>
+					<td align="right"><?= number_format($invoice['Payment_Rounding'],0,',','.')?></td>
+				</tr>
 				<tr style="font-size: 18px;font-weight: bold;">
 					<td align="left">TOTAL </td>
 					<td align="right"><?= number_format($invoice['Payment_Amount'],0,',','.')?></td>
 				</tr>
 			</table>
-			<?= ($customer['Cust_Member_Name'] <> 'MEMBER') ? '---------------------------------------------<center style="font-size: 16px; margin-bottom:-5px">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center>' : ''?>
-			---------------------------------------------
+			<?= ($customer['Cust_Member_Name'] <> 'MEMBER') ? '------------------------------------------<center style="font-size: 16px; margin-bottom:-5px">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center>' : ''?>
+			------------------------------------------
 			<div style="font-size:16px; margin-top:-5px;margin-bottom:-5px;">
 				Payment  : <?= ($invoice['Status_Payment'] == 'Y') ? 'PAID':'UNPAID' ?><br>
 				Method : <?= ($invoice['Status_Payment'] == 'Y') ? $payment['Payment_Type']:'-'?><br>
 				Payment Received : <?= ($invoice['Status_Payment'] == 'Y') ? date('D, d M Y', strtotime($payment['Payment_Tgl'])):'-'?>
 			</div>
-			---------------------------------------------
+			------------------------------------------
 			<div style="font-size:16px; ">
 			Print: <?= date('d M Y H:i:s')?> | <?= $_SESSION['Staff_Name']?>
 			</div>
