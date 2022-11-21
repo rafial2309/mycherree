@@ -38,7 +38,7 @@ if ($_GET['type'] == 'invoice') {
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
 			<p style="text-align: center; font-size:14px; margin-bottom:-5px">
-				<img src="../src/images/logo-mycherree.png" style="width:30%"><br>
+				<img src="../src/images/logo-mycherree.png" style="width:70%; margin-bottom:-30px"><br>
 			<?= ($_SESSION['cabang'] == 'MCL1') ? 'BGM PIK Blok G No 77':'Central Market PIK'?>. Jakarta Utara <br/>
 			
 			Tel: (021) 22338540 | WA: <?= ($_SESSION['cabang'] == 'MCL1') ? '+62 877 2410 9018':'+62 812 9055 1743 '?>
