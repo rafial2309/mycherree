@@ -145,7 +145,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
     <select id="invoice_data" onchange="pilihinv('MULTI')" data-placeholder="Select Invoice" class="tom-select w-full colour" style="z-index: 99999;">
         <option></option>
         <?php 
-            $queryinv = mysqli_query($conn,"SELECT * from Invoice WHERE Cust_ID='$customer_data' AND Status_Payment='N' ");
+            $queryinv = mysqli_query($conn,"SELECT * from Invoice WHERE Cust_ID='$customer_data' AND Status_Payment='N' AND Status_Inv != 'C'");
             while($datainv = mysqli_fetch_assoc($queryinv)){
         ?>
             <option value="<?php echo $datainv['Inv_Number'] ?>###<?php echo $datainv['Payment_Amount'] ?>"><?php echo $datainv['Inv_Number'] ?> &nbsp; Rp <?php echo number_format($datainv['Payment_Amount'] ,0,",",".")?></option>
