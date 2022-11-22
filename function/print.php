@@ -174,7 +174,7 @@ if ($_GET['type'] == 'invoice') {
 			------------------------------------------
 			<table width="100%" style="font-size:16px; margin-top:-5px; margin-bottom:-5px"> 	
 				<tr>
-					<td align="left"><?= number_format($invoice['Total_PCS'],0,',','.')?> PIECE(S)</td>
+					<td align="left"><?= number_format($invoice['Total_PCS'],0,',','.')?> ITEM</td>
 					<td align="right"><?= number_format($total,0,',','.')?></td>
 				</tr>
 				
