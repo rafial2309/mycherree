@@ -37,18 +37,18 @@ $ketemu=mysqli_num_rows($login);
 $r=mysqli_fetch_array($login);
 
 	if (mysqli_num_rows($login)) {
+		// server should keep session data for AT LEAST 1 hour
+		ini_set('session.gc_maxlifetime', 18000);
 
+		// each client should remember their session id for EXACTLY 1 hour
+		session_set_cookie_params(18000); 
 		session_start();
 		if ($r['Staff_Status']=='N') {
 			echo "<script>window.location=('../login?error=error&msg=Akun sudah dinonaktifkan')</script>";
 			exit();
 		}
 
-		// server should keep session data for AT LEAST 1 hour
-		ini_set('session.gc_maxlifetime', 18000);
-
-		// each client should remember their session id for EXACTLY 1 hour
-		session_set_cookie_params(18000); 
+		
 		$_SESSION['Staff_ID']=$r['Staff_ID'];
 		$_SESSION['Staff_Name']=$r['Staff_Name'];
 		$_SESSION['Staff_Access']=$r['Staff_Access'];
