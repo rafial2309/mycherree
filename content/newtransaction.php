@@ -271,6 +271,24 @@
                                         <hr>
                                     </div>
                                     <div class="col-span-6">
+                                        <label for="regular-form-1" class="form-label">Adjustment</label>
+                                        <div class="input-group">
+                                             <div id="input-group-email" class="input-group-text">Rp</div> 
+                                             <input type="text" onkeyup="updateitemprice()" name="adjustment" id="adjustment" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email">                                             
+                                        </div>
+                                    </div>
+                                    <div class="col-span-6">
+                                        <label  for="regular-form-1" class="form-label text-white">Adjusment</label>
+                                        <input id="note_adjustment" name="note_adjustment" type="text" class="form-control" placeholder="Note Adjusment">
+                                        <!-- kirimdata -->
+                                        <input type="hidden" name="Item_ID" id="Item_ID" value="">
+                                        <input type="hidden" name="Item_Name" id="Item_Name" value="">
+                                        <input type="hidden" name="Item_Price" id="Item_Price" value="">
+                                        <input type="hidden" name="Item_Pcs" id="Item_Pcs" value="">
+                                        <input type="hidden" name="Total_Price" id="Total_Price" value="">
+                                        <!-- kirimdata -->
+                                    </div>
+                                    <div class="col-span-6">
                                         <label for="regular-form-1" class="form-label">Discount</label>
                                         <div class="input-group">
                                             <input type="text" max="100" onkeyup="updateitempersen()" name="disc_persen" id="disc_persen" class="form-control uang" placeholder="10"  aria-describedby="input-group-email">                                             
@@ -283,29 +301,6 @@
                                              <div id="input-group-email" class="input-group-text">Rp</div> 
                                              <input type="text" onkeyup="updateitemprice()" name="disc_rupiah" id="disc_rupiah" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email">                                             
                                         </div>
-                                    </div>
-                                    
-                                    <div class="col-span-6">
-                                        <label for="regular-form-1" class="form-label">Special Treatment</label>
-                                        <div class="input-group">
-                                             <div id="input-group-email" class="input-group-text">Rp</div> 
-                                             <input type="text" onkeyup="updateitemprice()" name="adjustment" id="adjustment" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email">                                             
-                                        </div>
-                                    </div>
-                                    <div class="col-span-6">
-                                       <label  for="regular-form-1" class="form-label text-white">Adjusment</label>
-                                        <input id="note_adjustment" name="note_adjustment" type="text" class="form-control" placeholder="Note Special Treatment">
-                                       <!-- kirimdata -->
-                                             
-                                             
-                                             <input type="hidden" name="Item_ID" id="Item_ID" value="">
-                                             <input type="hidden" name="Item_Name" id="Item_Name" value="">
-                                             <input type="hidden" name="Item_Price" id="Item_Price" value="">
-                                             <input type="hidden" name="Item_Pcs" id="Item_Pcs" value="">
-                                             <input type="hidden" name="Total_Price" id="Total_Price" value="">
-
-                                            
-                                             <!-- kirimdata -->
                                     </div>
                                 </div>
                                 
@@ -639,10 +634,13 @@
                     var Item_Price = document.getElementById('Item_Price').value;
                     var item_qty = document.getElementById('item_qty').value
                     var persen = document.getElementById('disc_persen').value;
+                    var adjustment = document.getElementById('adjustment').value;
+                    
+                    adjustment  = (adjustment == '') ? '0' : adjustment;
                     if (persen=='') {persen='0';}
                     
-                    var pengurang = (parseInt(Item_Price) * parseInt(item_qty) * (parseInt(persen.replace(".", "")) / parseInt(100)));
-                    var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) - pengurang);
+                    var pengurang = (((parseInt(Item_Price) * parseInt(item_qty)) + parseInt(adjustment.replace(".", ""))) * (parseInt(persen.replace(".", "")) / parseInt(100)));
+                    var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) + parseInt(adjustment.replace(".", "")) - pengurang);
 
                     document.getElementById('disc_rupiah').value = pengurang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     document.getElementById('Total_Price').value = priceupdate;
@@ -684,10 +682,13 @@
                     var Item_Price = document.getElementById('Item_Price_edit').value;
                     var item_qty = document.getElementById('item_qty_edit').value
                     var persen = document.getElementById('disc_persen_edit').value;
+                    var adjustment = document.getElementById('adjustment_edit').value;
+                    
+                    adjustment  = (adjustment == '') ? '0' : adjustment;
                     if (persen=='') {persen='0';}
                     
-                    var pengurang = (parseInt(Item_Price) * parseInt(item_qty) * (parseInt(persen.replace(".", "")) / parseInt(100)));
-                    var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) - pengurang);
+                    var pengurang = (((parseInt(Item_Price) * parseInt(item_qty)) + parseInt(adjustment.replace(".", ""))) * (parseInt(persen.replace(".", "")) / parseInt(100)));
+                    var priceupdate = (parseInt(Item_Price) * parseInt(item_qty) + parseInt(adjustment.replace(".", "")) - pengurang);
 
                     document.getElementById('disc_rupiah_edit').value = pengurang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     document.getElementById('Total_Price_edit').value = priceupdate;

@@ -112,7 +112,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	
 	$subtotal 		= $data['Total_Price'];
 	$totalItemPrice = $data['Total_Item_Price'];
-	$charge			= (isset($_POST['persen'])) ? ((int)$_POST['persen']/100) * $totalItemPrice : 0;
+	$charge			= (isset($_POST['persen'])) ? ((int)$_POST['persen']/100) * $subtotal : 0;
 	$adjust 		= (isset($_POST['adjust'])) ? (int)$_POST['adjust'] : 0;
 	
 	if (isset($_SESSION['Cust_No'])) {
@@ -120,7 +120,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		if (isset($datadisc['Persentase'])) {
 			$persentase = $datadisc['Persentase'];
 			$namadiskon = $datadisc['Cust_Member_Name'];
-			$diskon 	= round(($datadisc['Persentase']/100)*$totalItemPrice);
+			$diskon 	= round(($datadisc['Persentase']/100)*$subtotal);
 		}else{
 			$persentase = '';
 			$namadiskon = '';
@@ -137,13 +137,13 @@ if ($_GET['menu'] == 'getitem' ) {
 		$customer = $invoice['Cust_ID'];
 		$datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$customer'"));
 		$charge = ($invoice['Express_Charge'] <> 0) ? ($invoice['Express_Charge']/100) * $totalItemPrice : 0;
-		$charge = (isset($_POST['persen'])) ? ((int)$_POST['persen'] / 100) * $totalItemPrice : $charge;
+		$charge = (isset($_POST['persen'])) ? ((int)$_POST['persen'] / 100) * $subtotal : $charge;
 		$adjust = (isset($_POST['adjust'])) ? (int)$_POST['adjust'] : $invoice['Adjustment'];
 		
 		if (isset($datadisc['Persentase'])) {
 			$persentase = $datadisc['Persentase'];
 			$namadiskon = $datadisc['Cust_Member_Name'];
-			$diskon 	= round(($datadisc['Persentase']/100)*$totalItemPrice);
+			$diskon 	= round(($datadisc['Persentase']/100)*$subtotal);
 		}else{
 			$persentase = '';
 			$namadiskon = '';
@@ -231,7 +231,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	
 	$totalItemPrice = $data['Total_Item_Price'];
 	$_POST['persen']= ($_POST['persen'] == '') ? 0 : $_POST['persen'];
-	$charge			= ($_POST['persen'] / 100) * $data['Total_Item_Price'];
+	$charge			= ($_POST['persen'] / 100) * $data['Total_Price'];
 	
 	echo number_format($charge,0,',','.');
 	exit();
@@ -241,7 +241,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice_Item WHERE Inv_Item_No='$id'"));
 	$databrand = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Brand_ID,Brand_Name from Master_Brand WHERE Brand_ID='$data[Brand_ID]'"));
 	$datacolour = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Colour_ID,Colour_Name from Master_Colour WHERE Colour_ID='$data[Colour_ID]'"));
-	$persen = ($data['Disc_Persen'] == true) ? ($data['Disc_Amount'] / $data['Item_Price']) * 100 : 0;
+	$persen = ($data['Disc_Persen'] == true) ? ($data['Disc_Amount'] / ($data['Item_Price'] + $data['Adjustment'])) * 100 : 0;
 
  ?>
  		<link rel="stylesheet" href="plugin/selectize/selectize.css" />
@@ -313,6 +313,24 @@ if ($_GET['menu'] == 'getitem' ) {
             <div class="col-span-12">
                 <hr>
             </div>
+			<div class="col-span-6">
+                <label for="regular-form-1" class="form-label">Adjustment</label>
+				<div class="input-group">
+					<div id="input-group-email" class="input-group-text">Rp</div> 
+                    <input type="text" onkeyup="updateitemprice1()" name="adjustment" id="adjustment_edit" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email" value="<?php echo $data['Adjustment'] ?>">                     
+                </div>
+            </div>
+            <div class="col-span-6">
+				<label for="regular-form-1" class="form-label text-white">Adjusment</label>                              
+				<input id="note_adjustment_edit" name="note_adjustment" type="text" class="form-control" placeholder="Note Adjustment" value="<?php echo $data['Adjustment_Note'] ?>">
+				<!-- kirimdata -->    
+				<input type="hidden" name="Inv_Item_No" id="Inv_Item_No_Edit" value="<?php echo $data['Inv_Item_No'] ?>">
+				<input type="hidden" name="Item_ID" id="Item_ID_Edit" value="<?php echo $data['Item_ID'] ?>">
+				<input type="hidden" name="Item_Price" id="Item_Price_edit" value="<?php echo $data['Item_Price'] ?>">
+				<input type="hidden" name="Item_Pcs" id="Item_Pcs_edit" value="<?php echo $data['Item_Pcs'] ?>">
+				<input type="hidden" name="Total_Price" id="Total_Price_edit" value="<?php echo $data['Total_Price'] ?>">
+				<!-- kirimdata -->
+            </div>
             <div class="col-span-6">
 				<label for="regular-form-1" class="form-label">Discount</label>
 				<div class="input-group">
@@ -327,31 +345,6 @@ if ($_GET['menu'] == 'getitem' ) {
 						<input type="text" onkeyup="updateitemprice1()" name="disc_rupiah" id="disc_rupiah_edit" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email"  value="<?= number_format($data['Disc_Amount'],0,',','.')?>">                                             
 				</div>
 			</div>
-			
-            <div class="col-span-6">
-                <label for="regular-form-1" class="form-label">Adjustment</label>
-				<div class="input-group">
-					<div id="input-group-email" class="input-group-text">Rp</div> 
-                    <input type="text" onkeyup="updateitemprice1()" name="adjustment" id="adjustment_edit" class="form-control uang" placeholder="50.000"  aria-describedby="input-group-email" value="<?php echo $data['Adjustment'] ?>">
-
-                     
-                </div>
-            </div>
-            <div class="col-span-6">
-				<label for="regular-form-1" class="form-label text-white">Adjusment</label>
-                                        
-               <input id="note_adjustment_edit" name="note_adjustment" type="text" class="form-control" placeholder="Note Adjustment" value="<?php echo $data['Adjustment_Note'] ?>">
-               <!-- kirimdata -->    
-                
-                <input type="hidden" name="Inv_Item_No" id="Inv_Item_No_Edit" value="<?php echo $data['Inv_Item_No'] ?>">
-                <input type="hidden" name="Item_ID" id="Item_ID_Edit" value="<?php echo $data['Item_ID'] ?>">
-                <input type="hidden" name="Item_Price" id="Item_Price_edit" value="<?php echo $data['Item_Price'] ?>">
-                <input type="hidden" name="Item_Pcs" id="Item_Pcs_edit" value="<?php echo $data['Item_Pcs'] ?>">
-                <input type="hidden" name="Total_Price" id="Total_Price_edit" value="<?php echo $data['Total_Price'] ?>">
-
-                    
-                     <!-- kirimdata -->
-            </div>
         </div>
         
         <div class="modal-footer text-right">
