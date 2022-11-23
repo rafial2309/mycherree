@@ -890,6 +890,12 @@
                             </ul>
                         </li>
                         <li>
+                            <a href="app?p=integration" class="top-menu">
+                                <div class="top-menu__icon"> <i data-lucide="cloud"></i> </div>
+                                <div class="top-menu__title"> Integration </div>
+                            </a>
+                        </li>
+                        <li>
                             <a href="app?p=discount" class="top-menu">
                                 <div class="top-menu__icon"> <i data-lucide="bookmark"></i> </div>
                                 <div class="top-menu__title"> Voucher </div>
