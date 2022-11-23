@@ -269,7 +269,8 @@ if ($_GET['type'] == 'invoice') {
 			<h6>
 				<span style="font-size:14px; font-weight: normal;text-transform: uppercase;">My Cherree Laundry Indonesia</span><br>
 				<span style="font-size:20px; font-weight: bold;text-transform: uppercase;"><?= date('d M Y', strtotime($data['Inv_Tg_Selesai']))?> <?= $data['Inv_Number'] ?> &nbsp; <?= $data['Item_No']?>/<?= $data['Total_PCS']?></span><br>
-				<span style="font-size:14px; font-weight: normal;text-transform: uppercase;"><?= $data['Deskripsi']?></span>
+				<span style="font-size:14px; font-weight: normal;text-transform: uppercase;"><?= $data['Deskripsi']?></span><br>
+				<span style="font-size:14px; font-weight: normal;text-transform: uppercase;"><b>NOTE: </b><?= $data['Item_Note']?></span>
 			</h6>
 		</div>
 	</body>
