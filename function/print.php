@@ -113,15 +113,15 @@ if ($_GET['type'] == 'invoice') {
 					$cust = mysqli_query($conn, "SELECT *FROM Customer WHERE Cust_No='$as'");
 					$customer = mysqli_fetch_assoc($cust);
 					if ($invoice['Total_Diskon'] <> 0) {
-						$afterDisc = number_format($item['Total_Price'] - ($item['Item_Price'] * ($promo['Persentase'] / 100)),0,',','.');
+						$afterDisc = number_format($item['Total_Price'] - ($item['Total_Price'] * ($promo['Persentase'] / 100)),0,',','.');
 						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? $afterDisc : 'NON MEMBER';
 						$price = '<strike>'.number_format($item['Item_Price'],0,',','.').'</strike> '. $afterDisc;
 					} elseif ($item['Disc_Amount'] <> 0){
 						$price = '<strike>'.number_format($item['Item_Price'],0,',','.').'</strike> '. number_format($item['Item_Price'],0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? number_format($item['Item_Price'],0,',','.') : 'NON MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? number_format($item['Total_Price'],0,',','.') : 'NON MEMBER';
 					} else {
 						$price = number_format($item['Item_Price'],0,',','.');
-						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? number_format((10/100) * $item['Item_Price'],0,',','.') : 'NON MEMBER';
+						$hargaMember = ($customer['Cust_Member_Name'] == 'MEMBER') ? number_format((10/100) * $item['Total_Price'],0,',','.') : 'NON MEMBER';
 					}
 
 					echo '
@@ -131,7 +131,7 @@ if ($_GET['type'] == 'invoice') {
 						<td width="15%" align="right" valign="top" style="padding-left:8px">'.number_format($item['Item_Price'],0,',','.').'</td>
 					</tr>';
 					if ($item['Disc_Amount'] <> 0) {
-						$persen = ($item['Disc_Amount']/$item['Item_Price']) * 100;
+						$persen = ($item['Disc_Amount']/$item['Total_Price']) * 100;
 						$persen = ($item['Disc_Persen'] == 0) ? 'Discount Item ' : 'Discount Item '.round($persen).'%';
 					echo '
 					<tr>
@@ -186,7 +186,7 @@ if ($_GET['type'] == 'invoice') {
 				<?php if ($invoice['Express_Charge'] <> 0) {?>
 				<tr>
 					<td align="left">Express Charge (<?= $invoice['Express_Charge']?>%)</td>
-					<td align="right"><?= number_format(($invoice['Express_Charge']/100)*$totalItemPrice,0,',','.')?></td>
+					<td align="right"><?= number_format(($invoice['Express_Charge']/100)*$total,0,',','.')?></td>
 				</tr>
 				<?php } ?>
 				<?php if ($invoice['Adjustment'] <> 0) {?>

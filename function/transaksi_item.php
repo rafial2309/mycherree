@@ -136,7 +136,7 @@ if ($_GET['menu'] == 'getitem' ) {
 	if (isset($invoice)) {
 		$customer = $invoice['Cust_ID'];
 		$datadisc = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount.Persentase,Customer.Cust_Member_Name from Customer join Discount on Customer.Discount_No=Discount.Discount_No WHERE Customer.Discount_No!=0 AND Cust_No='$customer'"));
-		$charge = ($invoice['Express_Charge'] <> 0) ? ($invoice['Express_Charge']/100) * $totalItemPrice : 0;
+		$charge = ($invoice['Express_Charge'] <> 0) ? ($invoice['Express_Charge']/100) * $subtotal : 0;
 		$charge = (isset($_POST['persen'])) ? ((int)$_POST['persen'] / 100) * $subtotal : $charge;
 		$adjust = (isset($_POST['adjust'])) ? (int)$_POST['adjust'] : $invoice['Adjustment'];
 		

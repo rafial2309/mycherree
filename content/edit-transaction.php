@@ -3,8 +3,8 @@ $id         = $_GET['id'];
 $sql        = mysqli_query($conn, "SELECT *FROM Invoice WHERE Inv_No='$id'");
 $invoice    = mysqli_fetch_assoc($sql);
 
-$data       = mysqli_fetch_assoc(mysqli_query($conn, "SELECT sum(Item_Price) as Total_Item_Price FROM Invoice_Item WHERE Inv_Number = '$invoice[Inv_Number]'"));
-$charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_Item_Price'],0,',','.');
+$data       = mysqli_fetch_assoc(mysqli_query($conn, "SELECT sum(Item_Price) as Total_Item_Price, sum(Total_Price) as Total_Price FROM Invoice_Item WHERE Inv_Number = '$invoice[Inv_Number]'"));
+$charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_Price'],0,',','.');
 ?>
 <script src="plugin/instascan.min.js"></script>
 <div class="wrapper-box">
