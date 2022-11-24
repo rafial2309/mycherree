@@ -131,7 +131,7 @@ if ($_GET['type'] == 'invoice') {
 						<td width="15%" align="right" valign="top" style="padding-left:8px">'.number_format($item['Item_Price'],0,',','.').'</td>
 					</tr>';
 					if ($item['Disc_Amount'] <> 0) {
-						$persen = ($item['Disc_Amount']/$item['Total_Price']) * 100;
+						$persen = ($item['Disc_Amount']/$item['Item_Price']) * 100;
 						$persen = ($item['Disc_Persen'] == 0) ? 'Discount Item ' : 'Discount Item '.round($persen).'%';
 					echo '
 					<tr>
