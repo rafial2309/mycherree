@@ -653,6 +653,7 @@
                     <ol class="breadcrumb breadcrumb-light">
                         <!-- <li class="breadcrumb-item" style="margin-top:7px; background-color:black"><a href="#">&nbsp;Pelunasan harus dilakukan sebelum Rabu, 23 November 2022. Jika melewati batas aplikasi akan di non-aktifan otomatis dari sistem.&nbsp;</a></li> -->
                         <li class="breadcrumb-item"><a href="#">Laundry & Dry Cleaning System V.1</a></li>
+                        <li class="breadcrumb-item"><a href="#" style="background-color:white;color: black;font-size:20px;padding:4px 6px 4px 6px;font-weight: bold;"><?php echo $_SESSION['cabang']; ?></a></li>
                     </ol>
                 </nav>
                 <!-- END: Breadcrumb -->

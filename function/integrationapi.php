@@ -2,7 +2,8 @@
 session_start();
 date_default_timezone_set("Asia/Jakarta");
 include "../config/configuration.php";
-$tgl1 = $_GET['tgl1'];
+$tgl1       = $_GET['tgl1'];
+$cabang     = 'MCL2';
 $tanggalnya = date('Ymd', strtotime($tgl1));
 ?>
 <link rel="stylesheet" href="plugin/datatable/jquery.dataTables.min.css" />
@@ -30,7 +31,7 @@ $tanggalnya = date('Ymd', strtotime($tgl1));
                 $no=1;
                 $totpay=0;
                 $totround=0;
-                $query=mysqli_query($conn,"SELECT * from Invoice_Payment WHERE DATE(Payment_Tgl)='$tgl1'"); 
+                $query=mysqli_query($conn,"SELECT * from Invoice_Payment WHERE DATE(Payment_Tgl)='$tgl1' and Inv_Number LIKE '$cabang%'"); 
                 while($data = mysqli_fetch_assoc($query)){
                     $header = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Invoice WHERE Inv_Number='$data[Inv_Number]'"));
             ?>
