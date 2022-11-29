@@ -51,7 +51,7 @@ if ($_GET['menu'] == 'cari' ) {
         <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;"><?php echo $data['Inv_Number'] ?></a> </td>
         <td class="w-40">
             <a href="" class="font-medium whitespace-nowrap"><?php echo $data['Cust_Nama'] ?></a> 
-            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
+            <div class="text-slate-500 text-xs whitespace-wrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Telp'] ?></div>
             <?php if ($data['Discount_No']=='1') { ?>
                 <small class="text-success">MEMBER</small>
@@ -179,7 +179,7 @@ if ($_GET['menu'] == 'cari' ) {
         <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;"><?php echo $data['Inv_Number'] ?></a> </td>
         <td class="w-40">
             <a href="" class="font-medium whitespace-nowrap"><?php echo $data['Cust_Nama'] ?></a> 
-            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
+            <div class="text-slate-500 text-xs whitespace-wrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Telp'] ?></div>
         </td>
         <td>
@@ -232,7 +232,7 @@ if ($_GET['menu'] == 'cari' ) {
         <td class="w-40 !py-4"> <a href="" class="underline decoration-dotted whitespace-nowrap" style="font-size: 17px;"><?php echo $data['Inv_Number'] ?></a> </td>
         <td class="w-40">
             <a href="" class="font-medium whitespace-nowrap"><?php echo $data['Cust_Nama'] ?></a> 
-            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
+            <div class="text-slate-500 text-xs whitespace-wrap mt-0.5"><?php echo $data['Cust_Alamat'] ?></div>
             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5"><?php echo $data['Cust_Telp'] ?></div>
         </td>
         <td>
