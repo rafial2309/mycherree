@@ -11,7 +11,7 @@
                             Transaction Details
                         </h2>
                         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-                            <button class="btn btn-primary shadow-md mr-2" onclick="goprintz()"><i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice</button>
+                            <button class="btn btn-primary shadow-md mr-2" onclick="printInvoice()"><i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice</button>
                             <button class="btn btn-primary shadow-md mr-2" onclick="editTrans()"><i data-lucide="edit" class="w-4 h-4 mr-2"></i> Edit</button>
                         </div>
                         <script type="text/javascript">

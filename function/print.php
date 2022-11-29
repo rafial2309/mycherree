@@ -38,7 +38,7 @@ if ($_GET['type'] == 'invoice') {
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
 			<p style="text-align: center; font-size:14px; margin-bottom:-5px">
-				<img src="../src/images/logo-mycherree.png" style="width:70%; margin-bottom:-30px"><br>
+				<img onclick="backgo()" src="../src/images/logo-mycherree.png" style="width:70%; margin-bottom:-30px"><br>
 			<?= ($_SESSION['cabang'] == 'MCL1') ? 'BGM PIK Blok G No 77':'Central Market PIK'?>. Jakarta Utara <br/>
 			
 			Tel: (021) 22338540 | WA: <?= ($_SESSION['cabang'] == 'MCL1') ? '+62 877 2410 9018':'+62 812 9055 1743 '?>
@@ -395,8 +395,8 @@ if ($_GET['type'] == 'invoice') {
 		let link = '<?= $link ?>';
 		let type = '<?= $_GET["type"] ?>';
 		window.print();
-	   	setTimeout(function () {
-	   		window.close(); 
+	   	//setTimeout(function () {
+	   		// window.close(); 
 			   // if (type != 'invoice') {
 			// 	   if (link == '') {
 			// 			window.close();
@@ -406,7 +406,7 @@ if ($_GET['type'] == 'invoice') {
 			   // } else {
 			// 	    window.location.href = "../app?p="+ link +"&invoice="+id; //will redirect to your blog page (an ex: blog.html)
 			   // }
-		}, 2000); //will call the function after 2 secs.
+		//}, 2000); //will call the function after 2 secs.
 	}
 
 
@@ -428,6 +428,20 @@ if ($_GET['type'] == 'invoice') {
 	}
 	}
 	
+	function backgo(){
+		let id = '<?= $id ?>';
+		let link = '<?= $link ?>';
+		let type = '<?= $_GET["type"] ?>';
+		if (type != 'invoice') {
+		   if (link == '') {
+				window.close();
+		   } else {
+			    window.location.href = link; //will redirect to your blog page (an ex: blog.html)
+		   }
+	    } else {
+		    window.location.href = "../app?p="+ link +"&invoice="+id; //will redirect to your blog page (an ex: blog.html)
+	    }
+	}
 
 </script>
 </body>
