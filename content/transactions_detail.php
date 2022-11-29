@@ -11,9 +11,14 @@
                             Transaction Details
                         </h2>
                         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-                            <button class="btn btn-primary shadow-md mr-2" onclick="printInvoice()"><i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice</button>
+                            <button class="btn btn-primary shadow-md mr-2" onclick="goprintz()"><i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print Invoice</button>
                             <button class="btn btn-primary shadow-md mr-2" onclick="editTrans()"><i data-lucide="edit" class="w-4 h-4 mr-2"></i> Edit</button>
                         </div>
+                        <script type="text/javascript">
+                            function goprintz(){
+                                window.open("function/print?type=invoice&invoice=<?php echo $_GET['invoice']; ?>",'name','height=300,width=350');
+                            }
+                        </script>
                     </div>
                     <!-- BEGIN: Transaction Details -->
                     <div class="intro-y grid grid-cols-11 gap-5 mt-5">
