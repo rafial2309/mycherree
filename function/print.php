@@ -37,7 +37,7 @@ if ($_GET['type'] == 'invoice') {
 		<!-- <button onclick="saveSignat()">SAVE SIGNATURE</button>
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
-			<p style="text-align: center; font-size:14px; margin-bottom:-5px">
+			<p style="text-align: center; font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '14px':'12px'?>; margin-bottom:-5px">
 				<img onclick="backgo()" src="../src/images/logo-mycherree.png" style="width:70%; margin-bottom:-30px"><br>
 			<?= ($_SESSION['cabang'] == 'MCL1') ? 'BGM PIK Blok G No 77':'Central Market PIK'?>. Jakarta Utara <br/>
 			
@@ -47,7 +47,7 @@ if ($_GET['type'] == 'invoice') {
 			<div style="width: 100%; margin-top:-5px;margin-bottom:-10px">
 				<center>
 				<div style="width: 100%;">
-					<table width="100%" style="font-size:16px;">
+					<table width="100%" style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>;">
 						<tr>
 							<td width="30%" align="left">Invoice</td>
 							<td width="5%">:</td>
@@ -91,7 +91,7 @@ if ($_GET['type'] == 'invoice') {
 			------------------------------------------
 			<?php if ($invoice['Note'] <>  '') {?>
 			<center style="margin-top:-25px; margin-bottom:-25px">
-				<p style="font-size:16px;">
+				<p style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>;">
 					<b>Request Customer :</b> <br><?= $invoice['Note']?>
 				</p>
 			</center>
@@ -103,7 +103,7 @@ if ($_GET['type'] == 'invoice') {
 			$promo		= mysqli_fetch_assoc($sql);
 			?>
 
-			<table width="100%" style="font-size:16px; margin-top:-5px; margin-bottom:-5px">
+			<table width="100%" style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>; margin-top:-5px; margin-bottom:-5px">
 				<?php
 				$no = 1;
 				$total = 0;
@@ -172,7 +172,7 @@ if ($_GET['type'] == 'invoice') {
 				?>     	
 			</table>
 			------------------------------------------
-			<table width="100%" style="font-size:16px; margin-top:-5px; margin-bottom:-5px"> 	
+			<table width="100%" style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>; margin-top:-5px; margin-bottom:-5px"> 	
 				<tr>
 					<td align="left"><?= number_format($invoice['Total_PCS'],0,',','.')?> ITEM</td>
 					<td align="right"><?= number_format($total,0,',','.')?></td>
@@ -199,28 +199,28 @@ if ($_GET['type'] == 'invoice') {
 					<td align="left">Rounding</td>
 					<td align="right"><?= number_format($invoice['Payment_Rounding'],0,',','.')?></td>
 				</tr>
-				<tr style="font-size: 18px;font-weight: bold;">
+				<tr style="font-size: <?= ($_SESSION['cabang'] == 'MCL1') ? '18px':'16px'?>;font-weight: bold;">
 					<td align="left">TOTAL </td>
 					<td align="right"><?= number_format($invoice['Payment_Amount'],0,',','.')?></td>
 				</tr>
 			</table>
 			<?= ($customer['Cust_Member_Name'] <> 'MEMBER') ? '------------------------------------------<center style="font-size: 16px; margin-bottom:-5px">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center>' : ''?>
 			------------------------------------------
-			<div style="font-size:16px; margin-top:-5px;margin-bottom:-5px;">
+			<div style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>; margin-top:-5px;margin-bottom:-5px;">
 				Payment  : <?= ($invoice['Status_Payment'] == 'Y') ? 'PAID':'UNPAID' ?><br>
 				Method : <?= ($invoice['Status_Payment'] == 'Y') ? $payment['Payment_Type']:'-'?><br>
 				Payment Received : <?= ($invoice['Status_Payment'] == 'Y') ? date('D, d M Y', strtotime($payment['Payment_Tgl'])):'-'?>
 			</div>
 			------------------------------------------
-			<div style="font-size:16px; ">
+			<div style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>; ">
 			Print: <?= date('d M Y H:i:s')?> | <?= $_SESSION['Staff_Name']?>
 			</div>
 			&nbsp;
 		
-			<table class="collapse" style="font-size:15px; margin-top:-20px">
+			<table class="collapse" style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '15px':'13px'?>; margin-top:-20px">
 				<tr class="collapse">
 					<td class="collapse">&nbsp;Customer&nbsp;</td>
-					<td class="collapse">&nbsp;Counter Staff&nbsp;</td>
+					<td class="collapse">&nbsp;Counter&nbsp;Staff&nbsp;</td>
 					<td class="collapse">&nbsp;Penerima&nbsp;</td>
 					<td class="collapse">&nbsp;Pengecek&nbsp;</td>
 				</tr>
