@@ -5,6 +5,12 @@ $invoice    = mysqli_fetch_assoc($sql);
 
 $data       = mysqli_fetch_assoc(mysqli_query($conn, "SELECT sum(Item_Price) as Total_Item_Price, sum(Total_Price) as Total_Price FROM Invoice_Item WHERE Inv_Number = '$invoice[Inv_Number]'"));
 $charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_Price'],0,',','.');
+
+$totalcredit = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(nilai) as total from Customer_Deposit where Cust_No='$invoice[Cust_ID]' and Jenis='CREDIT (+)'"));
+$totaldebit = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(nilai) as total from Customer_Deposit where Cust_No='$invoice[Cust_ID]' and Jenis='DEBIT (-)'"));
+
+$deposit = intval($totalcredit["total"]) - intval($totaldebit["total"]);
+
 ?>
 <script src="plugin/instascan.min.js"></script>
 <div class="wrapper-box">
@@ -17,7 +23,7 @@ $charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_Pr
 
             <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
                 
-                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-order-modal" class="btn btn-primary shadow-md mr-2"> <i data-lucide="user" class="w-4 h-4 mr-2"></i> <c id="tombolcust"><?php if (!isset($_SESSION['Cust_No'])) { echo "SELECT CUSTOMER";} else{ echo "UPDATE CUSTOMER"; } ?></c> </a> 
+                <a onclick="showformcust()" href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-order-modal" class="btn btn-primary shadow-md mr-2"> <i data-lucide="user" class="w-4 h-4 mr-2"></i> <c id="tombolcust"><?php if (!isset($_SESSION['Cust_No'])) { echo "SELECT CUSTOMER";} else{ echo "UPDATE CUSTOMER"; } ?></c> </a> 
             </div>
         </div>
         <div class="intro-y grid grid-cols-12 gap-5 mt-5">
@@ -79,6 +85,7 @@ $charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_Pr
                                         <b style="font-size: 16px;" id="namacustomer"><?= $invoice['Cust_Nama']?></b><br>
                                         <c id="alamatcustomer"><?= $invoice['Cust_Alamat']?></c><br>
                                         <c id="telpcustomer"><?= $invoice['Cust_Telp']?></c></div>
+                                        Saldo Deposit: Rp <c id="depositcustomer"><?= number_format($deposit,0,',','.') ?></c></div>
                                     <input type="hidden" name="invoice" id="invoice" value="<?= $invoice['Inv_Number']?>">
                                     <input type="hidden" name="Cust_No" id="Cust_No_Data" value="<?= $invoice['Cust_ID']?>">
                                     <input type="hidden" name="Cust_Nama" id="Cust_Nama_Data" value="<?= $invoice['Cust_Nama']?>">
@@ -166,19 +173,8 @@ $charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_Pr
                         </h2>
                     </div>
                     <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                        <div class="col-span-12">
-                                <label class="form-label">Customers</label>
-                                <div class="mt-1">
-                                    <select name="customer" id="customer" data-placeholder="Select Customers" class="tom-select w-full" onchange="cekcust()">
-                                    <option>-- SELECT CUSTOMER --</option>
-                                    <?php 
-                                        $querycust = mysqli_query($conn,"SELECT * from Customer WHERE Cust_Status='Y' order by Cust_Nama asc");
-                                        while($datacust = mysqli_fetch_assoc($querycust)){
-                                    ?>
-                                        <option value="<?php echo $datacust['Cust_No'] ?>+<?php echo $datacust['Cust_Nama'] ?>"><?php echo $datacust['Cust_Nama'] ?></option>
-                                    <?php } ?>
-                                    </select> 
-                                </div>
+                       <div class="col-span-12" id="showformcust">
+                                
                         </div>
                         <div class="col-span-12">
                             <input type="text" name="telp" id="telp" class="form-control" placeholder="Input Phone">
@@ -512,6 +508,20 @@ $charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_Pr
 
         })
     }
+
+    function showformcust() {
+        $.ajax({
+            url:'function/transaksi_item?menu=showformcust',
+            type:'POST',
+            dataType:'html',
+            success:function (response) {
+                $('#showformcust').html(response);
+
+            },
+
+        })
+    }
+    
     function pilihcust(){
         var id           = document.getElementById('customer').value;
         var Cust_Telp    = document.getElementById('telp').value;
@@ -536,6 +546,7 @@ $charge     = number_format(($invoice['Express_Charge'] / 100) * $data['Total_Pr
                 document.getElementById('Cust_Alamat_Data').value = Cust_Alamat;
                 document.getElementById('Discount_No_Data').value = obj.Discount_No;
                 document.getElementById('alamatcustomer').innerHTML = Cust_Alamat;
+                document.getElementById('depositcustomer').innerHTML = obj.Deposit;
                 document.getElementById('telpcustomer').innerHTML = Cust_Telp;
                 
                 

@@ -75,6 +75,8 @@
                                                     echo $_SESSION['Cust_Alamat'];
                                                 } ?></c><br><c id="telpcustomer"><?php if (isset($_SESSION['Cust_Telp'])) {
                                                     echo $_SESSION['Cust_Telp'];
+                                                } ?></c><br>Saldo Deposit: Rp <c id="depositcustomer"><?php if (isset($_SESSION['Deposit'])) {
+                                                    echo number_format($_SESSION['Deposit'],0,',','.');
                                                 } ?></c></div>
                                                 <input type="hidden" name="Cust_No" id="Cust_No_Data" value="<?php if (isset($_SESSION['Cust_No'])) {
                                                     echo $_SESSION['Cust_No'];
@@ -564,6 +566,7 @@
                             document.getElementById('Cust_Telp_Data').value = Cust_Telp;
                             document.getElementById('Cust_Alamat_Data').value = Cust_Alamat;
                             document.getElementById('Discount_No_Data').value = obj.Discount_No;
+                            document.getElementById('depositcustomer').innerHTML = obj.Deposit;
                             document.getElementById('alamatcustomer').innerHTML = Cust_Alamat;
                             document.getElementById('telpcustomer').innerHTML = Cust_Telp;
                             

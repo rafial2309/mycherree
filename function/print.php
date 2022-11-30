@@ -20,6 +20,12 @@ if ($_GET['type'] == 'invoice') {
 		$sql_payment 	= mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE Inv_Number = '$invoice[Inv_Number]'");
 		$payment 		= mysqli_fetch_assoc($sql_payment);
 	}
+
+	$totalcredit = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(nilai) as total from Customer_Deposit where Cust_No='$invoice[Cust_ID]' and Jenis='CREDIT (+)'"));
+	$totaldebit = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(nilai) as total from Customer_Deposit where Cust_No='$invoice[Cust_ID]' and Jenis='DEBIT (-)'"));
+
+	$deposit = intval($totalcredit["total"]) - intval($totaldebit["total"]);
+                                
 	?>
 	<!DOCTYPE html>
 	<html moznomarginboxes mozdisallowselectionprint style="background-color: #fff">
@@ -205,11 +211,15 @@ if ($_GET['type'] == 'invoice') {
 				</tr>
 			</table>
 			<?= ($customer['Cust_Member_Name'] <> 'MEMBER') ? '------------------------------------------<center style="font-size: 16px; margin-bottom:-5px">SILAHKAN JOIN MEMBERSHIP <BR>UNTUK MENIKMATI <BR>DISCOUNT 10%</center>' : ''?>
-			------------------------------------------
+			-----------------------------------------
 			<div style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>; margin-top:-5px;margin-bottom:-5px;">
 				Payment  : <?= ($invoice['Status_Payment'] == 'Y') ? 'PAID':'UNPAID' ?><br>
 				Method : <?= ($invoice['Status_Payment'] == 'Y') ? $payment['Payment_Type']:'-'?><br>
 				Payment Received : <?= ($invoice['Status_Payment'] == 'Y') ? date('D, d M Y', strtotime($payment['Payment_Tgl'])):'-'?>
+			</div>
+			------------------------------------------
+			<div style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>; margin-top:-5px;margin-bottom:-5px;">
+				Saldo Deposit : <?= 'Rp ' . number_format($deposit,0,',','.') ?>
 			</div>
 			------------------------------------------
 			<div style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>; ">
@@ -296,7 +306,7 @@ if ($_GET['type'] == 'invoice') {
 	<head>
 		<title>Print Invoice</title>
 		<style type="text/css">
-			body.receipt .sheet { width: 80mm;  font-family: 'Calibri'; height: auto; margin: 0 auto;padding-right: 20px;padding-left: 5px; } /* change height as you like */
+			body.receipt .sheet { width: 80mm;  font-family: 'Times New Roman'; height: auto; margin: 0 auto;padding-right: 20px;padding-left: 5px; } /* change height as you like */
 			@media print { body.receipt { width: 80mm; } } /* this line is needed for fixing Chrome's bug */
 			@media print { #printarea { width: 80mm } }
 			.collapse { border: 1px solid black; border-collapse:collapse}
@@ -306,23 +316,23 @@ if ($_GET['type'] == 'invoice') {
 		<!-- <button onclick="saveSignat()">SAVE SIGNATURE</button>
 		<button onclick="window.print()">PRINT</button> -->
 		<div id="printarea" style="background-color: #fff;" class="sheet">
-			<p style="text-align: center; font-size:14px">
-				<img src="../src/images/logo-mycherree.png" style="width:50%"><br>
+			<p style="text-align: center; font-size:14px; margin-bottom:-10px">
+				<img onclick="backgo()" src="../src/images/logo-mycherree.png" style="width:60%; margin-bottom:-30px"><br>
 			My Cherree Laundry  <br/>
 			<?= ($_SESSION['cabang'] == 'MCL1') ? 'BGM PIK Blok G No 77':'Central Market PIK'?><br/>
 			Jakarta Utara 14470<br/>
 			
 			Tel: (021) 22338540 | WA: <?= ($_SESSION['cabang'] == 'MCL1') ? '+62 877 2410 9018':'+62 812 9055 1743 '?>
 			</p>
-			============================
-			<center>
-				<b style="font-size:18px">
+			------------------------------------------
+			<center style="margin-top:-10px; margin-bottom:-10px">
+				<b style="font-size:18px;">
 					Proof of Membership Member
 				</b>
 			</center>
-			============================
+			------------------------------------------
 			<br>
-			<table width="100%" style="font-size:18px"> 	
+			<table width="100%" style="font-size:18px; margin-top:-10px; margin-bottom:-10px"> 	
 				<tr>
 					<td align="left">Name</td>
 					<td align="left">: <?= $member['Cust_Nama'] ?></td>
@@ -337,8 +347,8 @@ if ($_GET['type'] == 'invoice') {
 					<td align="left" colspan="2">Lifetime Member </td>
 				</tr>
 			</table>
-			============================
-			<table width="100%" style="font-size:18px"> 	
+			------------------------------------------
+			<table width="100%" style="font-size:18px; margin-top:-10px; margin-bottom:-10px"> 	
 				<tr>
 					<td align="left">Total</td>
 					<td align="left">: <?= number_format($member['Registrasi_Payment'],0,',','.') ?></td>
@@ -357,8 +367,8 @@ if ($_GET['type'] == 'invoice') {
 				</tr>
 
 			</table>
-			============================
-			<div style="font-size:18px">
+			------------------------------------------
+			<div style="font-size:18px; margin-top:-10px">
 			Print: <?= date('d M Y H:i:s')?> | <?= $_SESSION['Staff_Name']?>
 			</div>
 			&nbsp;

@@ -86,14 +86,21 @@ if ($_GET['menu'] == 'getitem' ) {
 	$id = 	explode('+',$_POST['id']);
 	$data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Cust_No,Cust_Nama,Discount_No from Customer WHERE Cust_No='$id[0]'"));
 
+	$totalcredit = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(nilai) as total from Customer_Deposit where Cust_No='$data[Cust_No]' and Jenis='CREDIT (+)'"));
+	$totaldebit = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(nilai) as total from Customer_Deposit where Cust_No='$data[Cust_No]' and Jenis='DEBIT (-)'"));
+
+	$deposit = intval($totalcredit["total"]) - intval($totaldebit["total"]);
+    
 	$_SESSION['Cust_No'] 		= $data['Cust_No'];
 	$_SESSION['Cust_Nama'] 		= $data['Cust_Nama'];
 	$_SESSION['Cust_Telp'] 		= $_POST['Cust_Telp'];
 	$_SESSION['Cust_Alamat'] 	= $_POST['Cust_Alamat'];
 	$_SESSION['Discount_No'] 	= $data['Discount_No'];
+	$_SESSION['Deposit'] 		= $deposit;
 
 	$json = [ 
         'Discount_No' => $data['Discount_No'],
+		'Deposit' => number_format($deposit,0,',','.')
 	];
 	echo json_encode($json);
     exit();

@@ -68,7 +68,8 @@ if ($_GET['menu'] == 'create' ) {
             ON Customer.Cust_No = Registrasi_Member.Cust_No 
             LEFT JOIN Invoice 
             ON Customer.Cust_No = Invoice.Cust_ID
-            WHERE Customer.Cust_Status='Y'";
+            WHERE Customer.Cust_Status='Y'
+            GROUP BY Customer.Cust_No";
     $query=mysqli_query($conn, $sql) or die("customers?menu=data: get dataku");
     $totalData = mysqli_num_rows($query);
     $totalFiltered = $totalData;
@@ -95,6 +96,7 @@ if ($_GET['menu'] == 'create' ) {
     //----------------------------------------------------------------------------------
     $query=mysqli_query($conn, $sql) or die("customers?menu=data: get dataku");
     $totalFiltered = mysqli_num_rows($query);
+    $sql.=" GROUP BY Customer.Cust_No";
     $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
     $query=mysqli_query($conn, $sql) or die("customers?menu=data: get dataku");
     //----------------------------------------------------------------------------------
