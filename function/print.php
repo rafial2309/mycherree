@@ -217,10 +217,12 @@ if ($_GET['type'] == 'invoice') {
 				Method : <?= ($invoice['Status_Payment'] == 'Y') ? $payment['Payment_Type']:'-'?><br>
 				Payment Received : <?= ($invoice['Status_Payment'] == 'Y') ? date('D, d M Y', strtotime($payment['Payment_Tgl'])):'-'?>
 			</div>
+			<?php if ($deposit!='0') { ?>
 			------------------------------------------
 			<div style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>; margin-top:-5px;margin-bottom:-5px;">
 				Saldo Deposit : <?= 'Rp ' . number_format($deposit,0,',','.') ?>
 			</div>
+			<?php } ?>
 			------------------------------------------
 			<div style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>; ">
 			Print: <?= date('d M Y H:i:s')?> | <?= $_SESSION['Staff_Name']?>
