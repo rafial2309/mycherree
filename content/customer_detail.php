@@ -2,6 +2,11 @@
     $data = mysqli_fetch_assoc(mysqli_query($conn,"SELECT * from Customer WHERE Cust_No='$_GET[Cust_No]'")); 
         if (isset($data['Cust_No'])) {
     ?>
+    <style type="text/css">
+        .dt-button{
+            background: #ff5070;color: white;padding: 8px;border-radius: 6px;
+        }
+    </style>
             <div class="wrapper-box">
                
                 <!-- BEGIN: Content -->
@@ -237,7 +242,8 @@
                         dom: 'Bfrtip',
                         "processing": true,
                         "serverSide": true,
-                        buttons: [],   
+                        buttons: ['excelHtml5']
+                        
                     } );     
                 } );
 
@@ -245,4 +251,12 @@
                     // Format mata uang.
                     $( '.uang' ).mask('000.000.000', {reverse: true});
                 })
+
+                function commaSeparateNumber(val) {
+                    while (/(\d+)(\d{3})/.test(val.toString())) {
+                        val = val.toString().replace(/(\d+)(\d{3})/, '$1' + ',' + '$2');
+                    }
+
+                    return val;
+                }
           </script>
