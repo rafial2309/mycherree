@@ -173,6 +173,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
         $total = intval($totalcredit["total"]) - intval($totaldebit["total"]);
         
         $bayar = 0;
+        $listinv = '';
         foreach ($_POST['invoice'] as $invoice) {
             if ($invoice=='') {
                 break;
@@ -185,6 +186,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
             $data = mysqli_fetch_assoc($sql);
 
             $bayar += $data['Payment_Amount'];
+            $listinv = $id . " " . $listinv;
         }
 
         if ($bayar > $total) {
@@ -192,7 +194,7 @@ $Staff_Name         = $_SESSION['Staff_Name'];
             exit();
         } else {
             $date = date('Y-m-d');
-            mysqli_query($conn, "INSERT INTO Customer_Deposit VALUES (0, '$customer[0]','$bayar','DEBIT (-)','Bayar Invoice','$date')");
+            mysqli_query($conn, "INSERT INTO Customer_Deposit VALUES (0, '$customer[0]','$bayar','DEBIT (-)','Invoice: $listinv','$date')");
             echo 'Saldo Cukup';
         }
     }

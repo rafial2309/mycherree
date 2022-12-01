@@ -224,19 +224,26 @@ if ($_GET['menu'] == 'create' ) {
     //----------------------------------------------------------------------------------
     $query=mysqli_query($conn, $sql) or die("colours?menu=datadeposit: get dataku");
     $totalFiltered = mysqli_num_rows($query);
-    $sql.=" ORDER BY Deposit_No DESC LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
+    $sql.=" ORDER BY Deposit_No ASC LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
     $query=mysqli_query($conn, $sql) or die("colours?menu=datadeposit: get dataku");
     //----------------------------------------------------------------------------------
     $data = array();
     $i = 1;
+    $saldo = 0;
     while( $row=mysqli_fetch_array($query) ) {
 
+        if ($row["Jenis"]=='CREDIT (+)') {
+            $saldo = intval($saldo) + intval($row["Nilai"]);
+        }else{
+            $saldo = intval($saldo) - intval($row["Nilai"]);
+        }
         $nestedData=array(); 
         $nestedData[] = "".$i++."";
         $nestedData[] = "".date('d M Y', strtotime($row["Tanggal"]))."";
         $nestedData[] = "".$row["Nilai"]."";
         $nestedData[] = "".$row["Jenis"]."";
         $nestedData[] = "".$row["Note"]."";
+        $nestedData[] = "".$saldo."";
         
         $data[] = $nestedData;
     }

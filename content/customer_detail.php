@@ -93,6 +93,7 @@
                                             <th>Nilai</th>
                                             <th>Transaksi</th>
                                             <th>Note</th>
+                                            <th>Sisa Deposit</th>
                                         </thead>
                                         <tbody id="hasil2">
                                             
@@ -240,10 +241,11 @@
                         },
                         order: [[0, 'desc']],
                         dom: 'Bfrtip',
+                        "searching": false,
                         "processing": true,
                         "serverSide": true,
                         buttons: ['excelHtml5']
-                        
+
                     } );     
                 } );
 
