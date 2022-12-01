@@ -234,7 +234,7 @@ if ($_GET['menu'] == 'create' ) {
         $nestedData=array(); 
         $nestedData[] = "".$i++."";
         $nestedData[] = "".date('d M Y', strtotime($row["Tanggal"]))."";
-        $nestedData[] = "".number_format($row["Nilai"],0,',','.')."";
+        $nestedData[] = "".$row["Nilai"]."";
         $nestedData[] = "".$row["Jenis"]."";
         $nestedData[] = "".$row["Note"]."";
         
