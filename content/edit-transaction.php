@@ -74,9 +74,9 @@ $deposit = intval($totalcredit["total"]) - intval($totaldebit["total"]);
                         </ul>
                     </div>
                 </div>
+                <form method="POST" action="function/transaksi_item?menu=savetransaksi" id="simpantransaksi">
                 <div class="tab-content">
                     <div id="ticket" class="tab-pane active" role="tabpanel" aria-labelledby="ticket-tab">
-                        <form method="POST" action="function/transaksi_item?menu=savetransaksi" id="simpantransaksi">
                         <div class="box p-2 mt-5">
                             <div class="flex items-center border-b border-slate-200 dark:border-darkmode-400 p-2">
                                 <div>
@@ -155,14 +155,15 @@ $deposit = intval($totalcredit["total"]) - intval($totaldebit["total"]);
                             <button class="btn w-40 border-slate-300 dark:border-darkmode-400 text-slate-500" type="button" onclick="cancelinvoice()">Cancel Transaction</button>
                             <button class="btn btn-primary w-40 shadow-md ml-auto">Save Transaction</button>
                         </div>
-                        </form>
-
+                   
                     </div>
                     
                 </div>
             </div>
             <!-- END: Ticket -->
         </div>
+        </form>
+
         <!-- BEGIN: New Order Modal -->
         <div id="new-order-modal" class="modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">

@@ -438,7 +438,7 @@ if ($_GET['menu'] == 'getitem' ) {
 		$Total_Voucher		= 0;
 		$Payment_Before		= round($_POST['total']);
 		$Payment_Amount		= angka_pembulatan($Payment_Before,2,100);
-		$Payment_Rounding	= $Payment_Amount-$Payment_Before;
+		$Payment_Rounding	= $Payment_Amount;
 
 		mysqli_query($conn, "UPDATE Invoice SET Cust_ID='$Cust_ID', Cust_Nama='$Cust_Nama', Cust_Alamat='$Cust_Alamat', Cust_Telp='$Cust_Telp', Note='$Note', Inv_Tg_Selesai='$Inv_Tg_Selesai', Discount_No='$Discount_No', Total_PCS='$Total_PCS', Total_Diskon='$Total_Diskon', Total_Voucher='$Total_Voucher', Payment_Before='$Payment_Before', Payment_Amount='$Payment_Amount', Payment_Rounding='$Payment_Rounding', Express_Charge='$Express_Charge', Adjustment='$Adjustment', Note_Adjustment='$Note_Adjustment' WHERE Inv_Number='$invoice'");
 		echo $invoice;
