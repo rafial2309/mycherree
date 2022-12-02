@@ -109,7 +109,7 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                                     </div>
                                                     <div class="text-3xl font-medium leading-8 mt-6"><?php if (isset($totalpayment['total'])) {
                                                         echo number_format($totalpayment['total'] ,0,",",".");
-                                                    } ?></div>
+                                                    }else{ echo '0'; } ?></div>
                                                     <div class="text-base text-slate-500 mt-1">Total Payment</div>
                                                 </div>
                                             </div>
@@ -153,7 +153,7 @@ $todaypayment   = mysqli_fetch_assoc(mysqli_query($conn,"SELECT sum(Payment_Tota
                                         </div>
                                         <div class="mt-5">
                                             <?php
-                                                $queryinv = mysqli_query($conn,"SELECT Inv_Number,Cust_Nama,Payment_Amount,Discount_No from Invoice WHERE Status_Inv!='C' order by Inv_No DESC LIMIT 6");
+                                                $queryinv = mysqli_query($conn,"SELECT Inv_Number,Cust_Nama,Payment_Amount,Discount_No from Invoice WHERE Inv_Number LIKE '%$cabang%' AND Status_Inv!='C' order by Inv_No DESC LIMIT 6");
                                                 while ($datainv = mysqli_fetch_assoc($queryinv)) {
                                                     $invoice = $datainv['Inv_Number'];
                                                  
