@@ -4,7 +4,7 @@
                 <div class="content">
                     <div class="intro-y flex items-center h-10 mt-5">
                         <h2 class="intro-y text-lg font-medium">
-                            Deadline Report
+                            Deadline Report - <?php echo $_SESSION['cabang']; ?>
                         </h2>
                         <!-- <button class="ml-auto btn btn-primary shadow-md mr-2" href="javascript:;" data-tw-toggle="modal" data-tw-target="#new-customer-modal"><i data-lucide='plus-circle' class='w-5 h-5'></i> &nbsp; Add New Customer</button> -->
                         
