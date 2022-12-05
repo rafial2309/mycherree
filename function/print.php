@@ -2,6 +2,26 @@
 session_start();
 include '../config/configuration.php';
 
+function angka_pembulatan($angka,$digit,$minimal) {
+	if (substr($angka, -2)=='00') {
+		return $angka;
+	} else {
+		$digitvalue=substr($angka,-($digit));  $bulat=0;
+		$nolnol="";
+
+		for($i=1;$i<=$digit;$i++) {
+			$nolnol.="0";
+		}
+		if($digitvalue<$minimal && $digit!=$nolnol) {  
+			$x1=$minimal-$digitvalue;
+			$bulat=$angka+$x1;
+		} else {
+			$bulat=$angka;
+		}
+		return $bulat; 
+ 	} 
+}
+
 if ($_GET['type'] == 'invoice') {
 	$id 	 = $_GET['invoice'];
 
@@ -107,6 +127,7 @@ if ($_GET['type'] == 'invoice') {
 			$discount 	= $invoice['Discount_No'];
 			$sql 		= mysqli_query($conn, "SELECT *FROM Discount WHERE Discount_No='$discount'");
 			$promo		= mysqli_fetch_assoc($sql);
+			$tot_pcs	= 0;
 			?>
 
 			<table width="100%" style="font-size:<?= ($_SESSION['cabang'] == 'MCL1') ? '16px':'14px'?>; margin-top:-5px; margin-bottom:-5px">
@@ -171,10 +192,13 @@ if ($_GET['type'] == 'invoice') {
 						</td>
 					</tr>
 					';
+					$tot_pcs = $tot_pcs + ($item['Item_Pcs'] * $item['Qty']);
 					$totalItemPrice += $item['Item_Price'];
 					$total += $item['Total_Price'];
 					$no++;
 				}
+				$payment_amount = $invoice['Payment_Amount'];
+				$total_pay = angka_pembulatan($total - $invoice['Total_Diskon'] + $invoice['Express_Charge'] + $invoice['Adjustment'], 2, 100);
 				?>     	
 			</table>
 			------------------------------------------
@@ -406,8 +430,21 @@ if ($_GET['type'] == 'invoice') {
 		let id = '<?= $id ?>';
 		let link = '<?= $link ?>';
 		let type = '<?= $_GET["type"] ?>';
-		window.print();
-	   	//setTimeout(function () {
+		if (type == 'invoice') {
+			let total_pay = '<?= $total_pay?>';
+			let payment_amount = '<?= $payment_amount?>';
+			let inv_no = '<?= $invoice["Inv_No"] ?>';
+
+			if (total_pay != payment_amount) {
+				alert('TOTAL BELUM TERUPDATE, SILAHKAN SAVE ULANG!');
+				location.href = '../app?p=edit-transaction&id='+inv_no;
+			} else {
+				window.print();
+	   		}
+		} else {
+			window.print();
+	   	}
+		//setTimeout(function () {
 	   		// window.close(); 
 			   // if (type != 'invoice') {
 			// 	   if (link == '') {
@@ -458,8 +495,3 @@ if ($_GET['type'] == 'invoice') {
 </script>
 </body>
 </html>
-<script>
-	function test() {
-		window.print();
-	}
-</script>
