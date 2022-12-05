@@ -3,6 +3,7 @@ session_start();
 date_default_timezone_set("Asia/Jakarta");
 include "../config/configuration.php";
 $tgl1 = $_GET['tgl1'];
+$cabang         = $_SESSION['cabang'];
 ?>
 <link rel="stylesheet" href="plugin/datatable/jquery.dataTables.min.css" />
 <link rel="stylesheet" href="plugin/datatable/buttons.dataTables.min.css" />
@@ -20,7 +21,7 @@ $tgl1 = $_GET['tgl1'];
     <tbody id="hasil">
         <?php 
             $no=1;
-            $query=mysqli_query($conn,"SELECT * from Invoice WHERE Inv_Tg_Selesai='$tgl1'"); 
+            $query=mysqli_query($conn,"SELECT * from Invoice WHERE Inv_Tg_Selesai='$tgl1' and Inv_Number LIKE '$cabang%'"); 
             while($data = mysqli_fetch_assoc($query)){
         ?>
         <tr>
