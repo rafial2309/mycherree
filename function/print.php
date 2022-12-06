@@ -164,7 +164,7 @@ if ($_GET['type'] == 'invoice') {
 					<tr>
 						<td width="5%">&nbsp;</td>
 						<td width="80%" align="left">'.$persen.'</td>
-						<td width="15%" align="right">-'.number_format($item['Disc_Amount'],0,',','.').'</td>
+						<td width="15%" align="right">'.number_format($item['Item_Price'] - $item['Disc_Amount'],0,',','.').'</td>
 					</tr>';
 					}
 
