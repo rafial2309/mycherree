@@ -198,7 +198,12 @@ if ($_GET['type'] == 'invoice') {
 					$no++;
 				}
 				$payment_amount = $invoice['Payment_Amount'];
-				$total_pay = angka_pembulatan($total - $invoice['Total_Diskon'] + $invoice['Express_Charge'] + $invoice['Adjustment'], 2, 100);
+				if ($invoice['Express_Charge']!='0') {
+					$exc = intval(($invoice['Express_Charge'] / 100) * $total);
+				}else{
+					$exc = 0;
+				}
+				$total_pay = angka_pembulatan($total - $invoice['Total_Diskon'] + $exc + $invoice['Adjustment'], 2, 100);
 				?>     	
 			</table>
 			------------------------------------------
