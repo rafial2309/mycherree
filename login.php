@@ -6,8 +6,10 @@
         $cekses=mysqli_query($conn, "SELECT * from Sessions where session_hash='$sh'");
         if (mysqli_num_rows($cekses)) {
             $data = mysqli_fetch_assoc($cekses);
+            session_start();
             $_SESSION = unserialize($data['session_data']);
             echo "<script>window.location=('app')</script>";
+            exit();
         }
     }else{
         //echo "no";

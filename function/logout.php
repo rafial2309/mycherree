@@ -18,6 +18,7 @@
     	setcookie('sesshash', '', time() - 3600, '/'); // empty value and old timestamp
 
 	session_destroy();
+
 	echo "<script type='text/javascript'>window.location='../login'</script>";
 	
 ?>
