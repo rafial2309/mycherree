@@ -55,6 +55,14 @@ $r=mysqli_fetch_array($login);
 		$catatan = $waktu . " : LOGIN SISTEM OLEH - " . $_SESSION['Staff_Name'];
 		mysqli_query($conn,"INSERT into log values('','$catatan')");
 		
+		$sessionid = session_id();
+    $sessionhash = md5($sessionid);
+    setcookie('sessid', $sessionid, time() + (86400 * 7), "/");
+    setcookie('sesshash', $sessionhash, time() + (86400 * 7), "/");
+
+    $isidata = serialize($_SESSION);
+    mysqli_query($conn,"INSERT into Sessions VALUES(0,'$sessionhash','$isidata')");
+
 		echo "<script>window.location=('../index')</script>";
 	} else {
 	

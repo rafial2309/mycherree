@@ -1,5 +1,18 @@
 <!DOCTYPE html>
-
+<?php 
+    include"config/configuration.php";
+    if (isset($_COOKIE['sessid'])) {
+        $sh = md5($_COOKIE['sessid']);
+        $cekses=mysqli_query($conn, "SELECT * from Sessions where session_hash='$sh'");
+        if (mysqli_num_rows($cekses)) {
+            $data = mysqli_fetch_assoc($cekses);
+            $_SESSION = unserialize($data['session_data']);
+            echo "<script>window.location=('app')</script>";
+        }
+    }else{
+        //echo "no";
+    }
+?>
 <html lang="en" class="light">
     <!-- BEGIN: Head -->
     <head>

@@ -98,6 +98,10 @@ if ($_GET['menu'] == 'getitem' ) {
 	$_SESSION['Discount_No'] 	= $data['Discount_No'];
 	$_SESSION['Deposit'] 		= $deposit;
 
+	$sh = md5($_COOKIE['sessid']);
+	$isidata = serialize($_SESSION);
+	mysqli_query($conn,"UPDATE Sessions SET session_data='$isidata' WHERE session_hash='$sh'");
+
 	$json = [ 
         'Discount_No' => $data['Discount_No'],
 		'Deposit' => number_format($deposit,0,',','.')
