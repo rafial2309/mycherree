@@ -155,7 +155,7 @@ if ($_GET['type'] == 'invoice') {
 					<tr>
 						<td width="5%" valign="top">'.$no.')</td>
 						<td width="80%" align="left">'.number_format($item['Qty'],0,',','.').' Item &nbsp; '.$item['Deskripsi'].'</td>
-						<td width="15%" align="right" valign="top" style="padding-left:8px">'.number_format($item['Item_Price'],0,',','.').'</td>
+						<td width="15%" align="right" valign="top" style="padding-left:8px">'.number_format($item['Item_Price'] + $item['Adjustment'],0,',','.').'</td>
 					</tr>';
 					if ($item['Disc_Amount'] <> 0) {
 						$persen = ($item['Disc_Amount']/$item['Item_Price']) * 100;
@@ -168,14 +168,6 @@ if ($_GET['type'] == 'invoice') {
 					</tr>';
 					}
 
-					if ($item['Adjustment'] <> 0) {
-					echo '
-					<tr>
-						<td width="5%">&nbsp;</td>
-						<td width="80%" align="left">Adjustment</td>
-						<td width="15%" align="right">'.number_format($item['Adjustment'],0,',','.').'</td>
-					</tr>';
-					}
 					if ($customer['Cust_Member_Name'] == 'MEMBER') {
 					echo '
 					<tr>
