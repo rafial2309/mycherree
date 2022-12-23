@@ -411,4 +411,93 @@ if ($_GET['menu'] == 'Top Customer') { ?>
         
     </script>
 
+<?php }elseif($_GET['menu'] == 'Customer JOIN'){ ?>
+    <h2 class="intro-y text-lg font-medium">
+        Generate Report <i><?php echo $_GET['menu']; ?></i>
+    </h2>
+
+    <b>Select Range Date</b>
+    <input type="date"   name="" id="tanggal1">
+    <input type="date"  name="" id="tanggal2">
+    <button class="btn btn-primary mr-1 mb-2" onclick="ambildata5()">Generate</button>
+    <br>
+    <div id="hasilajaxreport">
+        
+    </div>
+<?php }elseif($_GET['menu'] == 'ambildata5'){ 
+    $tgl1 = $_GET['tgl1'];
+    $tgl2 = $_GET['tgl2'];
+    ?>
+    <link rel="stylesheet" href="plugin/datatable/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="plugin/datatable/buttons.dataTables.min.css" />
+    <div style="width:100%;display: inline-flex;">
+        
+
+        <div style="width:100%;margin-top: 10px;">
+            <h2  style="text-align: center;font-size: 18px;text-transform: uppercase;font-weight: bold;margin-bottom: 15px;">Customer JOIN Report</h2>
+            <table id="example" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width:30px">No</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Join</th>
+                    </tr>
+                </thead>
+                <tbody id="hasil">
+
+                    <?php 
+                        $no=1;
+                        $query=mysqli_query($conn,"SELECT *  FROM Customer WHERE Cust_Tgl_Join>='$tgl1' AND Cust_Tgl_Join<='$tgl2' ORDER BY Cust_Tgl_Join ASC"); 
+                        $jmldata = mysqli_num_rows($query);
+                        while($data = mysqli_fetch_assoc($query)){  
+                    ?>
+                        <tr>
+                            <td><?php echo $no++; ?></td>
+                            <td><?php echo $data['Cust_Nama'] ?></td>
+                            <td><?php echo $data['Cust_Alamat'] ?></td>
+                            <td><?php echo $data['Cust_Telp'] ?></td>
+                            <td><?php echo date('d M Y', strtotime($data['Cust_Tgl_Join'])); ?></td>
+                        </tr>
+                    <?php } ?>
+                    
+                </tbody>
+                <tfoot>
+                    <tr style="background-color:yellow;font-weight: bold;font-size: 20px;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="font-weight:bold;">TOTAL</td>
+                        <td style="font-weight:bold;"><?php echo number_format($jmldata ,0,",","."); ?></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="plugin/datatable/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="plugin/datatable/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="plugin/datatable/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="plugin/datatable/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="plugin/datatable/pdfmake.min.js"></script>
+    <script type="text/javascript" src="plugin/datatable/vfs_fonts.js"></script>
+    <script type="text/javascript" src="plugin/datatable/jszip.min.js"></script>
+    <script type="text/javascript" src="plugin/datatable/buttons.html5.min.js"></script>
+    <script type="text/javascript">   
+        $(document).ready(function() {
+            $('#example').DataTable( {
+                dom: 'Bfrtip',
+                order: [[0, 'asc']],
+                buttons: [
+                    { extend: 'excelHtml5', footer: true,messageTop: 'Customer Join Report' },
+                ]   
+
+            } );     
+        } );
+
+        
+    </script>
+
 <?php } ?>
