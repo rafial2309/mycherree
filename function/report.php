@@ -382,7 +382,7 @@ if ($_GET['type'] == 'customer') {
     $no = 1;
 
     $bulan = substr($month, 5, 2);
-    $tahun = substr($month, 0, 4);
+    $tahun = substr($_POST['month'], -4);
     $cabang = $_SESSION['cabang'];
     
     $sql = mysqli_query($conn, "SELECT *FROM Invoice JOIN Customer ON Invoice.Cust_ID = Customer.Cust_No WHERE Invoice.Inv_Number LIKE '%$cabang%' AND MONTH(Invoice.Inv_Tgl_Masuk)='$bulan' AND YEAR(Invoice.Inv_Tgl_Masuk)='$tahun'");
@@ -454,7 +454,7 @@ if ($_GET['type'] == 'customer') {
     $baris = 5;
     $no = 1;
 
-    $tahun = substr($year, 0, 4);
+    $tahun  = substr($_POST['year'], -4);
     $cabang = $_SESSION['cabang'];
 
     $sql = mysqli_query($conn, "SELECT *FROM Invoice JOIN Customer ON Invoice.Cust_ID = Customer.Cust_No WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Invoice.Inv_Tgl_Masuk)='$tahun'");
@@ -523,8 +523,9 @@ if ($_GET['type'] == 'customer') {
     
     $baris = 5;
     $no = 1;
+    $cabang = $_SESSION['cabang'];
     
-    $sql = mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE DATE(Payment_Tgl) >= '$start' AND DATE(Payment_Tgl) <= '$end'");
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND DATE(Payment_Tgl) >= '$start' AND DATE(Payment_Tgl) <= '$end'");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
@@ -570,9 +571,11 @@ if ($_GET['type'] == 'customer') {
     $no = 1;
     
     $bulan = substr($month, 5, 2);
-    $tahun = substr($month, 0, 4);
+    $tahun = substr($_POST['month'], -4);
     
-    $sql = mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE MONTH(Payment_Tgl)='$bulan' AND YEAR(Payment_Tgl)='$tahun'");
+    $cabang = $_SESSION['cabang'];
+
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND MONTH(Payment_Tgl)='$bulan' AND YEAR(Payment_Tgl)='$tahun'");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
@@ -617,9 +620,10 @@ if ($_GET['type'] == 'customer') {
     $baris = 5;
     $no = 1;
     
-    $tahun = substr($year, 0, 4);
+    $tahun = substr($_POST['year'], -4);
+    $cabang = $_SESSION['cabang'];
     
-    $sql = mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE YEAR(Payment_Tgl)='$tahun'");
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Payment_Tgl)='$tahun'");
     while ($data = mysqli_fetch_assoc($sql)) {
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
@@ -649,9 +653,9 @@ if ($_GET['type'] == 'customer') {
     $year   = date('Y-m-d', strtotime($_POST['year']));
 
     $bulan  = substr($month, 5, 2);
-    $tahun  = substr($month, 0, 4);
+    $tahun  = substr($_POST['month'], -4);
 
-    $yearly = substr($year, 0, 4);
+    $yearly = substr($_POST['year'], -4);
 
     $type   = $_POST['type'];
     $cabang = $_SESSION['cabang'];
@@ -693,18 +697,19 @@ if ($_GET['type'] == 'customer') {
     $year   = date('Y-m-d', strtotime($_POST['year']));
 
     $bulan  = substr($month, 5, 2);
-    $tahun  = substr($month, 0, 4);
+    $tahun  = substr($_POST['month'], -4);
 
-    $yearly = substr($year, 0, 4);
-
+    $yearly = substr($_POST['year'], -4);
+    
     $type   = $_POST['type'];
+    $cabang = $_SESSION['cabang'];
 
     if ($type == 'daily')
-        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE DATE(Payment_Tgl) >='$start' AND DATE(Payment_Tgl) <= '$end'");
+        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND DATE(Payment_Tgl) >='$start' AND DATE(Payment_Tgl) <= '$end'");
     elseif ($type == 'monthly')
-        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE MONTH(Payment_Tgl)='$bulan' AND YEAR(Payment_Tgl)='$tahun'");
+        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND MONTH(Payment_Tgl)='$bulan' AND YEAR(Payment_Tgl)='$tahun'");
     else  
-        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE YEAR(Payment_Tgl)='$yearly'");
+        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Payment_Tgl)='$yearly'");
 
     $data = array();
     $json = array();
@@ -733,9 +738,9 @@ if ($_GET['type'] == 'customer') {
     $year   = date('Y-m-d', strtotime($_POST['year']));
 
     $bulan  = substr($month, 5, 2);
-    $tahun  = substr($month, 0, 4);
+    $tahun  = substr($_POST['month'], -4);
 
-    $yearly = substr($year, 0, 4);
+    $yearly = substr($_POST['year'], -4);
 
     $type   = $_POST['type'];
 
@@ -857,9 +862,9 @@ if ($_GET['type'] == 'customer') {
     $year   = date('Y-m-d', strtotime($_POST['year']));
 
     $bulan  = substr($month, 5, 2);
-    $tahun  = substr($month, 0, 4);
+    $tahun  = substr($_POST['month'], -4);
 
-    $yearly = substr($year, 0, 4);
+    $yearly = substr($_POST['year'], -4);
 
     $type   = $_POST['type'];
     $cabang = $_SESSION['cabang'];
@@ -869,7 +874,7 @@ if ($_GET['type'] == 'customer') {
     elseif ($type == 'monthly')
         $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND MONTH(Inv_Tgl_Masuk)='$bulan' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
     else 
-        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Inv_Tgl_Masuk)='$tahun'");
+        $query = mysqli_query($conn, "SELECT sum(Payment_Amount) as Total_Amount, sum(Total_PCS) as Total_PCS, Inv_Tgl_Masuk FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Inv_Tgl_Masuk)='$yearly'");
     
     $total = mysqli_fetch_assoc($query);
 
