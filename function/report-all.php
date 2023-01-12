@@ -2,7 +2,7 @@
 session_start();
 date_default_timezone_set("Asia/Jakarta");
 include "../config/configuration.php";
-
+$cabang         = $_SESSION['cabang'];
 if ($_GET['menu'] == 'Top Customer') { ?>
     <h2 class="intro-y text-lg font-medium">
         Generate Report <i><?php echo $_GET['menu']; ?></i>
@@ -269,7 +269,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                         $no=1;
                         $totpcs=0;
                         $totpay=0;
-                        $query=mysqli_query($conn,"SELECT *  FROM Invoice WHERE Inv_Tgl_Masuk<'$tgl1' AND status_payment='N' ORDER BY Inv_No DESC"); 
+                        $query=mysqli_query($conn,"SELECT *  FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND Inv_Tgl_Masuk<'$tgl1' AND status_payment='N' AND Status_Inv!='C' ORDER BY Inv_No DESC"); 
                         while($data = mysqli_fetch_assoc($query)){
                              
                         $cekmember = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount_Nama from Discount JOIN Customer ON Customer.Discount_No=Discount.Discount_No WHERE Cust_No='$data[Cust_ID]'"));
@@ -361,7 +361,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                         $no=1;
                         $totpcs=0;
                         $totpay=0;
-                        $query=mysqli_query($conn,"SELECT *  FROM Invoice WHERE Inv_Tgl_Masuk<'$tgl1' AND Status_Taken='N' ORDER BY Inv_No DESC"); 
+                        $query=mysqli_query($conn,"SELECT *  FROM Invoice WHERE Inv_Number LIKE '%$cabang%' AND Inv_Tgl_Masuk<'$tgl1' AND Status_Taken='N' ORDER BY Inv_No DESC"); 
                         while($data = mysqli_fetch_assoc($query)){
                              
                         $cekmember = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount_Nama from Discount JOIN Customer ON Customer.Discount_No=Discount.Discount_No WHERE Cust_No='$data[Cust_ID]'"));
