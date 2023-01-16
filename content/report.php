@@ -14,6 +14,7 @@
                             <option value="Customer UNPAID">Customer UNPAID (BELUM BAYAR)</option>
                             <option value="Customer UNTAKEN">Customer UNTAKEN (PENDINGAN)</option>
                             <option value="Customer JOIN">Customer Join (BARU TERDAFTAR)</option>
+                            <option value="Member JOIN">Member Join (BARU TERDAFTAR)</option>
                         </select>
                         &nbsp; &nbsp; 
                         <button class="btn btn-primary mr-1" onclick="ambildata()">Show</button>
@@ -152,6 +153,28 @@
                         
                         $.ajax({
                         url:'function/report-all.php?menu=ambildata5&tgl1='+tgl1+'&tgl2='+tgl2,
+                        type:'GET',
+                        dataType:'html',
+                        success:function (response) {
+                            $('#hasilajaxreport').html(response);
+                        },
+
+                        })                       
+                    }
+                }
+
+                function ambildata6() {
+                    var tgl1 = document.getElementById("tanggal1").value;
+                    var tgl2 = document.getElementById("tanggal2").value;
+
+                    if (tgl1=='' || tgl2=='') {
+                        
+                    }else{
+                        document.getElementById("tanggal1").blur();
+                        document.getElementById("tanggal2").blur();
+                        
+                        $.ajax({
+                        url:'function/report-all.php?menu=ambildata6&tgl1='+tgl1+'&tgl2='+tgl2,
                         type:'GET',
                         dataType:'html',
                         success:function (response) {
