@@ -315,6 +315,9 @@ if ($_GET['type'] == 'customer') {
 
     $sql = mysqli_query($conn, "SELECT *FROM Invoice JOIN Customer ON Invoice.Cust_ID = Customer.Cust_No WHERE Invoice.Inv_Number LIKE '%$cabang%' AND Invoice.Inv_Tgl_Masuk BETWEEN '$start' AND '$end'");
     while ($data = mysqli_fetch_assoc($sql)) {
+        if ($data['Status_Payment'] == 'Y') {
+            $cektipe = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Payment_Type from Invoice_Payment WHERE Inv_Number='$data[Inv_Number]'"));
+        }
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
         $sheet->setCellValue('C' . $baris, date('D, d M Y', strtotime($data['Inv_Tgl_Masuk'])));
@@ -324,7 +327,7 @@ if ($_GET['type'] == 'customer') {
         $sheet->setCellValue('G' . $baris, $data['Total_PCS']);
         $sheet->setCellValue('H' . $baris, $data['Payment_Amount']);
         $sheet->setCellValue('I' . $baris, ($data['Cust_Member_Name'] == 'MEMBER') ? 'MEMBER' : 'NONMEMBER');
-        $sheet->setCellValue('J' . $baris, ($data['Status_Payment'] == 'Y') ? 'PAID' : 'UNPAID');
+        $sheet->setCellValue('J' . $baris, ($data['Status_Payment'] == 'Y') ? 'PAID '.$cektipe['Payment_Type'] : 'UNPAID');
         $sheet->setCellValue('K' . $baris, $data['Staff_Name']);
         $baris++;
         $no++;
