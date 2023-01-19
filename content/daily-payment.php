@@ -14,18 +14,29 @@
                                     <div class="report-box-2 before:hidden xl:before:block intro-y mt-5">
                                         <form id="form-daily" action="function/report?type=daily-payment" method="POST">
                                         <div class="box p-5">
-                                                <div class="grid grid-cols-12 gap-4 gap-y-3">
-                                                <div class="col-span-12 sm:col-span-4">
+                                                <div class="grid grid-cols-12 gap-3 gap-y-3">
+                                                <div class="col-span-12 sm:col-span-3">
                                                     <label for="modal-datepicker-1" class="form-label">From</label>
                                                     <input type="text" id="start" name="start" class="datepicker form-control" data-single-mode="true">
                                                 </div>
-                                                <div class="col-span-12 sm:col-span-4">
+                                                <div class="col-span-12 sm:col-span-3">
                                                     <label for="modal-datepicker-2" class="form-label">To</label>
                                                     <input type="text" id="end" name="end" class="datepicker form-control" data-single-mode="true">
                                                 </div>
-                                                <div class="col-span-12 sm:col-span-4">
+                                                <div class="col-span-12 sm:col-span-3">
+                                                    <label for="modal-datepicker-2" class="form-label">Type</label>
+                                                    <select class="form-select sm:mr-2" name="jenis" id="jenis" aria-label="Default select example">
+                                                         <option value="SEMUA">SEMUA</option>
+                                                         <option value="CASH">CASH</option>
+                                                         <option value="TRANSFER">TRANSFER</option>
+                                                         <option value="DEPOSIT">DEPOSIT</option>
+                                                         <option value="DEBIT/EDC">DEBIT/EDC</option>
+                                                         <option value="QRIS">QRIS</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-span-12 sm:col-span-3">
                                                     <label class="form-label">&nbsp;</label><br>
-                                                    <button class="btn btn-primary" type="button" onclick="btnGenerate('daily')"><i data-lucide="refresh-cw"></i>&emsp;Generate</button>
+                                                    <button class="btn btn-primary btn-sm" type="button" onclick="btnGenerate('daily')"><i data-lucide="refresh-cw"></i>Generate</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -81,10 +92,12 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>Invoice</th>
-                                                                <th>Tanggal Payment</th>
-                                                                <th>Dibayar oleh</th>
-                                                                <th>Total Pembayaran</th>
-                                                                <th>Tipe Pembayaran</th>
+                                                                <th>Nama</th>
+                                                                <th>Tanggal</th>
+                                                                <th>Payment</th>
+                                                                <th>Oleh</th>
+                                                                <th>Total</th>
+                                                                <th>Tipe</th>
                                                                 <th>Catatan</th>
                                                                 <th>Staff</th>
                                                             </tr>
@@ -110,6 +123,7 @@
                     let url;
                     let start   = $('#start').val();
                     let end     = $('#end').val();
+                    let jenis   = $('#jenis').val();
                     let month   = $('#month').val();
                     let year    = $('#year').val();
                     
@@ -118,6 +132,7 @@
                         end: end,
                         month: month,
                         year: year,
+                        jenis: jenis,
                         type: type
                     }
 
@@ -136,6 +151,8 @@
                         },
                         columns: [
                             { data: 'Inv_Number' },
+                            { data: 'Cust_Nama' },
+                            { data: 'Inv_Tgl_Masuk' },
                             { data: 'Payment_Tgl' },
                             { data: 'Payment_Name' },
                             { data: 'Payment_Total' },

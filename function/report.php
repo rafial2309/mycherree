@@ -506,21 +506,32 @@ if ($_GET['type'] == 'customer') {
 }  elseif ($_GET['type'] == 'daily-payment') {
     $start  = date('Y-m-d', strtotime($_POST['start']));
     $end    = date('Y-m-d', strtotime($_POST['end']));
+    $jenis  = $_POST['jenis'];
+  
+    if ($jenis=='SEMUA') {
+        $jenisdata = "";
+    } else {
+        $jenisdata = "AND Payment_Type='" . $jenis ."'";
+    }
+
     $judul  = 'Daily Payment';
+    
 
     $sheet->setCellValue('A3', 'Report Payment ' . date('D, d M Y', strtotime($start)).' - '.date('D, d M Y', strtotime($end)));
     $sheet->setCellValue('A4', 'No');
     $sheet->setCellValue('B4', 'ID Invoice');
-    $sheet->setCellValue('C4', 'Tanggal Payment');
-    $sheet->setCellValue('D4', 'Dibayar oleh');
-    $sheet->setCellValue('E4', 'Total Pembayaran');
-    $sheet->setCellValue('F4', 'Tipe Pembayaran');
-    $sheet->setCellValue('G4', 'Catatan');
-    $sheet->setCellValue('H4', 'Dikerjakan oleh');
+    $sheet->setCellValue('C4', 'Nama Customer');
+    $sheet->setCellValue('D4', 'Tanggal Invoice');
+    $sheet->setCellValue('E4', 'Tanggal Payment');
+    $sheet->setCellValue('F4', 'Dibayar oleh');
+    $sheet->setCellValue('G4', 'Total Pembayaran');
+    $sheet->setCellValue('H4', 'Tipe Pembayaran');
+    $sheet->setCellValue('I4', 'Catatan');
+    $sheet->setCellValue('J4', 'Dikerjakan oleh');
     
-    $sheet->getStyle('A4:H4')->getAlignment()->setVertical('center')->setHorizontal('center');
-    $sheet->getStyle('A4:H4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
-    $sheet->getStyle('A4:H4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
+    $sheet->getStyle('A4:J4')->getAlignment()->setVertical('center')->setHorizontal('center');
+    $sheet->getStyle('A4:J4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A4:J4')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('E2E8F0');
     
     $sheet->freezePane('A5');
     
@@ -528,25 +539,33 @@ if ($_GET['type'] == 'customer') {
     $no = 1;
     $cabang = $_SESSION['cabang'];
     
-    $sql = mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND DATE(Payment_Tgl) >= '$start' AND DATE(Payment_Tgl) <= '$end'");
+
+
+    $sql = mysqli_query($conn, "SELECT *FROM Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' $jenisdata AND DATE(Payment_Tgl) >= '$start' AND DATE(Payment_Tgl) <= '$end'");
+    $subtotal = 0;
     while ($data = mysqli_fetch_assoc($sql)) {
+        $ceknama = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Cust_Nama, Inv_Tgl_Masuk FROM Invoice where Inv_Number='$data[Inv_Number]'"));
         $sheet->setCellValue('A' . $baris, $no);
         $sheet->setCellValue('B' . $baris, $data['Inv_Number']);
-        $sheet->setCellValue('C' . $baris, date('D, d M Y', strtotime($data['Payment_Tgl'])));
-        $sheet->setCellValue('D' . $baris, $data['Payment_Name']);
-        $sheet->setCellValue('E' . $baris, $data['Payment_Total']);
-        $sheet->setCellValue('F' . $baris, $data['Payment_Type']);
-        $sheet->setCellValue('G' . $baris, $data['Payment_Note']);
-        $sheet->setCellValue('H' . $baris, $data['Staff_Name']);
+        $sheet->setCellValue('C' . $baris, $ceknama['Cust_Nama']);  
+        $sheet->setCellValue('D' . $baris, date('D, d M Y', strtotime($ceknama['Inv_Tgl_Masuk'])));
+        $sheet->setCellValue('E' . $baris, date('D, d M Y', strtotime($data['Payment_Tgl'])));
+        $sheet->setCellValue('F' . $baris, $data['Payment_Name']);
+        $sheet->setCellValue('G' . $baris, $data['Payment_Total']);
+        $sheet->setCellValue('H' . $baris, $data['Payment_Type']);
+        $sheet->setCellValue('I' . $baris, $data['Payment_Note']);
+        $sheet->setCellValue('J' . $baris, $data['Staff_Name']);
+        $subtotal = intval($subtotal) + intval($data['Payment_Total']);
         $baris++;
         $no++;
     }
+    $sheet->setCellValue('G' . $baris, $subtotal);
     foreach ($sheet->getColumnIterator() as $column) {
         $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
     }
     $akhir = $baris - 1; 
     $sheet->getStyle('B5:B' . $akhir)->getAlignment()->setHorizontal('right');
-    $sheet->getStyle('A5:H' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+    $sheet->getStyle('A5:J' . $akhir)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
     $sheet->getStyle('E5:E' . $akhir)->getNumberFormat()->setFormatCode('_(* #,##0_);_([Red]* \(#,##0\);_(* "-"??_);_(@_)');
     $sheet->getColumnDimension('A')->setAutoSize(false)->setWidth(8);
 
@@ -705,22 +724,32 @@ if ($_GET['type'] == 'customer') {
     $yearly = substr($_POST['year'], -4);
     
     $type   = $_POST['type'];
+    $jenis  = $_POST['jenis'];
     $cabang = $_SESSION['cabang'];
 
+    if ($jenis=='SEMUA') {
+        $jenisdata = "";
+    } else {
+        $jenisdata = "AND Payment_Type='" . $jenis ."'";
+    }
+
+    //echo $jenisdata;
     if ($type == 'daily')
-        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND DATE(Payment_Tgl) >='$start' AND DATE(Payment_Tgl) <= '$end'");
+        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' $jenisdata AND DATE(Payment_Tgl) >='$start' AND DATE(Payment_Tgl) <= '$end'");
     elseif ($type == 'monthly')
-        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND MONTH(Payment_Tgl)='$bulan' AND YEAR(Payment_Tgl)='$tahun'");
+        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' $jenisdata AND MONTH(Payment_Tgl)='$bulan' AND YEAR(Payment_Tgl)='$tahun'");
     else  
-        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' AND YEAR(Payment_Tgl)='$yearly'");
+        $sql = mysqli_query($conn, "SELECT * from Invoice_Payment WHERE Inv_Number LIKE '%$cabang%' $jenisdata AND YEAR(Payment_Tgl)='$yearly'");
 
     $data = array();
     $json = array();
     $i = 1;
     while( $row=mysqli_fetch_array($sql) ) {
-
+        $ceknama = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Cust_Nama, Inv_Tgl_Masuk FROM Invoice where Inv_Number='$row[Inv_Number]'"));
         $nestedData=array(); 
         $nestedData['Inv_Number']       = $row["Inv_Number"];
+        $nestedData['Cust_Nama']        = $ceknama["Cust_Nama"];
+        $nestedData['Inv_Tgl_Masuk']    = date('D, d M Y', strtotime($ceknama['Inv_Tgl_Masuk']));
         $nestedData['Payment_Tgl']      = date('D, d M Y', strtotime($row['Payment_Tgl']));
         $nestedData['Payment_Name']     = $row["Payment_Name"];
         $nestedData['Payment_Type']     = $row["Payment_Type"];

@@ -23,9 +23,10 @@
                                                     <label for="modal-datepicker-2" class="form-label">To</label>
                                                     <input type="text" id="end" name="end" class="datepicker form-control" data-single-mode="true">
                                                 </div>
+
                                                 <div class="col-span-12 sm:col-span-4">
                                                     <label class="form-label">&nbsp;</label><br>
-                                                    <button class="btn btn-primary" type="button" onclick="btnGenerate('daily')"><i data-lucide="refresh-cw"></i>&emsp;Generate</button>
+                                                    <button class="btn btn-primary" type="button" onclick="btnGenerate('daily')"><i data-lucide="refresh-cw"></i>&nbsp;Generate</button>
                                                 </div>
                                             </div>
                                         </div>
