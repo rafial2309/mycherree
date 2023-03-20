@@ -144,15 +144,16 @@
                 function ambildata5() {
                     var tgl1 = document.getElementById("tanggal1").value;
                     var tgl2 = document.getElementById("tanggal2").value;
+                    var cabang5 = document.getElementById("cabang5").value;
 
-                    if (tgl1=='' || tgl2=='') {
+                    if (tgl1=='' || tgl2=='' || cabang5=='') {
                         
                     }else{
                         document.getElementById("tanggal1").blur();
                         document.getElementById("tanggal2").blur();
                         
                         $.ajax({
-                        url:'function/report-all.php?menu=ambildata5&tgl1='+tgl1+'&tgl2='+tgl2,
+                        url:'function/report-all.php?menu=ambildata5&tgl1='+tgl1+'&tgl2='+tgl2+'&cabang='+cabang5,
                         type:'GET',
                         dataType:'html',
                         success:function (response) {
@@ -166,15 +167,16 @@
                 function ambildata6() {
                     var tgl1 = document.getElementById("tanggal1").value;
                     var tgl2 = document.getElementById("tanggal2").value;
+                    var cabang6 = document.getElementById("cabang6").value;
 
-                    if (tgl1=='' || tgl2=='') {
+                    if (tgl1=='' || tgl2=='' || cabang6=='') {
                         
                     }else{
                         document.getElementById("tanggal1").blur();
                         document.getElementById("tanggal2").blur();
                         
                         $.ajax({
-                        url:'function/report-all.php?menu=ambildata6&tgl1='+tgl1+'&tgl2='+tgl2,
+                        url:'function/report-all.php?menu=ambildata6&tgl1='+tgl1+'&tgl2='+tgl2+'&cabang='+cabang6,
                         type:'GET',
                         dataType:'html',
                         success:function (response) {

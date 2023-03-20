@@ -419,6 +419,11 @@ if ($_GET['menu'] == 'Top Customer') { ?>
     <b>Select Range Date</b>
     <input type="date"   name="" id="tanggal1">
     <input type="date"  name="" id="tanggal2">
+    <select name="" data-placeholder="Select Report" id="cabang5">
+        <option>-- Select Store --</option>
+        <option value="MCL1">MCL1</option>
+        <option value="MCL2">MCL2</option>
+    </select>
     <button class="btn btn-primary mr-1 mb-2" onclick="ambildata5()">Generate</button>
     <br>
     <div id="hasilajaxreport">
@@ -427,6 +432,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
 <?php }elseif($_GET['menu'] == 'ambildata5'){ 
     $tgl1 = $_GET['tgl1'];
     $tgl2 = $_GET['tgl2'];
+    $cabang = $_GET['cabang'];
     ?>
     <link rel="stylesheet" href="plugin/datatable/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="plugin/datatable/buttons.dataTables.min.css" />
@@ -443,6 +449,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                         <th>Address</th>
                         <th>Phone</th>
                         <th>Member</th>
+                        <th>Store</th>
                         <th>Join</th>
                     </tr>
                 </thead>
@@ -450,7 +457,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
 
                     <?php 
                         $no=1;
-                        $query=mysqli_query($conn,"SELECT *  FROM Customer WHERE Cust_Tgl_Join>='$tgl1' AND Cust_Tgl_Join<='$tgl2' ORDER BY Cust_Tgl_Join ASC"); 
+                        $query=mysqli_query($conn,"SELECT *  FROM Customer WHERE (Cust_Tgl_Join>='$tgl1' AND Cust_Tgl_Join<='$tgl2') and Cust_Store='$cabang' ORDER BY Cust_Tgl_Join ASC"); 
                         $jmldata = mysqli_num_rows($query);
                         while($data = mysqli_fetch_assoc($query)){  
                             $cekmember = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount_Nama from Discount JOIN Customer ON Customer.Discount_No=Discount.Discount_No WHERE Cust_No='$data[Cust_No]'"));
@@ -461,6 +468,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                             <td><?php echo $data['Cust_Alamat'] ?></td>
                             <td><?php echo $data['Cust_Telp'] ?></td>
                             <td><?php if (isset($cekmember['Discount_Nama'])) { echo $cekmember['Discount_Nama']; } ?></td>
+                            <td><?php echo $data['Cust_Store'] ?></td>
                             <td><?php echo date('d M Y', strtotime($data['Cust_Tgl_Join'])); ?></td>
                         </tr>
                     <?php } ?>
@@ -473,6 +481,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                         <td></td>
                         <td style="font-weight:bold;">TOTAL</td>
                         <td style="font-weight:bold;"><?php echo number_format($jmldata ,0,",","."); ?></td>
+                        <td></td>
                         <td></td>
                     </tr>
                 </tfoot>
@@ -512,6 +521,12 @@ if ($_GET['menu'] == 'Top Customer') { ?>
     <b>Select Range Date</b>
     <input type="date"   name="" id="tanggal1">
     <input type="date"  name="" id="tanggal2">
+    <select name="" data-placeholder="Select Report" id="cabang6">
+        <option>-- Select Store --</option>
+        <option value="MCL1">MCL1</option>
+        <option value="MCL2">MCL2</option>
+    </select>
+
     <button class="btn btn-primary mr-1 mb-2" onclick="ambildata6()">Generate</button>
     <br>
     <div id="hasilajaxreport">
@@ -520,6 +535,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
 <?php }elseif($_GET['menu'] == 'ambildata6'){ 
     $tgl1 = $_GET['tgl1'];
     $tgl2 = $_GET['tgl2'];
+    $cabang = $_GET['cabang'];
     ?>
     <link rel="stylesheet" href="plugin/datatable/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="plugin/datatable/buttons.dataTables.min.css" />
@@ -536,6 +552,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                         <th>Address</th>
                         <th>Phone</th>
                         <th>Member</th>
+                        <th>Store</th>
                         <th>Join Member</th>
                     </tr>
                 </thead>
@@ -543,7 +560,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
 
                     <?php 
                         $no=1;
-                        $query=mysqli_query($conn,"SELECT *  FROM Customer WHERE Cust_Member_Join>='$tgl1' AND Cust_Member_Join<='$tgl2' ORDER BY Cust_Member_Join ASC"); 
+                        $query=mysqli_query($conn,"SELECT *  FROM Customer WHERE (Cust_Member_Join>='$tgl1' AND Cust_Member_Join<='$tgl2') and Cust_Store='$cabang' ORDER BY Cust_Member_Join ASC"); 
                         $jmldata = mysqli_num_rows($query);
                         while($data = mysqli_fetch_assoc($query)){  
                             $cekmember = mysqli_fetch_assoc(mysqli_query($conn,"SELECT Discount_Nama from Discount JOIN Customer ON Customer.Discount_No=Discount.Discount_No WHERE Cust_No='$data[Cust_No]'"));
@@ -554,6 +571,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                             <td><?php echo $data['Cust_Alamat'] ?></td>
                             <td><?php echo $data['Cust_Telp'] ?></td>
                             <td><?php if (isset($cekmember['Discount_Nama'])) { echo $cekmember['Discount_Nama']; } ?></td>
+                            <td><?php echo $data['Cust_Store']; ?></td>
                             <td><?php echo date('d M Y', strtotime($data['Cust_Member_Join'])); ?></td>
                         </tr>
                     <?php } ?>
@@ -566,6 +584,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                         <td></td>
                         <td style="font-weight:bold;">TOTAL</td>
                         <td style="font-weight:bold;"><?php echo number_format($jmldata ,0,",","."); ?></td>
+                        <td></td>
                         <td></td>
                     </tr>
                 </tfoot>

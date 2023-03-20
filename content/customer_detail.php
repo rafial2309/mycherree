@@ -95,7 +95,29 @@
                                             <th>Note</th>
                                             <th>Sisa Deposit</th>
                                         </thead>
-                                        <tbody id="hasil2">
+                                        <tbody id="hasil2xx">
+                                            <?php 
+                                                $nonya = 1;
+                                                $saldo = 0;
+                                          
+                                                $sql = mysqli_query($conn,"SELECT * from Customer_Deposit WHERE Cust_No='$_GET[Cust_No]'");
+                                                while($row = mysqli_fetch_assoc($sql)){
+                                                    if ($row["Jenis"]=='CREDIT (+)') {
+                                                        $saldo = intval($saldo) + intval($row["Nilai"]);
+                                                    }else{
+                                                        $saldo = intval($saldo) - intval($row["Nilai"]);
+                                                    }
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $nonya++; ?></td>
+                                                <td><?php echo date('d M Y', strtotime($row["Tanggal"])) ?></td>
+                                                <td><?php echo $row["Nilai"]; ?></td>
+                                                <td><?php echo $row["Jenis"]; ?></td>
+                                                <td><?php echo $row["Note"]; ?></td>
+                                                <td><?php echo $saldo; ?></td>
+
+                                            </tr>
+                                            <?php } ?>
                                             
                                         </tbody>
                                     </table>
@@ -230,20 +252,20 @@
 
                 $(document).ready(function() {
                     $('#example2').DataTable( {
-                        "ajax":{
-                            url :"function/customers?menu=datadeposit&Cust_No=<?php echo $_GET['Cust_No'] ?>",
-                            type: "post",
-                            error: function(){
-                                $(".dataku-error").html("");
-                                $("#dataku").append('<tbody class="dataku-error"><tr><th colspan="3">Tidak ada data untuk ditampilkan</th></tr></tbody>');
-                                $("#dataku-error-proses").css("display","none");
-                            }
-                        },
+                        // "ajax":{
+                        //     url :"function/customers?menu=datadeposit&Cust_No=<?php echo $_GET['Cust_No'] ?>",
+                        //     type: "post",
+                        //     error: function(){
+                        //         $(".dataku-error").html("");
+                        //         $("#dataku").append('<tbody class="dataku-error"><tr><th colspan="3">Tidak ada data untuk ditampilkan</th></tr></tbody>');
+                        //         $("#dataku-error-proses").css("display","none");
+                        //     }
+                        // },
                         order: [[0, 'desc']],
                         dom: 'Bfrtip',
                         "searching": false,
-                        "processing": true,
-                        "serverSide": true,
+                        // "processing": true,
+                        // "serverSide": true,
                         buttons: ['excelHtml5']
 
                     } );     
