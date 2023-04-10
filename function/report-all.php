@@ -158,6 +158,8 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                     <tr>
                         
                         <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Address</th>
                         <th>Member</th>
                         <th>Days</th>
                         <th>Age</th>
@@ -176,7 +178,7 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                         $no=1;
                         $totpcs=0;
                         $totpay=0;
-                        $query=mysqli_query($conn,"SELECT Cust_ID,Cust_Nama, MAX(Inv_Tgl_Masuk) as dm  FROM Invoice WHERE Inv_Tgl_Masuk<'$tgl1' AND Inv_Number LIKE '%$cabang%' GROUP BY Cust_ID ORDER BY Inv_No DESC"); 
+                        $query=mysqli_query($conn,"SELECT Cust_ID,Cust_Nama,Cust_Telp,Cust_Alamat, MAX(Inv_Tgl_Masuk) as dm  FROM Invoice WHERE Inv_Tgl_Masuk<'$tgl1' AND Inv_Number LIKE '%$cabang%' GROUP BY Cust_ID ORDER BY Inv_No DESC"); 
 
                         while($data = mysqli_fetch_assoc($query)){
                         
@@ -197,6 +199,8 @@ if ($_GET['menu'] == 'Top Customer') { ?>
                     ?>
                         <tr>
                             <td><?php echo $data['Cust_Nama'] ?></td>
+                            <td><?php echo $data['Cust_Telp'] ?></td>
+                            <td><?php echo $data['Cust_Alamat'] ?></td>
                             <td><?php if (isset($cekmember['Discount_Nama'])) { echo $cekmember['Discount_Nama']; } ?></td>
                             <td><?php echo $dd; ?></td>
                             <td><?php echo $diff->format('%y years %m months and %d days'); ?></td>
