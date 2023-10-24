@@ -62,9 +62,9 @@ if ($_GET['menu'] == 'create' ) {
     );
     //----------------------------------------------------------------------------------
     //join 2 tabel dan bisa lebih, tergantung kebutuhan
-    $sql = "SELECT Customer.*, (SELECT SUM(Payment_Amount) FROM Invoice WHERE Invoice.Cust_ID = Customer.Cust_No) as Total_Amount, 
-                   (SELECT SUM(Total_PCS) FROM Invoice WHERE Invoice.Cust_ID = Customer.Cust_No) as Total_PCS, 
-                   Registrasi_Member.Status_Payment, Invoice.Inv_Tgl_Masuk FROM Customer 
+    $sql = "SELECT Customer.*, SUM(Payment_Amount) as Total_Amount, SUM(Total_PCS) as Total_PCS, 
+                   Registrasi_Member.Status_Payment, Invoice.Inv_Tgl_Masuk 
+            FROM Customer 
             LEFT JOIN Registrasi_Member 
             ON Customer.Cust_No = Registrasi_Member.Cust_No 
             LEFT JOIN Invoice 
@@ -76,9 +76,9 @@ if ($_GET['menu'] == 'create' ) {
     $totalFiltered = $totalData;
 
     //----------------------------------------------------------------------------------
-    $sql = "SELECT Customer.*,  (SELECT SUM(Payment_Amount) FROM Invoice WHERE Invoice.Cust_ID = Customer.Cust_No) as Total_Amount, 
-                   (SELECT SUM(Total_PCS) FROM Invoice WHERE Invoice.Cust_ID = Customer.Cust_No) as Total_PCS,
-                   Registrasi_Member.Status_Payment, Invoice.Inv_Tgl_Masuk from Customer 
+    $sql = "SELECT Customer.*, SUM(Payment_Amount) as Total_Amount, SUM(Total_PCS) as Total_PCS, 
+                   Registrasi_Member.Status_Payment, Invoice.Inv_Tgl_Masuk 
+            FROM Customer 
             LEFT JOIN Registrasi_Member 
             ON Customer.Cust_No = Registrasi_Member.Cust_No 
             LEFT JOIN Invoice 
@@ -95,9 +95,9 @@ if ($_GET['menu'] == 'create' ) {
         $sql.=" OR Customer.Cust_No LIKE '".$requestData['search']['value']."%' )";
     }
     //----------------------------------------------------------------------------------
+    $sql.=" GROUP BY Customer.Cust_No";
     $query=mysqli_query($conn, $sql) or die("customers?menu=data: get dataku");
     $totalFiltered = mysqli_num_rows($query);
-    $sql.=" GROUP BY Customer.Cust_No";
     $sql.=" ORDER BY ". $columns[$requestData['order'][0]['column']]."   ".$requestData['order'][0]['dir']."  LIMIT ".$requestData['start']." ,".$requestData['length']."   ";  
     $query=mysqli_query($conn, $sql) or die("customers?menu=data: get dataku");
     //----------------------------------------------------------------------------------
